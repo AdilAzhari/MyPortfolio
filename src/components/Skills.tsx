@@ -19,56 +19,37 @@ const Skills: React.FC = () => {
     { name: 'Backend', icon: Server, color: 'from-green-500 to-emerald-500' },
     { name: 'Cloud', icon: Cloud, color: 'from-blue-500 to-cyan-500' },
     { name: 'Database', icon: Database, color: 'from-orange-500 to-red-500' },
-    { name: 'DevOps', icon: Settings, color: 'from-purple-500 to-indigo-500' },
-    { name: 'Mobile', icon: Smartphone, color: 'from-teal-500 to-green-500' }
+    { name: 'DevOps', icon: Settings, color: 'from-purple-500 to-indigo-500' }
   ];
 
   const skills: Skill[] = [
     // Frontend
-    { name: 'React', level: 95, category: 'Frontend', yearsExp: 6, projects: 25 },
-    { name: 'TypeScript', level: 90, category: 'Frontend', yearsExp: 5, projects: 30 },
-    { name: 'Next.js', level: 85, category: 'Frontend', yearsExp: 4, projects: 15 },
-    { name: 'Vue.js', level: 80, category: 'Frontend', yearsExp: 3, projects: 12 },
-    { name: 'Tailwind CSS', level: 90, category: 'Frontend', yearsExp: 4, projects: 20 },
-    { name: 'GraphQL', level: 85, category: 'Frontend', yearsExp: 3, projects: 10 },
+    { name: 'React', level: 65, category: 'Frontend', yearsExp: 1.5, projects: 2 },
+    { name: 'TypeScript', level: 60, category: 'Frontend', yearsExp: .5, projects: 30 },
+    { name: 'JavaScript', level: 70, category: 'Frontend', yearsExp: 1.5, projects: 5 },
+    { name: 'Vue.js', level: 80, category: 'Frontend', yearsExp: 3, projects: 7 },
+    { name: 'Tailwind CSS', level: 90, category: 'Frontend', yearsExp: 4, projects: 15 },
+    { name: 'GraphQL', level: 70, category: 'Frontend', yearsExp: 1, projects:2 },
     
     // Backend
-    { name: 'Node.js', level: 95, category: 'Backend', yearsExp: 7, projects: 35 },
-    { name: 'Python', level: 90, category: 'Backend', yearsExp: 6, projects: 28 },
-    { name: 'Java', level: 80, category: 'Backend', yearsExp: 4, projects: 15 },
-    { name: 'Go', level: 75, category: 'Backend', yearsExp: 2, projects: 8 },
-    { name: 'Express.js', level: 90, category: 'Backend', yearsExp: 6, projects: 25 },
-    { name: 'FastAPI', level: 85, category: 'Backend', yearsExp: 3, projects: 12 },
+    { name: 'Php', level: 95, category: 'Backend', yearsExp: 7, projects: 35 },
+    { name: 'Laravel', level: 85, category: 'Backend', yearsExp: 3, projects: 15 },
+    { name: 'Inertia.js', level: 80, category: 'Backend', yearsExp: 2, projects: 6 },
+    { name: 'livewire', level: 75, category: 'Backend', yearsExp: 2, projects: 3 },
+    
     
     // Cloud
-    { name: 'AWS', level: 90, category: 'Cloud', yearsExp: 5, projects: 22 },
-    { name: 'Google Cloud', level: 85, category: 'Cloud', yearsExp: 4, projects: 18 },
-    { name: 'Azure', level: 80, category: 'Cloud', yearsExp: 3, projects: 12 },
+    { name: 'AWS', level: 90, category: 'Cloud', yearsExp: 2, projects: 2 },
     { name: 'Serverless', level: 85, category: 'Cloud', yearsExp: 4, projects: 15 },
-    { name: 'Lambda', level: 90, category: 'Cloud', yearsExp: 5, projects: 20 },
-    { name: 'CloudFormation', level: 80, category: 'Cloud', yearsExp: 3, projects: 10 },
     
     // Database
-    { name: 'PostgreSQL', level: 90, category: 'Database', yearsExp: 6, projects: 30 },
-    { name: 'MongoDB', level: 85, category: 'Database', yearsExp: 5, projects: 20 },
-    { name: 'Redis', level: 85, category: 'Database', yearsExp: 4, projects: 18 },
-    { name: 'DynamoDB', level: 80, category: 'Database', yearsExp: 3, projects: 12 },
-    { name: 'Elasticsearch', level: 75, category: 'Database', yearsExp: 2, projects: 8 },
     { name: 'MySQL', level: 85, category: 'Database', yearsExp: 5, projects: 22 },
     
     // DevOps
-    { name: 'Docker', level: 90, category: 'DevOps', yearsExp: 5, projects: 25 },
-    { name: 'Kubernetes', level: 85, category: 'DevOps', yearsExp: 4, projects: 15 },
-    { name: 'CI/CD', level: 90, category: 'DevOps', yearsExp: 6, projects: 30 },
-    { name: 'GitHub Actions', level: 85, category: 'DevOps', yearsExp: 3, projects: 20 },
-    { name: 'Terraform', level: 80, category: 'DevOps', yearsExp: 3, projects: 12 },
-    { name: 'Monitoring', level: 85, category: 'DevOps', yearsExp: 4, projects: 18 },
-    
-    // Mobile
-    { name: 'React Native', level: 80, category: 'Mobile', yearsExp: 3, projects: 8 },
-    { name: 'Flutter', level: 70, category: 'Mobile', yearsExp: 2, projects: 5 },
-    { name: 'iOS', level: 65, category: 'Mobile', yearsExp: 2, projects: 4 },
-    { name: 'Android', level: 65, category: 'Mobile', yearsExp: 2, projects: 4 }
+    { name: 'Docker', level: 90, category: 'DevOps', yearsExp: 5, projects: 2 },
+    { name: 'CI/CD', level: 90, category: 'DevOps', yearsExp: 1, projects: 4 },
+    { name: 'GitHub Actions', level: 85, category: 'DevOps', yearsExp: 1, projects: 4 }
+
   ];
 
   const filteredSkills = selectedCategory === 'All' 

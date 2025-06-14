@@ -54,7 +54,7 @@ const Projects: React.FC = () => {
         'Reduced infrastructure costs by 30% through optimization'
       ],
       demoUrl: 'https://demo.example.com',
-      githubUrl: 'https://github.com/alexchen/ecommerce-platform',
+      githubUrl: 'https://github.com/adilomer/ecommerce-platform',
       image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Full-Stack',
       complexity: 'High',
@@ -87,7 +87,7 @@ const Projects: React.FC = () => {
         'Prevented $2.3M in potential fraudulent transactions',
         'Improved customer trust and regulatory compliance'
       ],
-      githubUrl: 'https://github.com/alexchen/realtime-analytics',
+      githubUrl: 'https://github.com/adilomer/realtime-analytics',
       image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Data Engineering',
       complexity: 'High',
@@ -153,16 +153,16 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="py-20 bg-white dark:bg-gray-900 relative">
       {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
+      {/* <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }} />
-      </div>
+      </div> */}
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium mb-4">
-            <Code2 className="h-4 w-4" />
+            {/* <Code2 className="h-4 w-4" /> */}
             Engineering Portfolio
           </div>
           <h2 className="text-5xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 dark:from-white dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent mb-6">
@@ -174,7 +174,7 @@ const Projects: React.FC = () => {
         </div>
 
         {/* Category Filter */}
-        <div className="flex flex-wrap justify-center gap-4 mb-12">
+        {/* <div className="flex flex-wrap justify-center gap-4 mb-12">
           <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
             <Filter className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter:</span>
@@ -192,7 +192,7 @@ const Projects: React.FC = () => {
               {category}
             </button>
           ))}
-        </div>
+        </div> */}
 
         {/* Projects Grid */}
         <div className="space-y-12">
