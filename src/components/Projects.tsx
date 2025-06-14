@@ -153,11 +153,11 @@ const Projects: React.FC = () => {
   return (
     <section id="projects" className="py-20 bg-white dark:bg-gray-900 relative">
       {/* Background Pattern */}
-      {/* <div className="absolute inset-0 opacity-5">
+      <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
         }} />
-      </div> */}
+      </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
@@ -174,7 +174,7 @@ const Projects: React.FC = () => {
         </div>
 
         {/* Category Filter */}
-        {/* <div className="flex flex-wrap justify-center gap-4 mb-12">
+        <div className="flex flex-wrap justify-center gap-4 mb-12">
           <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
             <Filter className="h-4 w-4 text-gray-500 dark:text-gray-400" />
             <span className="text-sm font-medium text-gray-700 dark:text-gray-300">Filter:</span>
@@ -192,7 +192,7 @@ const Projects: React.FC = () => {
               {category}
             </button>
           ))}
-        </div> */}
+        </div>
 
         {/* Projects Grid */}
         <div className="space-y-12">
