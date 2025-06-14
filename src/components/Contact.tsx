@@ -11,25 +11,54 @@ const Contact: React.FC = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate form submission
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    
-    console.log('Form submitted:', formData);
-    setIsSubmitting(false);
-    
-    // Reset form
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-      projectType: 'consulting'
-    });
+    setSubmissionStatus('idle'); // Reset status on new submission
+
+    try {
+      // In a real application, you would send this data to your backend API.
+      // Example using fetch:
+      /*
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log('Form submission successful:', result);
+      setSubmissionStatus('success');
+      */
+
+      // Simulate form submission success
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      console.log('Form submitted:', formData);
+      setSubmissionStatus('success');
+
+      // Reset form only on success
+      setFormData({
+        name: '',
+        email: '',
+        subject: '',
+        message: '',
+        projectType: 'consulting'
+      });
+
+    } catch (error) {
+      console.error('Form submission failed:', error);
+      setSubmissionStatus('error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -43,10 +72,14 @@ const Contact: React.FC = () => {
     { value: 'consulting', label: 'Technical Consulting', icon: '🔧' },
     { value: 'fulltime', label: 'Full-time Position', icon: '💼' },
     { value: 'contract', label: 'Contract Work', icon: '📋' },
-    { value: 'mentoring', label: 'Mentoring/Coaching', icon: '🎓' },
-    { value: 'speaking', label: 'Speaking Engagement', icon: '🎤' },
+    { value: 'freelance', label: 'Freelance Project', icon: '🛠️' },
+    { value: 'collaboration', label: 'Collaboration', icon: '🤝' },
     { value: 'other', label: 'Other Opportunity', icon: '💡' }
   ];
+
+  const currentYear = new Date().getFullYear();
+  const currentMonth = new Date().toLocaleString('en-US', { month: 'long' });
+  const currentDay = new Date().getDate();
 
   return (
     <section id="contact" className="py-20 bg-gray-50 dark:bg-gray-800 relative overflow-hidden">
@@ -97,7 +130,7 @@ const Contact: React.FC = () => {
               </p>
               <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
                 <Calendar className="h-4 w-4" />
-                Response time: Within 24 hours
+                Response time: Within 24 hours (Current date: {currentDay} {currentMonth} {currentYear})
               </div>
             </div>
 
@@ -112,22 +145,22 @@ const Contact: React.FC = () => {
                   {
                     icon: Mail,
                     label: 'Email',
-                    value: 'alex.chen@example.com',
-                    href: 'mailto:alex.chen@example.com',
+                    value: 'adilazhariosman@gmail.com',
+                    href: 'mailto:adilazhariosman@gmail.com',
                     color: 'from-blue-500 to-cyan-500'
                   },
                   {
                     icon: Phone,
                     label: 'Phone',
-                    value: '+1 (555) 123-4567',
-                    href: 'tel:+1-555-123-4567',
+                    value: '+60 13-903 4997',
+                    href: 'tel:+60139034997',
                     color: 'from-emerald-500 to-teal-500'
                   },
                   {
                     icon: MapPin,
                     label: 'Location',
-                    value: 'San Francisco, CA',
-                    href: '#',
+                    value: 'Shah Alam, Selangor, Malaysia',
+                    href: 'https://www.google.com/maps/place/Shah+Alam,+Selangor,+Malaysia',
                     color: 'from-purple-500 to-pink-500'
                   }
                 ].map((contact, index) => (
@@ -142,6 +175,8 @@ const Contact: React.FC = () => {
                       {contact.href !== '#' ? (
                         <a 
                           href={contact.href}
+                          target={contact.label === 'Location' ? '_blank' : '_self'} // Open location in new tab
+                          rel={contact.label === 'Location' ? 'noopener noreferrer' : ''}
                           className="text-blue-600 dark:text-blue-400 hover:underline transition-colors duration-200"
                         >
                           {contact.value}
@@ -164,9 +199,9 @@ const Contact: React.FC = () => {
               </h4>
               <div className="flex gap-4">
                 {[
-                  { icon: Github, href: 'https://github.com/alexchen', label: 'GitHub', color: 'hover:bg-gray-800' },
-                  { icon: Linkedin, href: 'https://linkedin.com/in/alexchen', label: 'LinkedIn', color: 'hover:bg-blue-600' },
-                  { icon: Globe, href: 'https://alexchen.dev', label: 'Blog', color: 'hover:bg-emerald-600' }
+                  { icon: Github, href: 'https://github.com/AdilAzhari', label: 'GitHub', color: 'hover:bg-gray-800' },
+                  { icon: Linkedin, href: 'https://github.com/AdilAzhari', label: 'LinkedIn', color: 'hover:bg-blue-600' },
+                  { icon: Globe, href: 'https://your-blog-or-portfolio.dev', label: 'Portfolio', color: 'hover:bg-emerald-600' } // Changed label from Blog to Portfolio
                 ].map((social, index) => (
                   <a
                     key={index}
@@ -292,6 +327,20 @@ const Contact: React.FC = () => {
                   />
                 </div>
 
+                {/* Submission Status Message */}
+                {submissionStatus === 'success' && (
+                  <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-lg flex items-center gap-2">
+                    <Zap className="h-5 w-5" />
+                    Message sent successfully! I'll get back to you shortly.
+                  </div>
+                )}
+                {submissionStatus === 'error' && (
+                  <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-lg flex items-center gap-2">
+                    <Zap className="h-5 w-5" />
+                    Failed to send message. Please try again later or contact me directly.
+                  </div>
+                )}
+
                 {/* Submit Button */}
                 <button
                   type="submit"
@@ -319,4 +368,4 @@ const Contact: React.FC = () => {
   );
 };
 
-export default Contact;
+export default Contact; 

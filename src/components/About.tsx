@@ -1,36 +1,36 @@
 import React from 'react';
-import { Code, Database, Cloud, Users, Lightbulb, Rocket, Shield, Zap } from 'lucide-react';
+import { Code, Database, Cloud, Users, Lightbulb, Rocket, Shield, Zap, TrendingUp, Cpu, Layers, GitBranch } from 'lucide-react'; // Added new icons if needed
 
 const About: React.FC = () => {
   const highlights = [
     {
       icon: Code,
-      title: "Full-Stack Mastery",
-      description: "Expert in modern web technologies, from React frontends to Node.js backends",
+      title: "Backend Development",
+      description: "Crafting robust RESTful APIs with Laravel, focused on scalability and performance.",
       color: "from-blue-500 to-cyan-500"
     },
     {
-      icon: Cloud,
-      title: "Cloud Architecture",
-      description: "Designing scalable, resilient systems on AWS, Azure, and Google Cloud",
-      color: "from-purple-500 to-pink-500"
-    },
-    {
-      icon: Database,
-      title: "Data Engineering",
-      description: "Building robust data pipelines and optimizing database performance",
+      icon: Database, // Changed icon to better reflect database focus
+      title: "Database Design & Optimization",
+      description: "Designing efficient MySQL schemas and optimizing queries with Redis caching.",
       color: "from-emerald-500 to-teal-500"
     },
     {
-      icon: Users,
-      title: "Technical Leadership",
-      description: "Mentoring teams and driving engineering excellence across organizations",
+      icon: Layers, // Represents modularity/architecture
+      title: "Frontend Integration", // Combined for full stack
+      description: "Seamlessly integrating dynamic UIs using Vue.js, Inertia.js, and Tailwind CSS.",
+      color: "from-purple-500 to-pink-500"
+    },
+    {
+      icon: GitBranch, // Represents DevOps/CI/CD
+      title: "Software Architecture & DevOps",
+      description: "Applying modular design, Clean Code, SOLID principles, and CI/CD basics.",
       color: "from-orange-500 to-red-500"
     }
   ];
 
   const principles = [
-    { icon: Lightbulb, title: "Innovation First", description: "Always exploring cutting-edge solutions" },
+    { icon: Lightbulb, title: "Problem Solving", description: "Analytical approach to complex challenges" },
     { icon: Rocket, title: "Performance Driven", description: "Optimizing for speed and scalability" },
     { icon: Shield, title: "Security Minded", description: "Building with security as a foundation" },
     { icon: Zap, title: "Efficiency Focused", description: "Delivering maximum value with minimal complexity" }
@@ -70,22 +70,22 @@ const About: React.FC = () => {
               <div className="space-y-6 text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p className="relative pl-6">
                   <span className="absolute left-0 top-2 w-2 h-2 bg-blue-600 rounded-full"></span>
-                  I'm a passionate software engineer with over <strong className="text-blue-600 dark:text-blue-400">8 years of experience</strong> building 
-                  scalable web applications and distributed systems. My engineering philosophy 
+                  I'm a dedicated Full-Stack PHP Developer with over <strong className="text-blue-600 dark:text-blue-400">2 years of experience</strong> building 
+                  scalable web applications, primarily with Laravel. My engineering philosophy 
                   centers on writing clean, maintainable code while delivering measurable 
                   business value.
                 </p>
                 <p className="relative pl-6">
                   <span className="absolute left-0 top-2 w-2 h-2 bg-purple-600 rounded-full"></span>
-                  Throughout my career, I've led cross-functional teams to deliver complex 
-                  projects, from high-traffic e-commerce platforms handling <strong className="text-purple-600 dark:text-purple-400">millions of users</strong> 
-                  to real-time data processing systems managing petabytes of information.
+                  Throughout my experience, I've focused on delivering robust solutions, from 
+                  designing efficient database schemas to integrating dynamic front-ends, often 
+                  handling data-intensive processes.
                 </p>
                 <p className="relative pl-6">
                   <span className="absolute left-0 top-2 w-2 h-2 bg-emerald-600 rounded-full"></span>
                   I believe in continuous learning and staying ahead of technology trends. 
-                  When I'm not coding, you\'ll find me contributing to <strong className="text-emerald-600 dark:text-emerald-400">open-source projects</strong>, 
-                  writing technical articles, or mentoring junior developers.
+                  When I'm not coding, you'll find me contributing to <strong className="text-emerald-600 dark:text-emerald-400">self-initiated projects</strong>, 
+                  and applying industry best practices.
                 </p>
               </div>
             </div>
@@ -122,10 +122,13 @@ const About: React.FC = () => {
             {/* Skills Tags */}
             <div>
               <h4 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-                Specializations
+                Technical Specializations
               </h4>
               <div className="flex flex-wrap gap-3">
-                {['Problem Solving', 'System Design', 'Performance Optimization', 'Team Leadership', 'Mentoring', 'Architecture'].map((skill, index) => (
+                {['Laravel', 'Vue.js', 'MySQL', 'REST APIs', 'Redis', 'Inertia.js', 'Filament', 'SOLID Principles', 'Clean Code', 'Test-Driven Development', 'Git',
+                'CI/CD', 'PHP 8+', 'Tailwind CSS', 'JavaScript', 'TypeScript', 'HTML5', 'CSS3', 'Docker', 'Agile Methodologies', 'Problem Solving', 'Performance Optimization', 'Security Best Practices'
+                , 'Modular Architecture', 'Code Reviews', 'Documentation', 'Cross-Functional Collaboration', 'Continuous Learning'
+                ].map((skill, index) => (
                   <span 
                     key={skill}
                     className="group px-4 py-2 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/30 dark:to-purple-900/30 text-blue-800 dark:text-blue-300 rounded-full text-sm font-medium hover:from-blue-600 hover:to-purple-600 hover:text-white transition-all duration-300 transform hover:scale-105 cursor-default"
@@ -180,10 +183,14 @@ const About: React.FC = () => {
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
               {[
-                { number: '8+', label: 'Years Experience', sublabel: 'Building scalable systems', icon: '🚀' },
-                { number: '50+', label: 'Projects Delivered', sublabel: 'From concept to production', icon: '💻' },
-                { number: '15+', label: 'Technologies Mastered', sublabel: 'Across the full stack', icon: '⚡' },
-                { number: '100k+', label: 'Lines of Code', sublabel: 'Clean, maintainable solutions', icon: '🎯' }
+                { number: '3+', label: 'Years Experience', sublabel: 'Building scalable web apps', icon: '🚀' },
+                { number: '3+', label: 'Key Projects', sublabel: 'From concept to production', icon: '💻' },
+                { number: '10+', label: 'Technologies', sublabel: 'Across the PHP ecosystem', icon: '⚡' },
+                { number: '5+', label: 'Languages', sublabel: 'PHP, JavaScript, TypeScript, and more', icon: <Cpu className="h-6 w-6" /> },
+                { number: '3+', label: 'Years with Laravel', sublabel: 'Building robust APIs', icon: <Code className="h-6 w-6" /> },
+                { number: '5+', label: 'Frameworks', sublabel: 'Laravel, Vue.js, and more', icon: <Code className="h-6 w-6" /> },
+                { number: '50+', label: 'APIs Developed', sublabel: 'RESTful services for diverse needs', icon: <Database className="h-6 w-6" /> },
+                { number: '100%', label: 'Commitment to Quality', sublabel: 'Clean code and best practices', icon: <GitBranch className="h-6 w-6" /> }
               ].map((stat, index) => (
                 <div 
                   key={index} 
