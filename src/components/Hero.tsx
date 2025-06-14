@@ -7,11 +7,10 @@ const Hero: React.FC = () => {
   const [isTyping, setIsTyping] = useState(true);
 
   const roles = [
-    'Senior Software Engineer',
+    'Software Engineer',
     'Cloud Architect',
     'Full-Stack Developer',
-    'System Designer',
-    'Tech Lead'
+    'System Designer'
   ];
 
   useEffect(() => {
@@ -61,7 +60,7 @@ const Hero: React.FC = () => {
                 </div>
                 <div className="flex items-center gap-2 ml-4">
                   <Terminal className="h-4 w-4 text-gray-400" />
-                  <span className="text-gray-400 text-sm font-mono">alex@portfolio:~$</span>
+                  <span className="text-gray-400 text-sm font-mono">adil@portfolio:~$</span>
                 </div>
               </div>
               
@@ -71,7 +70,7 @@ const Hero: React.FC = () => {
                   <div className="text-green-400">
                     <span className="text-gray-500">$</span> whoami
                   </div>
-                  <div className="text-white">Alex Chen</div>
+                  <div className="text-white">Adil Omer</div>
                   
                   <div className="text-green-400 mt-4">
                     <span className="text-gray-500">$</span> cat role.txt
@@ -85,12 +84,22 @@ const Hero: React.FC = () => {
                     <span className="text-gray-500">$</span> ls skills/
                   </div>
                   <div className="text-white grid grid-cols-2 gap-1 text-xs">
-                    <div>react.js</div>
-                    <div>node.js</div>
-                    <div>python.py</div>
-                    <div>aws.cloud</div>
-                    <div>docker.container</div>
-                    <div>kubernetes.yaml</div>
+                    <div>tailwind.css</div>
+                      <div>react.js</div>
+                      <div>vue.js</div>
+                      <div>inertia.js</div>
+                      <div>php.language</div>
+                      <div>laravel.framework</div>
+                      <div>mysql.db</div>
+                      <div>eloquent.orm</div>
+                      <div>git.version</div>
+                      <div>github.repo</div>
+                      <div>docker.container</div>
+                      <div>aws.cloud</div>
+                      <div>rest.api</div>
+                      <div>ci/cd.pipeline</div>
+                      <div>phpunit.test</div>
+                      <div>pest</div>
                   </div>
                   
                   <div className="text-green-400 mt-4">
@@ -138,7 +147,7 @@ const Hero: React.FC = () => {
                 <div className="relative w-40 h-40 rounded-full overflow-hidden border-4 border-white dark:border-gray-800">
                   <img
                     src="https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=400&h=400&fit=crop"
-                    alt="Alex Chen"
+                    alt="Adil Omer"
                     className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   />
                 </div>
@@ -151,7 +160,7 @@ const Hero: React.FC = () => {
             {/* Name & Title */}
             <div className="space-y-4">
               <h1 className="text-5xl lg:text-6xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 dark:from-white dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent">
-                Alex Chen
+                Adil Omer
               </h1>
               <div className="space-y-2">
                 <p className="text-xl text-gray-600 dark:text-gray-300">
@@ -174,8 +183,8 @@ const Hero: React.FC = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 py-8">
               {[
-                { number: '8+', label: 'Years', sublabel: 'Experience' },
-                { number: '50+', label: 'Projects', sublabel: 'Delivered' },
+                { number: '3+', label: 'Years', sublabel: 'Experience' },
+                { number: '15+', label: 'Projects', sublabel: 'Delivered' },
                 { number: '99.9%', label: 'Uptime', sublabel: 'Achieved' }
               ].map((stat, index) => (
                 <div
@@ -198,9 +207,9 @@ const Hero: React.FC = () => {
             {/* Social Links */}
             <div className="flex justify-center lg:justify-start space-x-4">
               {[
-                { icon: Github, href: 'https://github.com', label: 'GitHub' },
-                { icon: Linkedin, href: 'https://linkedin.com', label: 'LinkedIn' },
-                { icon: Mail, href: 'mailto:alex@example.com', label: 'Email' }
+                { icon: Github, href: 'https://github.com/AdilAzhari', label: 'GitHub' },
+                { icon: Linkedin, href: 'https://linkedin.com/in/adil-omer-8aab21167', label: 'LinkedIn' },
+                { icon: Mail, href: 'mailto:adilazhariosman@gmail.com', label: 'Email' }
               ].map(({ icon: Icon, href, label }) => (
                 <a
                   key={label}

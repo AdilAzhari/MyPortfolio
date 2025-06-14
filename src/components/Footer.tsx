@@ -5,9 +5,9 @@ const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
 
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/alexchen', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://linkedin.com/in/alexchen', label: 'LinkedIn' },
-    { icon: Mail, href: 'mailto:alex.chen@example.com', label: 'Email' }
+    { icon: Github, href: 'https://github.com/AdilAzhari', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/Adil-Omer-8aab21167', label: 'LinkedIn' },
+    { icon: Mail, href: 'mailto:adilazhariosman@gmail.com', label: 'Email' }
   ];
 
   const quickLinks = [
@@ -39,9 +39,9 @@ const Footer: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-2xl font-bold bg-gradient-to-r from-white to-blue-400 bg-clip-text text-transparent">
-                    Alex Chen
+                    Adil Omer
                   </h3>
-                  <p className="text-gray-400 text-sm">Senior Software Engineer</p>
+                  <p className="text-gray-400 text-sm">Software Engineer - Software Developer</p>
                 </div>
               </div>
               
@@ -107,7 +107,7 @@ const Footer: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div className="flex flex-col md:flex-row justify-between items-center gap-4">
               <div className="flex items-center gap-2 text-gray-400 text-sm">
-                <span>© {currentYear} Alex Chen. Crafted with</span>
+                <span>© {currentYear} Adil Omer. Crafted with</span>
                 <Heart className="h-4 w-4 text-red-500 animate-pulse" />
                 <span>using React & TypeScript</span>
               </div>
