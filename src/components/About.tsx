@@ -198,7 +198,7 @@ const About: React.FC = () => {
                 { number: '3+', label: 'Key Projects', sublabel: 'From concept to production', icon: '💻' },
                 { number: '10+', label: 'Technologies', sublabel: 'Across the PHP ecosystem', icon: '⚡' },
                 { number: '5+', label: 'Languages', sublabel: 'PHP, JavaScript, TypeScript, and more', icon: <Cpu className="h-6 w-6" /> },
-                { number: '3+', label: 'Years with Laravel', sublabel: 'Building robust APIs', icon: <Code className="h-6 w-6" /> },
+                { number: '2+', label: 'Years with Laravel', sublabel: 'Building robust APIs', icon: <Code className="h-6 w-6" /> },
                 { number: '5+', label: 'Frameworks', sublabel: 'Laravel, Vue.js, and more', icon: <Code className="h-6 w-6" /> },
                 { number: '50+', label: 'APIs Developed', sublabel: 'RESTful services for diverse needs', icon: <Database className="h-6 w-6" /> },
                 { number: '100%', label: 'Commitment to Quality', sublabel: 'Clean code and best practices', icon: <GitBranch className="h-6 w-6" /> }

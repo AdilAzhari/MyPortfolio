@@ -215,7 +215,7 @@ const Hero: React.FC = () => {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 py-10">
               {[
-                { number: '3+', label: 'Years', sublabel: 'Experience' },
+                { number: '2+', label: 'Years', sublabel: 'Experience' },
                 { number: '15+', label: 'Projects', sublabel: 'Delivered' },
                 { number: '99.9%', label: 'Uptime', sublabel: 'Achieved' }
               ].map((stat, index) => (

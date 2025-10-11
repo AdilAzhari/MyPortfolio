@@ -213,7 +213,7 @@ const AvailabilityCalendar: React.FC<AvailabilityCalendarProps> = ({ isVisible, 
                       Selected Date: {selectedDate.toDateString()}
                     </p>
                     <p className="text-sm text-blue-600 dark:text-blue-400 mt-1">
-                      Timezone: UAE Standard Time (UTC+4)
+                      Timezone: Malaysia Standard Time (UTC+8)
                     </p>
                   </div>
 
