@@ -150,7 +150,7 @@ const Header: React.FC = () => {
               </span>
               <MapPin className="h-3 w-3 text-gray-500 ml-1" />
               <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
-                UAE
+                Malaysia
               </span>
             </div>
 
@@ -227,7 +227,7 @@ const Header: React.FC = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <Clock className="h-4 w-4 text-gray-500" />
                   <span className="text-sm text-gray-600 dark:text-gray-300">
-                    {formatTime(currentTime)} UAE
+                    {formatTime(currentTime)} Malaysia
                   </span>
                 </div>
 
