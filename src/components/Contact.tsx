@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Mail, Phone, MapPin, Send, Github, Linkedin, Globe, MessageCircle, Calendar, Zap } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, Github, Linkedin, Globe, MessageCircle, Calendar, Zap, CheckCircle, AlertCircle } from 'lucide-react';
+import emailjs from '@emailjs/browser';
 
 const Contact: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -16,32 +17,26 @@ const Contact: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    setSubmissionStatus('idle'); // Reset status on new submission
+    setSubmissionStatus('idle');
 
     try {
-      // In a real application, you would send this data to your backend API.
-      // Example using fetch:
-      /*
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+      // EmailJS configuration - replace with your actual service details
+      const templateParams = {
+        from_name: formData.name,
+        from_email: formData.email,
+        subject: formData.subject,
+        message: formData.message,
+        project_type: formData.projectType,
+        to_name: 'Adil Omer'
+      };
 
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
+      await emailjs.send(
+        'YOUR_SERVICE_ID', // Replace with your EmailJS service ID
+        'YOUR_TEMPLATE_ID', // Replace with your EmailJS template ID
+        templateParams,
+        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
+      );
 
-      const result = await response.json();
-      console.log('Form submission successful:', result);
-      setSubmissionStatus('success');
-      */
-
-      // Simulate form submission success
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      console.log('Form submitted:', formData);
       setSubmissionStatus('success');
 
       // Reset form only on success
@@ -329,15 +324,21 @@ const Contact: React.FC = () => {
 
                 {/* Submission Status Message */}
                 {submissionStatus === 'success' && (
-                  <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-lg flex items-center gap-2">
-                    <Zap className="h-5 w-5" />
-                    Message sent successfully! I'll get back to you shortly.
+                  <div className="p-4 bg-emerald-100 dark:bg-emerald-900/30 text-emerald-800 dark:text-emerald-300 rounded-lg flex items-center gap-3 animate-fade-in">
+                    <CheckCircle className="h-5 w-5 text-emerald-600" />
+                    <div>
+                      <p className="font-semibold">Message sent successfully!</p>
+                      <p className="text-sm opacity-90">Thank you for reaching out. I'll get back to you within 24 hours.</p>
+                    </div>
                   </div>
                 )}
                 {submissionStatus === 'error' && (
-                  <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-lg flex items-center gap-2">
-                    <Zap className="h-5 w-5" />
-                    Failed to send message. Please try again later or contact me directly.
+                  <div className="p-4 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded-lg flex items-center gap-3 animate-fade-in">
+                    <AlertCircle className="h-5 w-5 text-red-600" />
+                    <div>
+                      <p className="font-semibold">Failed to send message</p>
+                      <p className="text-sm opacity-90">Please try again later or contact me directly at adilazhariosman@gmail.com</p>
+                    </div>
                   </div>
                 )}
 

@@ -1,5 +1,16 @@
 import React from 'react';
-import { Code, Database, Cloud, Users, Lightbulb, Rocket, Shield, Zap, TrendingUp, Cpu, Layers, GitBranch } from 'lucide-react'; // Added new icons if needed
+import { 
+  Code, 
+  Database, 
+  Users, 
+  Lightbulb, 
+  Rocket, 
+  Shield, 
+  Zap, 
+  GitBranch,
+  Layers,
+  Cpu
+} from 'lucide-react';
 
 const About: React.FC = () => {
   const highlights = [

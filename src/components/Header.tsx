@@ -1,18 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { Menu, X, Sun, Moon, Code2, Zap } from 'lucide-react';
+import { Menu, X, Sun, Moon, Code2, Download, MapPin, Clock, Calendar } from 'lucide-react';
 import { useTheme } from '../contexts/ThemeContext';
+import AvailabilityCalendar from './AvailabilityCalendar';
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(new Date());
+  const [isAvailable, setIsAvailable] = useState(true);
+  const [showCalendar, setShowCalendar] = useState(false);
   const { isDark, toggleTheme } = useTheme();
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 10);
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          setIsScrolled(window.scrollY > 10);
+
+          // Calculate scroll progress
+          const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const currentProgress = (window.scrollY / totalScroll) * 100;
+          setScrollProgress(Math.min(currentProgress, 100));
+
+          ticking = false;
+        });
+        ticking = true;
+      }
     };
-    window.addEventListener('scroll', handleScroll);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // Update time and availability status (reduce update frequency to 30s)
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      setCurrentTime(now);
+
+      // Availability logic (9 AM - 6 PM local time)
+      const hour = now.getHours();
+      setIsAvailable(hour >= 9 && hour < 18);
+    };
+
+    // Initial update
+    updateTime();
+
+    // Update every 30 seconds instead of every second for better performance
+    const timer = setInterval(updateTime, 30000);
+
+    return () => clearInterval(timer);
   }, []);
 
   const scrollToSection = (sectionId: string) => {
@@ -21,6 +61,24 @@ const Header: React.FC = () => {
       element.scrollIntoView({ behavior: 'smooth' });
       setIsOpen(false);
     }
+  };
+
+  const downloadResume = () => {
+    // Create a temporary download link - you'll need to add your actual resume file
+    const link = document.createElement('a');
+    link.href = '/resume/Adil_Omer_Resume.pdf'; // Add your resume file to public/resume/
+    link.download = 'Adil_Omer_Resume.pdf';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', { 
+      hour: '2-digit', 
+      minute: '2-digit',
+      hour12: true 
+    });
   };
 
   const navItems = [
@@ -55,7 +113,7 @@ const Header: React.FC = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1">
+          <nav className="hidden lg:flex items-center space-x-1">
             {navItems.map((item) => (
               <button
                 key={item.id}
@@ -69,6 +127,42 @@ const Header: React.FC = () => {
               </button>
             ))}
           </nav>
+
+          {/* Status & Actions (Desktop) */}
+          <div className="hidden md:flex items-center space-x-4">
+            {/* Availability Status */}
+            <button
+              onClick={() => setShowCalendar(true)}
+              className="flex items-center gap-2 px-3 py-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-700 hover:bg-white/70 dark:hover:bg-gray-800/70 transition-all duration-200 transform hover:scale-105"
+            >
+              <div className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                {isAvailable ? 'Available' : 'Busy'}
+              </span>
+              <Calendar className="h-3 w-3 text-gray-500" />
+            </button>
+
+            {/* Time & Location */}
+            <div className="flex items-center gap-2 px-3 py-2 bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-full border border-gray-200 dark:border-gray-700">
+              <Clock className="h-3 w-3 text-gray-500" />
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                {formatTime(currentTime)}
+              </span>
+              <MapPin className="h-3 w-3 text-gray-500 ml-1" />
+              <span className="text-xs font-medium text-gray-600 dark:text-gray-300">
+                UAE
+              </span>
+            </div>
+
+            {/* Resume Download */}
+            <button
+              onClick={downloadResume}
+              className="group flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+            >
+              <Download className="h-4 w-4 group-hover:animate-bounce" />
+              <span className="text-sm">Resume</span>
+            </button>
+          </div>
 
           {/* Theme Toggle & Mobile Menu */}
           <div className="flex items-center space-x-4">
@@ -86,7 +180,7 @@ const Header: React.FC = () => {
 
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="md:hidden group p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 transform hover:scale-110"
+              className="lg:hidden group p-3 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-all duration-200 transform hover:scale-110"
               aria-label="Toggle menu"
             >
               {isOpen ? (
@@ -100,7 +194,7 @@ const Header: React.FC = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="md:hidden">
+          <div className="lg:hidden">
             <div className="px-2 pt-2 pb-3 space-y-1 bg-white dark:bg-gray-900 border-t border-gray-200 dark:border-gray-800 rounded-b-lg shadow-lg">
               {navItems.map((item) => (
                 <button
@@ -114,10 +208,56 @@ const Header: React.FC = () => {
                   {item.label}
                 </button>
               ))}
+              
+              {/* Mobile Status Info */}
+              <div className="px-4 py-3 border-t border-gray-200 dark:border-gray-700">
+                <div className="flex items-center justify-between mb-3">
+                  <button
+                    onClick={() => setShowCalendar(true)}
+                    className="flex items-center gap-2 hover:bg-gray-50 dark:hover:bg-gray-800 p-2 rounded-lg transition-colors duration-200"
+                  >
+                    <div className={`w-2 h-2 rounded-full ${isAvailable ? 'bg-emerald-500 animate-pulse' : 'bg-red-500'}`}></div>
+                    <span className="text-sm font-medium text-gray-600 dark:text-gray-300">
+                      {isAvailable ? 'Available for work' : 'Currently busy'}
+                    </span>
+                    <Calendar className="h-4 w-4 text-gray-500" />
+                  </button>
+                </div>
+                
+                <div className="flex items-center gap-2 mb-3">
+                  <Clock className="h-4 w-4 text-gray-500" />
+                  <span className="text-sm text-gray-600 dark:text-gray-300">
+                    {formatTime(currentTime)} UAE
+                  </span>
+                </div>
+
+                <button
+                  onClick={downloadResume}
+                  className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-medium rounded-lg transition-all duration-200"
+                >
+                  <Download className="h-4 w-4" />
+                  Download Resume
+                </button>
+              </div>
             </div>
           </div>
         )}
       </div>
+      
+      {/* Scroll Progress Bar */}
+      <div className="absolute bottom-0 left-0 w-full h-1 bg-gray-200 dark:bg-gray-700 opacity-0 transition-opacity duration-300" 
+           style={{ opacity: isScrolled ? 1 : 0 }}>
+        <div 
+          className="h-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 transition-all duration-150 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
+      {/* Availability Calendar Modal */}
+      <AvailabilityCalendar 
+        isVisible={showCalendar} 
+        onClose={() => setShowCalendar(false)} 
+      />
     </header>
   );
 };

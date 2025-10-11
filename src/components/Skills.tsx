@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Code, Server, Cloud, Database, Settings, Smartphone, Zap, Target } from 'lucide-react';
+import { Code, Server, Cloud, Database, Settings, Zap, Target, Search } from 'lucide-react';
 
 interface Skill {
   name: string;
@@ -12,6 +12,7 @@ interface Skill {
 const Skills: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [animatedSkills, setAnimatedSkills] = useState<Set<string>>(new Set());
+  const [searchTerm, setSearchTerm] = useState('');
 
   const skillCategories = [
     { name: 'All', icon: Code, color: 'from-blue-500 to-purple-500' },
@@ -52,9 +53,11 @@ const Skills: React.FC = () => {
 
   ];
 
-  const filteredSkills = selectedCategory === 'All' 
-    ? skills 
-    : skills.filter(skill => skill.category === selectedCategory);
+  const filteredSkills = skills.filter(skill => {
+    const matchesCategory = selectedCategory === 'All' || skill.category === selectedCategory;
+    const matchesSearch = skill.name.toLowerCase().includes(searchTerm.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -66,7 +69,7 @@ const Skills: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [selectedCategory]);
+  }, [filteredSkills, selectedCategory]);
 
   const getSkillColor = (level: number) => {
     if (level >= 90) return 'from-emerald-500 to-green-400';
@@ -105,6 +108,28 @@ const Skills: React.FC = () => {
           </p>
         </div>
 
+        {/* Search Bar */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search skills..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           {skillCategories.map((category) => {
@@ -113,8 +138,10 @@ const Skills: React.FC = () => {
               <button
                 key={category.name}
                 onClick={() => {
-                  setSelectedCategory(category.name);
-                  setAnimatedSkills(new Set());
+                  if (selectedCategory !== category.name) {
+                    setSelectedCategory(category.name);
+                    setAnimatedSkills(new Set());
+                  }
                 }}
                 className={`group relative flex items-center gap-3 px-6 py-3 rounded-xl font-medium transition-all duration-300 transform hover:scale-105 ${
                   selectedCategory === category.name
@@ -252,7 +279,7 @@ const Skills: React.FC = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               'Agile/Scrum', 'Test-Driven Development', 'Clean Architecture', 'Microservices',
-              'Domain-Driven Design', 'SOLID Principles', 'Code Reviews', 'Performance Optimization'
+              'Domain-Driven Design', 'SOLID Principles', 'Performance Optimization'
             ].map((methodology, index) => (
               <div
                 key={methodology}

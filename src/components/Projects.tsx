@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { ExternalLink, Github, Filter, Calendar, Users, TrendingUp, Zap, Shield, Cpu } from 'lucide-react';
+import { ExternalLink, Github, Filter, Calendar, Users, TrendingUp, Zap, Shield, Cpu, Layers, Search } from 'lucide-react';
+import LazyImage from './LazyImage';
 
 interface Project {
   id: string;
@@ -24,115 +25,120 @@ interface Project {
 const Projects: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const projects: Project[] = [
     {
       id: '1',
-      title: 'Quantum-Scale E-Commerce Engine',
-      duration: 'Jan 2023 - Aug 2023',
-      domain: 'E-Commerce / Retail',
-      problem: 'Legacy monolithic e-commerce platform experiencing performance bottlenecks, handling 50k+ daily active users with 3-5 second page load times and frequent downtime during peak traffic.',
-      solution: 'Architected and implemented a microservices-based solution using event-driven architecture, implementing CQRS pattern for order processing and implementing Redis caching layer.',
-      role: 'Lead Backend Engineer',
+      title: 'Vehicle Rental System',
+      duration: 'Sep 2025 - Present',
+      domain: 'Transportation / Rental Services',
+      problem: 'Need for comprehensive rental platform handling multi-language support, real-time booking management, and seamless payment processing for growing vehicle rental business.',
+      solution: 'Developing full-stack rental platform using Laravel 12 and Vue.js 3 with Inertia.js, implementing multi-language support (Arabic/English RTL), real-time notifications, and integrated payment processing.',
+      role: 'Full-Stack Developer',
       contributions: [
-        'Designed microservices architecture reducing system coupling by 70%',
-        'Implemented event-driven order processing system handling 10k+ orders/day',
-        'Optimized database queries reducing average response time from 800ms to 120ms',
-        'Built robust CI/CD pipeline with automated testing and zero-downtime deployments'
+        'Architected scalable backend APIs with extensive migrations and relationship mapping',
+        'Built comprehensive Filament-based admin dashboard with analytics and reporting',
+        'Implemented SPA with Vue.js for intuitive booking workflow and user management',
+        'Integrated business logic for deposit calculations, booking validation, and availability tracking'
       ],
-      technologies: ['Node.js', 'TypeScript', 'PostgreSQL', 'Redis', 'Docker', 'Kubernetes', 'AWS ECS', 'RabbitMQ', 'Jest'],
+      technologies: ['Laravel 12', 'Vue.js 3', 'Inertia.js', 'MySQL', 'Filament v4', 'Livewire v3', 'Pest', 'PHP 8.2+'],
       features: [
-        'Real-time inventory management across multiple warehouses',
-        'Advanced product recommendation engine using collaborative filtering',
-        'Secure payment processing with multiple gateway integrations',
-        'Admin dashboard with real-time analytics and reporting'
+        'Multi-language support with Arabic/English RTL functionality',
+        'Real-time booking system with availability management',
+        'Comprehensive admin dashboard with revenue reporting',
+        'Activity logging and vehicle utilization tracking'
       ],
       outcomes: [
-        'Reduced page load times by 65% (from 3-5s to 1-1.5s)',
-        'Increased system uptime to 99.9% during peak traffic',
-        'Improved order processing speed by 40%',
-        'Reduced infrastructure costs by 30% through optimization'
+        'Streamlined vehicle rental operations with automated workflows',
+        'Enhanced user experience with multi-language support',
+        'Improved booking efficiency with real-time availability',
+        'Established comprehensive testing infrastructure for reliability'
       ],
-      demoUrl: 'https://demo.example.com',
-      githubUrl: 'https://github.com/adilomer/ecommerce-platform',
-      image: 'https://images.pexels.com/photos/230544/pexels-photo-230544.jpeg?auto=compress&cs=tinysrgb&w=800',
+      githubUrl: 'https://github.com/AdilAzhari/vehicle-rental-system',
+      image: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800',
+      category: 'Full-Stack',
+      complexity: 'High',
+      impact: 'High'
+    },
+    {
+      id: '2',
+      title: 'Enterprise POS & Retail Management System',
+      duration: 'Jul 2024 - Aug 2025',
+      domain: 'Retail / Point of Sale',
+      problem: 'Retail businesses needed comprehensive management system with real-time inventory tracking, multi-store support, and advanced analytics for efficient operations.',
+      solution: 'Developed enterprise-grade retail management system using Laravel 11 and Vue.js 3, implementing real-time inventory tracking, multi-payment processing, and comprehensive reporting.',
+      role: 'Full-Stack Developer',
+      contributions: [
+        'Built interactive POS interface with barcode scanning and receipt generation',
+        'Implemented advanced inventory management with supplier integration',
+        'Created customer loyalty program with analytics and personalized promotions',
+        'Optimized database performance with Redis caching for high-volume transactions'
+      ],
+      technologies: ['Laravel 11', 'Vue.js 3', 'Inertia.js', 'Redis', 'MySQL', 'PHP 8.2+', 'Pest', 'Stripe'],
+      features: [
+        'Real-time inventory tracking with low-stock alerts',
+        'Multi-payment processing with receipt generation',
+        'Customer loyalty program with purchase history analytics',
+        'Comprehensive reporting with PDF, Excel, CSV export capabilities'
+      ],
+      outcomes: [
+        'Improved retail operations efficiency with automated inventory management',
+        'Enhanced customer engagement through loyalty program features',
+        'Streamlined multi-store operations with centralized management',
+        'Achieved high-performance transaction processing with Redis optimization'
+      ],
+      githubUrl: 'https://github.com/AdilAzhari/enterprise-pos-system',
+      image: 'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Full-Stack',
       complexity: 'High',
       impact: 'Critical'
     },
     {
-      id: '2',
-      title: 'Neural Fraud Detection Pipeline',
-      duration: 'Sep 2022 - Dec 2022',
-      domain: 'FinTech / Analytics',
-      problem: 'Financial services company needed real-time fraud detection and risk analysis for processing 1M+ transactions daily with sub-100ms latency requirements.',
-      solution: 'Built scalable stream processing pipeline using Apache Kafka and Apache Flink, implementing machine learning models for real-time anomaly detection.',
-      role: 'Data Platform Engineer',
+      id: '3',
+      title: 'BloodConnect - Healthcare Management Platform',
+      duration: 'Dec 2023 - Aug 2024',
+      domain: 'Healthcare / Blood Bank Management',
+      problem: 'Healthcare facilities needed comprehensive blood bank management system with donor-patient matching, inventory tracking, and regulatory compliance features.',
+      solution: 'Built comprehensive healthcare platform using Laravel 11 with sophisticated role-based access control, automated notification system, and compliance-ready audit trails.',
+      role: 'Full-Stack Developer',
       contributions: [
-        'Architected Kafka-based streaming platform processing 50k events/second',
-        'Implemented real-time ML inference pipeline with 99.5% accuracy',
-        'Built monitoring dashboard with custom alerts for anomaly detection',
-        'Optimized data storage reducing costs by 45% using data partitioning'
+        'Implemented sophisticated donor-patient matching algorithms',
+        'Built automated notification system for critical blood requests',
+        'Designed audit trail system for medical compliance and regulatory reporting',
+        'Created role-based access control using Spatie permissions for multi-user workflows'
       ],
-      technologies: ['Python', 'Apache Kafka', 'Apache Flink', 'TensorFlow', 'PostgreSQL', 'InfluxDB', 'Grafana', 'Docker'],
+      technologies: ['Laravel 11', 'Spatie Permissions', 'AdminLTE', 'MySQL', 'PHP 8.2+', 'Pest', 'JavaScript'],
       features: [
-        'Real-time fraud detection with ML-powered risk scoring',
-        'Scalable event streaming architecture',
-        'Interactive analytics dashboard with drill-down capabilities',
-        'Automated alerting system for suspicious activities'
+        'Comprehensive blood bank inventory management',
+        'Donor-patient matching with compatibility algorithms',
+        'Automated notifications for critical requests and inventory alerts',
+        'File management system for donor documentation and medical certificates'
       ],
       outcomes: [
-        'Reduced fraud detection time from 24 hours to <100ms',
-        'Achieved 99.5% accuracy in anomaly detection',
-        'Prevented $2.3M in potential fraudulent transactions',
-        'Improved customer trust and regulatory compliance'
+        'Streamlined blood bank operations with automated matching',
+        'Improved response time for critical blood requests',
+        'Enhanced regulatory compliance with comprehensive audit trails',
+        'Reduced administrative overhead through automation'
       ],
-      githubUrl: 'https://github.com/adilomer/realtime-analytics',
-      image: 'https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=800',
-      category: 'Data Engineering',
+      githubUrl: 'https://github.com/AdilAzhari/bloodconnect-platform',
+      image: 'https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800',
+      category: 'Full-Stack',
       complexity: 'High',
       impact: 'Critical'
-    },
-    {
-      id: '3',
-      title: 'Serverless Collaboration Matrix',
-      duration: 'Mar 2022 - Aug 2022',
-      domain: 'SaaS / Project Management',
-      problem: 'Startup needed to rapidly build and scale a project management platform for remote teams, requiring multi-tenancy, real-time collaboration, and global deployment.',
-      solution: 'Developed cloud-native architecture using serverless technologies, implementing GraphQL federation for API management and WebSocket connections for real-time features.',
-      role: 'Full-Stack Architect',
-      contributions: [
-        'Designed serverless architecture reducing operational overhead by 80%',
-        'Implemented GraphQL federation connecting 5+ microservices',
-        'Built real-time collaboration features supporting 1000+ concurrent users',
-        'Created automated deployment pipeline with multi-region support'
-      ],
-      technologies: ['React', 'TypeScript', 'Node.js', 'GraphQL', 'AWS Lambda', 'DynamoDB', 'WebSocket', 'CDK'],
-      features: [
-        'Real-time collaborative document editing',
-        'Multi-tenant architecture with data isolation',
-        'Advanced project analytics and reporting',
-        'Integration marketplace with 20+ third-party tools'
-      ],
-      outcomes: [
-        'Achieved 0-100k users scaling in 6 months',
-        'Maintained 99.9% uptime across multiple regions',
-        'Reduced development time for new features by 50%',
-        'Generated $500k ARR within first year'
-      ],
-      demoUrl: 'https://saas-demo.example.com',
-      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=800',
-      category: 'Cloud Architecture',
-      complexity: 'High',
-      impact: 'High'
     }
   ];
 
   const categories = ['All', 'Full-Stack', 'Data Engineering', 'Cloud Architecture', 'Mobile'];
 
-  const filteredProjects = selectedCategory === 'All' 
-    ? projects 
-    : projects.filter(project => project.category === selectedCategory);
+  const filteredProjects = projects.filter(project => {
+    const matchesCategory = selectedCategory === 'All' || project.category === selectedCategory;
+    const matchesSearch = 
+      project.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.domain.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      project.technologies.some(tech => tech.toLowerCase().includes(searchTerm.toLowerCase()));
+    return matchesCategory && matchesSearch;
+  });
 
   const getComplexityIcon = (complexity: string) => {
     switch (complexity) {
@@ -173,6 +179,28 @@ const Projects: React.FC = () => {
           </p>
         </div>
 
+        {/* Project Search */}
+        <div className="max-w-md mx-auto mb-8">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search projects, technologies, or domains..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 text-gray-900 dark:text-white placeholder-gray-500"
+            />
+            {searchTerm && (
+              <button
+                onClick={() => setSearchTerm('')}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+              >
+                ×
+              </button>
+            )}
+          </div>
+        </div>
+
         {/* Category Filter */}
         <div className="flex flex-wrap justify-center gap-4 mb-12">
           <div className="flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
@@ -189,7 +217,10 @@ const Projects: React.FC = () => {
                   : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-blue-50 dark:hover:bg-gray-700 shadow-md'
               }`}
             >
-              {category}
+              <span className="relative flex items-center gap-2">
+                <Layers className="h-4 w-4 group-hover:animate-spin" />
+                {category}
+              </span>
             </button>
           ))}
         </div>
@@ -207,10 +238,10 @@ const Projects: React.FC = () => {
                 <div className="grid lg:grid-cols-2 gap-0">
                   {/* Project Image */}
                   <div className="relative overflow-hidden">
-                    <img
+                    <LazyImage
                       src={project.image}
                       alt={project.title}
-                      className="w-full h-64 lg:h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                      className="w-full h-64 lg:h-full transition-transform duration-700 group-hover:scale-110"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
                     
@@ -478,5 +509,31 @@ const ProjectModal: React.FC<{ project: Project; onClose: () => void }> = ({ pro
     </div>
   );
 };
+
+// Add these CSS classes to your index.css for the enhanced effects
+/*
+.neural-network-pattern {
+  background-image: 
+    radial-gradient(circle at 25% 25%, rgba(6, 182, 212, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 75% 75%, rgba(168, 85, 247, 0.1) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+  background-size: 60px 60px, 80px 80px, 100px 100px;
+  animation: neural-pulse 10s ease-in-out infinite;
+}
+
+@keyframes neural-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+}
+
+.quantum-energy-line {
+  animation: energy-flow 2s ease-in-out infinite;
+}
+
+@keyframes energy-flow {
+  0%, 100% { opacity: 0; transform: scaleX(0); }
+  50% { opacity: 1; transform: scaleX(1); }
+}
+*/
 
 export default Projects;
