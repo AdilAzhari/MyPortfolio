@@ -20,7 +20,7 @@ import {
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
-  const experienceYears = currentYear - 2022; // Started in 2022
+  const experienceYears = currentYear - 2023; // Started in 2023
 
   const socialLinks = [
     { icon: Github, href: 'https://github.com/AdilAzhari', label: 'GitHub', description: 'View my code' },
