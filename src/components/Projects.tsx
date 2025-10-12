@@ -55,7 +55,7 @@ const Projects: React.FC = () => {
         'Improved booking efficiency with real-time availability',
         'Established comprehensive testing infrastructure for reliability'
       ],
-      githubUrl: 'https://github.com/AdilAzhari/vehicle-rental-system',
+      githubUrl: 'https://github.com/AdilAzhari/car-rental-system',
       image: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Full-Stack',
       complexity: 'High',
@@ -88,7 +88,7 @@ const Projects: React.FC = () => {
         'Streamlined multi-store operations with centralized management',
         'Achieved high-performance transaction processing with Redis optimization'
       ],
-      githubUrl: 'https://github.com/AdilAzhari/enterprise-pos-system',
+      githubUrl: 'https://github.com/AdilAzhari/POS-SuperMarket',
       image: 'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Full-Stack',
       complexity: 'High',
@@ -121,7 +121,7 @@ const Projects: React.FC = () => {
         'Enhanced regulatory compliance with comprehensive audit trails',
         'Reduced administrative overhead through automation'
       ],
-      githubUrl: 'https://github.com/AdilAzhari/bloodconnect-platform',
+      githubUrl: 'https://github.com/AdilAzhari/blood-bank',
       image: 'https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800',
       category: 'Full-Stack',
       complexity: 'High',
