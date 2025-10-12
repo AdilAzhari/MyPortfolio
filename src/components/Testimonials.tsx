@@ -37,7 +37,7 @@ const Testimonials: React.FC = () => {
       project: 'Vehicle Rental System (In Development)',
       duration: 'Ongoing project',
       skills: ['Laravel 12', 'Vue.js 3', 'Inertia.js', 'MySQL'],
-      companySize: '20-50 employees',
+      companySize: '20-60 employees',
       industry: 'Transportation'
     },
     {
