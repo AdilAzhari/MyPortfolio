@@ -82,10 +82,11 @@ const Header: React.FC = () => {
   };
 
   const navItems = [
-    { id: 'about', label: 'About', icon: '👨‍💻' },
-    { id: 'projects', label: 'Projects', icon: '🚀' },
-    { id: 'skills', label: 'Skills', icon: '⚡' },
-    { id: 'contact', label: 'Contact', icon: '📬' }
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'blog', label: 'Blog' },
+    { id: 'skills', label: 'Skills' },
+    { id: 'contact', label: 'Contact' },
   ];
 
   return (
@@ -118,11 +119,8 @@ const Header: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className="group flex items-center gap-2 px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-all duration-200 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                className="px-4 py-2 text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 font-medium transition-colors duration-200 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 text-sm"
               >
-                <span className="text-sm group-hover:scale-110 transition-transform duration-200">
-                  {item.icon}
-                </span>
                 {item.label}
               </button>
             ))}
@@ -200,11 +198,8 @@ const Header: React.FC = () => {
                 <button
                   key={item.id}
                   onClick={() => scrollToSection(item.id)}
-                  className="group flex items-center gap-3 w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-all duration-200 rounded-lg"
+                  className="w-full text-left px-4 py-3 text-base font-medium text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200 rounded-lg"
                 >
-                  <span className="text-lg group-hover:scale-110 transition-transform duration-200">
-                    {item.icon}
-                  </span>
                   {item.label}
                 </button>
               ))}
