@@ -30,18 +30,13 @@ const Skills: React.FC = () => {
     { name: 'JavaScript', level: 70, category: 'Frontend', yearsExp: 1.5, projects: 5 },
     { name: 'Vue.js', level: 80, category: 'Frontend', yearsExp: 3, projects: 7 },
     { name: 'Tailwind CSS', level: 90, category: 'Frontend', yearsExp: 4, projects: 15 },
-    { name: 'GraphQL', level: 70, category: 'Frontend', yearsExp: 1, projects:2 },
-    
     // Backend
     { name: 'Php', level: 95, category: 'Backend', yearsExp: 7, projects: 35 },
     { name: 'Laravel', level: 85, category: 'Backend', yearsExp: 3, projects: 15 },
     { name: 'Inertia.js', level: 80, category: 'Backend', yearsExp: 2, projects: 6 },
-    { name: 'livewire', level: 75, category: 'Backend', yearsExp: 2, projects: 3 },
-    
-    
+
     // Cloud
     { name: 'AWS', level: 90, category: 'Cloud', yearsExp: 2, projects: 2 },
-    { name: 'Serverless', level: 85, category: 'Cloud', yearsExp: 4, projects: 15 },
     
     // Database
     { name: 'MySQL', level: 85, category: 'Database', yearsExp: 5, projects: 22 },
