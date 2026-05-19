@@ -273,7 +273,7 @@ const Skills: React.FC = () => {
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
-              'Agile/Scrum', 'Test-Driven Development', 'Clean Architecture', 'Microservices',
+              'Agile/Scrum', 'Test-Driven Development', 'Clean Architecture',
               'Domain-Driven Design', 'SOLID Principles', 'Performance Optimization'
             ].map((methodology, index) => (
               <div
