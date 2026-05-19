@@ -29,6 +29,41 @@ const Projects: React.FC = () => {
 
   const projects: Project[] = [
     {
+      id: '4',
+      title: 'Madarik - School Management SaaS',
+      duration: 'Jan 2025 - Present',
+      domain: 'Education / Multi-Tenant SaaS',
+      problem: 'Schools needed an all-in-one management platform covering students, teachers, attendance, grades, fees, library, conduct, messaging, and more — with full data isolation between tenants and role-based access for admins, principals, teachers, parents, and students.',
+      solution: 'Built a multi-tenant SaaS on Laravel 11 + Inertia.js (React 18) using a global scope tenant isolation pattern, Sanctum-based API, Spatie permissions, and a rich developer portal for real-time auditing and job health monitoring.',
+      role: 'Full-Stack Developer',
+      contributions: [
+        'Architected multi-tenancy using a BelongsToSchool global scope and ResolveSchool middleware binding school_id per authenticated user',
+        'Built a comprehensive REST API (students, attendance, grades, assignments, fees, announcements, parent & teacher portals, principal dashboard)',
+        'Implemented CheckSchoolStatus middleware for web and API groups to block suspended schools with correct JSON/redirect responses',
+        'Delivered chunked notification dispatch via chunkById(200) to handle large user bases without memory exhaustion',
+        'Designed InvoicePolicy with school_id guard to prevent cross-tenant data access, and rate-limited login to 6 attempts/minute',
+        'Wrote 103+ Pest v2 feature tests covering every API endpoint and business rule'
+      ],
+      technologies: ['Laravel 11', 'React 18', 'Inertia.js v1', 'Pest v2', 'Spatie Permissions', 'Laravel Sanctum', 'MySQL', 'Ziggy v2', 'PHP 8.4'],
+      features: [
+        'Multi-tenant isolation with per-school global scoping and super-admin override via X-School-Id header',
+        'Full school operations: students, attendance, grades, exams, assignments, fees, library, conduct, calendar',
+        'Role-based access for admin, principal, teacher, parent, student, and developer roles',
+        'Developer portal with real-time audit logs, failed job monitoring, and tenant/subscription management'
+      ],
+      outcomes: [
+        'Zero cross-tenant data leaks through layered policy and scope enforcement',
+        '103 Pest tests providing full coverage of API contracts and security rules',
+        'Chunked notification pipeline supporting schools with thousands of users',
+        'Modular architecture enabling rapid addition of new school modules without regression'
+      ],
+      githubUrl: 'https://github.com/AdilAzhari/madarik',
+      image: 'https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?auto=compress&cs=tinysrgb&w=800',
+      category: 'Full-Stack',
+      complexity: 'High',
+      impact: 'Critical'
+    },
+    {
       id: '1',
       title: 'Vehicle Rental System',
       duration: 'Sep 2025 - Present',

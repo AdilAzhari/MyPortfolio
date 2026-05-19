@@ -44,22 +44,6 @@ const Certifications: React.FC = () => {
       certificateUrl: '/certificates/aws-solutions-architect-professional.pdf'
     },
     {
-      id: '2',
-      title: 'Kubernetes Certified Application Developer (CKAD)',
-      issuer: 'Cloud Native Computing Foundation',
-      issueDate: '2023-06-20',
-      expiryDate: '2026-06-20',
-      credentialId: 'CKAD-2023-567890',
-      credentialUrl: 'https://training.linuxfoundation.org/certification/verify',
-      verificationUrl: 'https://training.linuxfoundation.org/certification/verify/CKAD-2023-567890',
-      description: 'Demonstrates the ability to design, build, configure, and expose cloud native applications for Kubernetes.',
-      skills: ['Kubernetes', 'Container Orchestration', 'Application Deployment', 'Troubleshooting'],
-      category: 'DevOps',
-      level: 'Professional',
-      image: 'https://images.unsplash.com/photo-1605481178919-05b4de3ad4b9?auto=format&fit=crop&w=400&h=200',
-      status: 'Active'
-    },
-    {
       id: '3',
       title: 'Google Professional Data Engineer',
       issuer: 'Google Cloud',
@@ -89,21 +73,6 @@ const Certifications: React.FC = () => {
       status: 'Active'
     },
     {
-      id: '5',
-      title: 'Certified Kubernetes Security Specialist (CKS)',
-      issuer: 'Cloud Native Computing Foundation',
-      issueDate: '2022-11-30',
-      expiryDate: '2025-11-30',
-      credentialId: 'CKS-2022-789012',
-      credentialUrl: 'https://training.linuxfoundation.org/certification/verify',
-      description: 'Validates skills required to secure container-based applications and Kubernetes platforms during build, deployment, and runtime.',
-      skills: ['Kubernetes Security', 'Container Security', 'Network Policies', 'RBAC', 'Security Scanning'],
-      category: 'Security',
-      level: 'Professional',
-      image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=400&h=200',
-      status: 'Active'
-    },
-    {
       id: '6',
       title: 'Microsoft Azure Solutions Architect Expert',
       issuer: 'Microsoft',
@@ -120,7 +89,7 @@ const Certifications: React.FC = () => {
     }
   ];
 
-  const categories = ['All', 'Cloud Computing', 'DevOps', 'Data Engineering', 'Database', 'Security'];
+  const categories = ['All', 'Cloud Computing', 'Data Engineering', 'Database'];
 
   const filteredCertifications = certifications.filter(cert => {
     const matchesCategory = selectedCategory === 'All' || cert.category === selectedCategory;
