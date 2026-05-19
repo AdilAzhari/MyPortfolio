@@ -9,7 +9,7 @@ const Hero: React.FC = () => {
   const stack = ['Laravel', 'PHP 8.4', 'React', 'Vue.js', 'Inertia.js', 'MySQL', 'AWS', 'Pest'];
 
   return (
-    <section className="min-h-screen flex items-center bg-[#080808] relative overflow-hidden">
+    <section className="min-h-screen flex items-center bg-gray-50 dark:bg-[#080808] relative overflow-hidden">
       <div className="hero-grid absolute inset-0 pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-6 lg:px-8 w-full py-32 relative z-10">
@@ -18,19 +18,19 @@ const Hero: React.FC = () => {
           {/* Left — Identity */}
           <div className="space-y-8">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-              <span className="text-emerald-400 font-mono text-sm tracking-widest uppercase">Open to opportunities</span>
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-emerald-600 dark:text-emerald-400 font-mono text-sm tracking-widest uppercase">Open to opportunities</span>
             </div>
 
-            <h1 className="text-[clamp(4rem,10vw,8rem)] font-black text-white leading-none tracking-tight">
+            <h1 className="text-[clamp(4rem,10vw,8rem)] font-black text-gray-900 dark:text-white leading-none tracking-tight">
               Adil<br />Omer
             </h1>
 
-            <p className="text-xl lg:text-2xl text-gray-300 leading-relaxed max-w-lg">
-              I build <span className="text-white font-semibold">Laravel SaaS products</span> that don't fall apart at scale.
+            <p className="text-xl lg:text-2xl text-gray-600 dark:text-gray-300 leading-relaxed max-w-lg">
+              I build <span className="text-gray-900 dark:text-white font-semibold">Laravel SaaS products</span> that don't fall apart at scale.
             </p>
 
-            <p className="text-gray-500 max-w-md leading-relaxed">
+            <p className="text-gray-500 dark:text-gray-500 max-w-md leading-relaxed">
               Full-stack developer specializing in multi-tenant architecture, clean API design, and test-driven Laravel applications.
             </p>
 
@@ -62,7 +62,7 @@ const Hero: React.FC = () => {
                   target={href.startsWith('mailto') ? undefined : '_blank'}
                   rel={href.startsWith('mailto') ? undefined : 'noopener noreferrer'}
                   aria-label={label}
-                  className="text-gray-600 hover:text-white transition-colors duration-200"
+                  className="text-gray-500 dark:text-gray-600 hover:text-gray-900 dark:hover:text-white transition-colors duration-200"
                 >
                   <Icon className="h-5 w-5" />
                 </a>
@@ -72,47 +72,7 @@ const Hero: React.FC = () => {
 
           {/* Right — Bento Grid */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bento-card p-6 rounded-2xl">
-              <div className="text-5xl font-black text-white leading-none">7+</div>
-              <div className="text-gray-500 text-sm mt-2">Years of PHP</div>
-            </div>
-
-            <div className="bento-card p-6 rounded-2xl">
-              <div className="text-5xl font-black text-white leading-none">15+</div>
-              <div className="text-gray-500 text-sm mt-2">Projects built</div>
-            </div>
-
-            <div className="col-span-2 bento-card p-5 rounded-2xl">
-              <div className="flex items-center justify-between">
-                <div>
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                    <span className="text-emerald-400 font-semibold text-sm">Available now</span>
-                  </div>
-                  <p className="text-gray-500 text-xs">Open to full-time or freelance</p>
-                </div>
-                <div className="flex items-center gap-1 text-gray-600 text-xs">
-                  <MapPin className="h-3 w-3" />
-                  Malaysia (UTC+8)
-                </div>
-              </div>
-            </div>
-
-            <div className="col-span-2 bento-card p-5 rounded-2xl">
-              <p className="text-gray-600 text-xs uppercase tracking-widest mb-3 font-mono">Core Stack</p>
-              <div className="flex flex-wrap gap-2">
-                {stack.map(tech => (
-                  <span
-                    key={tech}
-                    className="px-3 py-1 bg-white/5 border border-white/[0.08] text-gray-300 rounded-full text-xs font-medium"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="col-span-2 bento-card rounded-2xl overflow-hidden h-48 relative">
+            <div className="col-span-2 bento-card rounded-2xl overflow-hidden h-56 relative">
               <img
                 src="/adil-profile.png"
                 alt="Adil Omer"
@@ -124,6 +84,46 @@ const Hero: React.FC = () => {
                 <p className="text-gray-400 text-xs">Shah Alam, Malaysia</p>
               </div>
             </div>
+
+            <div className="bento-card p-6 rounded-2xl">
+              <div className="text-5xl font-black text-gray-900 dark:text-white leading-none">7+</div>
+              <div className="text-gray-500 text-sm mt-2">Years of PHP</div>
+            </div>
+
+            <div className="bento-card p-6 rounded-2xl">
+              <div className="text-5xl font-black text-gray-900 dark:text-white leading-none">15+</div>
+              <div className="text-gray-500 text-sm mt-2">Projects built</div>
+            </div>
+
+            <div className="col-span-2 bento-card p-5 rounded-2xl">
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="flex items-center gap-2 mb-1">
+                    <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+                    <span className="text-emerald-600 dark:text-emerald-400 font-semibold text-sm">Available now</span>
+                  </div>
+                  <p className="text-gray-500 text-xs">Open to full-time or freelance</p>
+                </div>
+                <div className="flex items-center gap-1 text-gray-500 dark:text-gray-600 text-xs">
+                  <MapPin className="h-3 w-3" />
+                  Malaysia (UTC+8)
+                </div>
+              </div>
+            </div>
+
+            <div className="col-span-2 bento-card p-5 rounded-2xl">
+              <p className="text-gray-500 dark:text-gray-600 text-xs uppercase tracking-widest mb-3 font-mono">Core Stack</p>
+              <div className="flex flex-wrap gap-2">
+                {stack.map(tech => (
+                  <span
+                    key={tech}
+                    className="px-3 py-1 bg-gray-100 dark:bg-white/5 border border-gray-200 dark:border-white/[0.08] text-gray-600 dark:text-gray-300 rounded-full text-xs font-medium"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
 
         </div>
@@ -131,8 +131,8 @@ const Hero: React.FC = () => {
 
       {/* Scroll hint */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 pointer-events-none">
-        <span className="text-gray-700 text-[10px] tracking-widest uppercase font-mono">scroll</span>
-        <div className="w-px h-8 bg-gradient-to-b from-gray-700 to-transparent" />
+        <span className="text-gray-400 dark:text-gray-700 text-[10px] tracking-widest uppercase font-mono">scroll</span>
+        <div className="w-px h-8 bg-gradient-to-b from-gray-400 dark:from-gray-700 to-transparent" />
       </div>
     </section>
   );

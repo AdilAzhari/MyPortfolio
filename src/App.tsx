@@ -24,7 +24,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <div className="min-h-screen bg-[#080808] animate-fade-in" role="main" aria-label="Adil Omer's Portfolio Website">
+        <div className="min-h-screen bg-white dark:bg-[#080808] animate-fade-in" role="main" aria-label="Adil Omer's Portfolio Website">
           <Header />
 
           <main id="main-content" aria-label="Portfolio Content">
