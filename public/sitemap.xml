@@ -44,14 +44,6 @@
     <priority>0.8</priority>
   </url>
 
-  <!-- Certifications Section -->
-  <url>
-    <loc>https://adilomer.xyz/#certifications</loc>
-    <lastmod>2026-05-19</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-
   <!-- Skills Section -->
   <url>
     <loc>https://adilomer.xyz/#skills</loc>

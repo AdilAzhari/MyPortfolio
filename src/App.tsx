@@ -11,7 +11,6 @@ const About = React.lazy(() => import('./components/About'));
 const Projects = React.lazy(() => import('./components/Projects'));
 const Testimonials = React.lazy(() => import('./components/Testimonials'));
 const Blog = React.lazy(() => import('./components/Blog'));
-const Certifications = React.lazy(() => import('./components/Certifications'));
 const Skills = React.lazy(() => import('./components/Skills'));
 const Contact = React.lazy(() => import('./components/Contact'));
 const Footer = React.lazy(() => import('./components/Footer'));
@@ -45,10 +44,6 @@ function App() {
 
             <Suspense fallback={<SkeletonLoader type="blog" />}>
               <Blog />
-            </Suspense>
-
-            <Suspense fallback={<SkeletonLoader type="section" />}>
-              <Certifications />
             </Suspense>
 
             <Suspense fallback={<SkeletonLoader type="section" />}>

@@ -68,34 +68,6 @@ const Testimonials: React.FC = () => {
       companySize: '500+ employees',
       industry: 'Healthcare'
     },
-    {
-      id: '4',
-      name: 'Omar Abdullah',
-      role: 'Real Estate Manager',
-      company: 'Elite Properties Group',
-      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150',
-      rating: 5,
-      content: 'Adil built a comprehensive real estate management platform that handles our property listings perfectly. The advanced search capabilities, offer management system, and comprehensive analytics have improved our client service significantly. Clean Laravel architecture and excellent performance.',
-      project: 'Real Estate Management Platform',
-      duration: '3 months',
-      skills: ['Laravel 12', 'Vue.js 3', 'Inertia.js', 'MySQL'],
-      companySize: '50-100 employees',
-      industry: 'Real Estate'
-    },
-    {
-      id: '5',
-      name: 'Nadia Hassan',
-      role: 'Head Librarian',
-      company: 'Central City Library',
-      image: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=150&h=150',
-      rating: 5,
-      content: 'The library management system Adil developed completely modernized our operations. The intelligent search using Typesense, automated borrowing workflow, and comprehensive analytics dashboard have made managing our collection effortless. Exceptional Laravel development skills.',
-      project: 'Enterprise Library Management System',
-      duration: '6 months',
-      skills: ['Laravel 12', 'Vue.js 3', 'Typesense', 'MySQL'],
-      companySize: '100-200 employees',
-      industry: 'Education'
-    }
   ];
 
   const nextTestimonial = (isAutoplay = false) => {
