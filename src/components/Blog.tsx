@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, BookOpen, ArrowRight, Tag, Eye, Heart, Share2, Filter, Search, ExternalLink, Copy, Check } from 'lucide-react';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vsDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import LazyImage from './LazyImage';
 
 interface Article {
@@ -452,7 +452,7 @@ const CB: React.FC<{ children: string; language?: string }> = ({ children, langu
     <div className="relative group my-6 rounded-xl overflow-hidden">
       <SyntaxHighlighter
         language={language}
-        style={vsDark}
+        style={vscDarkPlus}
         customStyle={{ margin: 0, borderRadius: '0.75rem', padding: '1.25rem', fontSize: '0.875rem', lineHeight: '1.625' }}
       >
         {children}
@@ -985,7 +985,7 @@ class StudentPolicy
     }
 }`}</CB>
     <P>
-      The pattern is always the same: <IC>$user->school_id === $resource->school_id</IC> before any
+      The pattern is always the same: <IC>{'$user->school_id === $resource->school_id'}</IC> before any
       permission or role check. If the school IDs do not match, the request is denied regardless of
       what role or permission the user holds. This makes cross-tenant access impossible even if a user
       somehow obtains a valid token from a different school.
