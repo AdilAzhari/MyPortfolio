@@ -1079,6 +1079,992 @@ it('scopes student index to the authenticated user\'s school', function (): void
   </div>
 );
 
+const ServicePatternArticle: React.FC = () => (
+  <div>
+    <H2 id="sp-god-objects">Why Controllers Become God Objects</H2>
+    <P>
+      It starts innocuously. A controller method validates a request, queries the database, sends an email,
+      fires a notification, and returns a JSON response — all in 80 lines. That is not a controller;
+      that is a god object wearing a controller's clothes. Over time it grows: new business rules get appended,
+      special cases accumulate, and the method becomes untestable without bootstrapping half the framework.
+    </P>
+    <P>Here is what a typical over-stuffed controller action looks like before the refactor:</P>
+    <CB>{`public function store(Request $request): JsonResponse
+{
+    $validated = $request->validate([
+        'student_id' => ['required', 'exists:students,id'],
+        'course_id'  => ['required', 'exists:courses,id'],
+    ]);
+
+    $student = Student::findOrFail($validated['student_id']);
+    $course  = Course::findOrFail($validated['course_id']);
+
+    if ($course->students()->count() >= $course->capacity) {
+        return response()->json(['error' => 'Course is full'], 422);
+    }
+
+    if ($student->enrollments()->where('course_id', $course->id)->exists()) {
+        return response()->json(['error' => 'Already enrolled'], 422);
+    }
+
+    $enrollment = Enrollment::create([
+        'student_id' => $student->id,
+        'course_id'  => $course->id,
+        'enrolled_at' => now(),
+    ]);
+
+    Mail::to($student->email)->send(new EnrollmentConfirmationMail($enrollment));
+
+    $student->notify(new EnrolledInCourseNotification($enrollment));
+
+    return response()->json(new EnrollmentResource($enrollment), 201);
+}`}</CB>
+    <P>
+      This method is doing validation, capacity checking, duplicate detection, persistence, email dispatch,
+      and notification dispatch. It is impossible to unit test (you need a database, a mailer, and a notification
+      channel), impossible to reuse from a console command, and impossible to read quickly. The service pattern
+      fixes this by extracting the business logic into a dedicated class.
+    </P>
+
+    <H2 id="sp-service-layer">The Service Layer</H2>
+    <P>
+      A service is a plain PHP class with no parent, no traits, and no framework magic — just a constructor
+      that accepts dependencies and methods that encode business logic. Create one with:
+    </P>
+    <CB language="bash">{`php artisan make:class Services/EnrollmentService`}</CB>
+    <CB>{`// app/Services/EnrollmentService.php
+
+class EnrollmentService
+{
+    public function __construct(
+        private readonly EnrollmentRepository $enrollments,
+        private readonly MailerInterface $mailer,
+    ) {}
+
+    public function enroll(Student $student, Course $course): Enrollment
+    {
+        if ($this->enrollments->isFull($course)) {
+            throw new CourseFullException($course);
+        }
+
+        if ($this->enrollments->isAlreadyEnrolled($student, $course)) {
+            throw new AlreadyEnrolledException($student, $course);
+        }
+
+        $enrollment = $this->enrollments->create($student, $course);
+
+        $this->mailer->send(new EnrollmentConfirmationMail($enrollment));
+
+        return $enrollment;
+    }
+}`}</CB>
+    <P>
+      The controller becomes a thin HTTP adapter — it translates an HTTP request into service inputs
+      and translates the result into an HTTP response. Business logic lives nowhere near it:
+    </P>
+    <CB>{`public function store(EnrollStudentRequest $request, EnrollmentService $service): JsonResponse
+{
+    try {
+        $enrollment = $service->enroll(
+            Student::findOrFail($request->student_id),
+            Course::findOrFail($request->course_id),
+        );
+
+        return response()->json(new EnrollmentResource($enrollment), 201);
+
+    } catch (CourseFullException $e) {
+        return response()->json(['error' => $e->getMessage()], 422);
+    } catch (AlreadyEnrolledException $e) {
+        return response()->json(['error' => $e->getMessage()], 422);
+    }
+}`}</CB>
+    <P>
+      Now the same <IC>EnrollmentService::enroll()</IC> can be called from a console command,
+      a queued job, a Livewire component, or an API controller — with zero code duplication.
+    </P>
+
+    <H2 id="sp-dtos">Data Transfer Objects</H2>
+    <P>
+      As services grow, methods start accepting many parameters — which is fragile, unreadable, and
+      order-dependent. Data Transfer Objects (DTOs) replace parameter lists with typed value objects.
+      PHP 8.1's readonly properties make them essentially free to write:
+    </P>
+    <CB>{`// app/DataTransferObjects/EnrollStudentData.php
+
+readonly class EnrollStudentData
+{
+    public function __construct(
+        public int    $studentId,
+        public int    $courseId,
+        public ?string $notes = null,
+    ) {}
+
+    public static function fromRequest(Request $request): self
+    {
+        return new self(
+            studentId: (int) $request->validated('student_id'),
+            courseId:  (int) $request->validated('course_id'),
+            notes:     $request->validated('notes'),
+        );
+    }
+}`}</CB>
+    <CB>{`// Service now accepts a single typed object
+public function enroll(EnrollStudentData $data): Enrollment
+{
+    $student = Student::findOrFail($data->studentId);
+    $course  = Course::findOrFail($data->courseId);
+    // ...
+}`}</CB>
+    <P>
+      DTOs give you IDE autocompletion on every property, compile-time type safety, and a single place
+      to add validation or transformation logic when the shape of the input changes.
+      The <IC>fromRequest()</IC> factory keeps the HTTP-to-domain translation in one place.
+    </P>
+
+    <H2 id="sp-actions">Action Classes: Single Responsibility in Practice</H2>
+    <P>
+      Services are great for cohesive groups of related operations. But sometimes you have a single,
+      discrete operation that does not belong in a broader service. Action classes — single-method
+      classes named after the operation they perform — are the right tool:
+    </P>
+    <CB>{`// app/Actions/EnrollStudentAction.php
+
+class EnrollStudentAction
+{
+    public function __construct(
+        private readonly EnrollmentRepository $repository,
+    ) {}
+
+    public function __invoke(EnrollStudentData $data): Enrollment
+    {
+        if ($this->repository->isFull($data->courseId)) {
+            throw new CourseFullException();
+        }
+
+        return $this->repository->create(
+            studentId:  $data->studentId,
+            courseId:   $data->courseId,
+            enrolledAt: now(),
+        );
+    }
+}`}</CB>
+    <P>
+      Actions use PHP's <IC>__invoke()</IC> method so they are callable as functions:
+    </P>
+    <CB>{`// In the controller
+public function store(EnrollStudentRequest $request, EnrollStudentAction $action): JsonResponse
+{
+    $enrollment = $action(EnrollStudentData::fromRequest($request));
+
+    return response()->json(new EnrollmentResource($enrollment), 201);
+}`}</CB>
+    <P>
+      The rule of thumb: use a service when you need multiple related methods that share dependencies.
+      Use an action when you need exactly one operation. In practice, many complex services
+      decompose naturally into a collection of action classes orchestrated by a thin service.
+    </P>
+
+    <H2 id="sp-together">Structuring the Layers Together</H2>
+    <P>
+      The full request lifecycle with these patterns looks like this:
+    </P>
+    <UL>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">FormRequest</strong> — validates and authorizes the HTTP input</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">DTO</strong> — converts validated input into a typed domain object</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Action / Service</strong> — executes the business logic</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Eloquent Model / Repository</strong> — persists and retrieves data</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">API Resource</strong> — transforms the Eloquent result into JSON</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Controller</strong> — orchestrates the above, owns no logic itself</li>
+    </UL>
+    <P>
+      A controller that follows this structure is typically 10–20 lines. Every one of those lines is
+      readable at a glance, and every layer is independently testable.
+    </P>
+
+    <H2 id="sp-testing">Testing Service Classes</H2>
+    <P>
+      The primary benefit of the service pattern is testability. Because services accept their dependencies
+      via the constructor, you can inject mocks in tests without touching the HTTP layer:
+    </P>
+    <CB language="php">{`it('throws CourseFullException when the course has no capacity', function (): void {
+    $repository = Mockery::mock(EnrollmentRepository::class);
+    $repository->shouldReceive('isFull')->once()->andReturn(true);
+    $repository->shouldNotReceive('create');
+
+    $action = new EnrollStudentAction($repository);
+    $data   = new EnrollStudentData(studentId: 1, courseId: 1);
+
+    expect(fn () => $action($data))->toThrow(CourseFullException::class);
+});
+
+it('creates an enrollment when the course has capacity', function (): void {
+    $repository = Mockery::mock(EnrollmentRepository::class);
+    $repository->shouldReceive('isFull')->andReturn(false);
+    $repository->shouldReceive('create')->once()->andReturn(
+        Enrollment::factory()->make()
+    );
+
+    $action     = new EnrollStudentAction($repository);
+    $enrollment = $action(new EnrollStudentData(studentId: 1, courseId: 1));
+
+    expect($enrollment)->toBeInstanceOf(Enrollment::class);
+});`}</CB>
+    <P>
+      These are pure unit tests — no database, no HTTP, no framework bootstrap. They run in milliseconds
+      and give you pinpoint feedback about exactly which business rule broke.
+    </P>
+
+    <H2 id="sp-when-not">When Not to Use This Pattern</H2>
+    <P>
+      The service pattern is not free. It adds indirection, more files, and a learning curve for new team members.
+      Do not reach for it everywhere:
+    </P>
+    <UL>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Simple CRUD with no business logic</strong> — if a controller
+        just validates, saves, and returns, there is no service to extract. A direct Eloquent call in the
+        controller is the right answer.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Prototypes and MVPs</strong> — when speed matters and the
+        domain is not yet understood, fat controllers are acceptable. Refactor when the domain stabilises.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">One-off scripts and commands</strong> — console commands that
+        run once and are never reused do not benefit from the abstraction.
+      </li>
+    </UL>
+    <P>
+      The right signal for introducing a service: you find yourself copy-pasting logic between two controllers,
+      or you cannot write a unit test for a controller action without spinning up a database.
+      When either happens, extract the logic and do not look back.
+    </P>
+  </div>
+);
+
+const EventDrivenArticle: React.FC = () => (
+  <div>
+    <H2 id="eda-what">What Event-Driven Actually Means in Laravel</H2>
+    <P>
+      "Event-driven" is often misunderstood as complexity for its own sake. In Laravel, it has a precise meaning:
+      instead of a single method doing X and then directly calling Y and Z, you fire an event that says "X happened"
+      and let separate listeners decide what to do about it. The action that triggered the event does not know
+      — and should not care — what the listeners do.
+    </P>
+    <P>
+      The payoff is decoupling. When a student enrols, you want to: send a confirmation email, post a Slack
+      notification to the teacher, increment an analytics counter, and maybe generate a PDF receipt.
+      Without events, all of that logic lives in the enrolment service. With events, the service fires
+      <IC>StudentEnrolled</IC> and each concern is handled by its own listener. Adding the PDF receipt
+      later requires writing one new listener — zero changes to existing code.
+    </P>
+
+    <H2 id="eda-events-listeners">Defining Events and Listeners</H2>
+    <P>
+      Events in Laravel are plain PHP classes that carry data. Create them with Artisan:
+    </P>
+    <CB language="bash">{`php artisan make:event StudentEnrolled
+php artisan make:listener SendEnrollmentConfirmation --event=StudentEnrolled
+php artisan make:listener NotifyTeacher --event=StudentEnrolled`}</CB>
+    <CB>{`// app/Events/StudentEnrolled.php
+
+class StudentEnrolled
+{
+    public function __construct(
+        public readonly Enrollment $enrollment,
+    ) {}
+}`}</CB>
+    <CB>{`// app/Listeners/SendEnrollmentConfirmation.php
+
+class SendEnrollmentConfirmation
+{
+    public function handle(StudentEnrolled $event): void
+    {
+        Mail::to($event->enrollment->student->email)
+            ->send(new EnrollmentConfirmationMail($event->enrollment));
+    }
+}`}</CB>
+    <P>
+      In Laravel 11, event-listener bindings are discovered automatically via convention — no manual
+      registration in a service provider needed. Laravel scans your <IC>app/Events</IC> and
+      <IC>app/Listeners</IC> directories and wires them up by the type hint on <IC>handle()</IC>.
+      You can verify the mapping with:
+    </P>
+    <CB language="bash">{`php artisan event:list`}</CB>
+    <P>
+      Fire the event from wherever the business action completes:
+    </P>
+    <CB>{`// In your service or action
+$enrollment = Enrollment::create([...]);
+
+event(new StudentEnrolled($enrollment));
+// or: StudentEnrolled::dispatch($enrollment);
+
+return $enrollment;`}</CB>
+
+    <H2 id="eda-queued">Queued Listeners: Async by Default</H2>
+    <P>
+      Any listener that performs I/O — sending email, calling an external API, writing to a log service —
+      should be queued. Synchronous listeners block the current request and make the user wait
+      for operations they do not care about. Implementing <IC>ShouldQueue</IC> is a one-line change:
+    </P>
+    <CB>{`class SendEnrollmentConfirmation implements ShouldQueue
+{
+    public string $queue    = 'notifications';
+    public int    $tries    = 3;
+    public int    $backoff  = 60; // seconds before retry
+
+    public function handle(StudentEnrolled $event): void
+    {
+        Mail::to($event->enrollment->student->email)
+            ->send(new EnrollmentConfirmationMail($event->enrollment));
+    }
+
+    public function failed(StudentEnrolled $event, Throwable $e): void
+    {
+        Log::error('Enrollment confirmation failed', [
+            'enrollment_id' => $event->enrollment->id,
+            'error'         => $e->getMessage(),
+        ]);
+    }
+}`}</CB>
+    <P>
+      The <IC>failed()</IC> hook is critical and underused. When a listener exhausts its retries,
+      <IC>failed()</IC> gives you one last chance to log, alert, or clean up. Without it,
+      failures disappear silently into the failed jobs table.
+    </P>
+    <P>
+      Use dedicated queues per concern (<IC>'notifications'</IC>, <IC>'analytics'</IC>, <IC>'reports'</IC>).
+      This lets you scale and prioritise independently — a backlog in the analytics queue should never
+      delay notification delivery.
+    </P>
+
+    <H2 id="eda-observer-vs-events">Observer vs Events: Choosing the Right Tool</H2>
+    <P>
+      Laravel ships two mechanisms that look similar but serve different purposes: model observers and
+      application events. Knowing when to reach for each prevents architectural confusion.
+    </P>
+    <P>
+      <strong className="font-semibold text-gray-900 dark:text-white">Use model observers</strong> for reactions to Eloquent lifecycle
+      hooks — <IC>creating</IC>, <IC>created</IC>, <IC>updating</IC>, <IC>deleting</IC>.
+      Observers are the right place for: setting default values on creation, maintaining audit logs,
+      cascading soft-deletes, and auto-generating slugs. They respond to <em className="not-italic font-medium text-gray-900 dark:text-white">model persistence events</em>.
+    </P>
+    <CB language="bash">{`php artisan make:observer EnrollmentObserver --model=Enrollment`}</CB>
+    <CB>{`class EnrollmentObserver
+{
+    public function created(Enrollment $enrollment): void
+    {
+        AuditLog::record('enrollment.created', $enrollment);
+    }
+
+    public function deleting(Enrollment $enrollment): void
+    {
+        // Cascade soft-delete to related records
+        $enrollment->grades()->delete();
+    }
+}`}</CB>
+    <P>
+      <strong className="font-semibold text-gray-900 dark:text-white">Use application events</strong> for cross-module communication and
+      business-level domain signals. <IC>StudentEnrolled</IC>, <IC>InvoicePaid</IC>,
+      <IC>AnnouncementPublished</IC> — these represent <em className="not-italic font-medium text-gray-900 dark:text-white">things that happened in your domain</em>,
+      not Eloquent persistence operations. They are the seams between modules and the foundation
+      of a loosely coupled architecture.
+    </P>
+
+    <H2 id="eda-coupling">Preventing Listener Coupling</H2>
+    <P>
+      The most common mistake with events is recreating the coupling they were meant to break —
+      just in listener form. Watch for these patterns:
+    </P>
+    <UL>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">One listener doing many things.</strong>{' '}
+        If <IC>HandleStudentEnrolled</IC> sends an email AND updates analytics AND posts to Slack,
+        you have not decoupled anything — you have just moved the god object. One listener, one concern.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Listeners calling each other.</strong>{' '}
+        Listeners should react to events, not fire new events that trigger other listeners in a chain.
+        Chains are hard to trace and easy to accidentally make circular.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Past-tense event names.</strong>{' '}
+        Events describe things that <em className="not-italic">already happened</em>: <IC>StudentEnrolled</IC>,
+        not <IC>EnrollStudent</IC>. The imperative form suggests a command, which belongs in a service or action,
+        not an event.
+      </li>
+    </UL>
+
+    <H2 id="eda-testing">Testing Events and Listeners</H2>
+    <P>
+      Laravel's <IC>Event::fake()</IC> replaces the event dispatcher with a spy, letting you assert
+      which events were fired without running any listeners:
+    </P>
+    <CB language="php">{`it('fires StudentEnrolled when an enrollment is created', function (): void {
+    Event::fake();
+
+    $data = new EnrollStudentData(studentId: 1, courseId: 1);
+    app(EnrollStudentAction::class)($data);
+
+    Event::assertDispatched(StudentEnrolled::class, function ($event) {
+        return $event->enrollment->student_id === 1;
+    });
+});`}</CB>
+    <P>
+      To test the listener itself — independently of whether the event fires — instantiate it directly
+      and call <IC>handle()</IC> with a fake event:
+    </P>
+    <CB language="php">{`it('sends a confirmation email when a student enrols', function (): void {
+    Mail::fake();
+
+    $enrollment = Enrollment::factory()->create();
+    $event      = new StudentEnrolled($enrollment);
+
+    app(SendEnrollmentConfirmation::class)->handle($event);
+
+    Mail::assertSent(EnrollmentConfirmationMail::class, function ($mail) use ($enrollment) {
+        return $mail->hasTo($enrollment->student->email);
+    });
+});`}</CB>
+
+    <H2 id="eda-pitfalls">Common Pitfalls</H2>
+    <UL>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Synchronous listeners on the hot path.</strong>{' '}
+        If any listener on a frequently fired event is synchronous and slow, every request that triggers
+        that event will be slow. Default to <IC>ShouldQueue</IC>. Make synchronous the exception, not the rule.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Event payloads with Eloquent models.</strong>{' '}
+        When events are queued, the model is serialised into the job payload. If the model is large
+        (many attributes, loaded relationships), the payload bloats the queue. Pass only the model ID
+        and re-fetch inside the listener: <IC>{'$this->enrollment = Enrollment::find($this->enrollmentId)'}</IC>.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Missing <IC>failed()</IC> handlers.</strong>{' '}
+        Silent failures are worse than loud ones. Every queued listener that touches external systems
+        (email, Slack, SMS) must implement <IC>failed()</IC> and surface the error somewhere actionable.
+      </li>
+      <li>
+        <strong className="font-semibold text-gray-900 dark:text-white">Firing events inside database transactions.</strong>{' '}
+        If you fire <IC>StudentEnrolled</IC> inside a transaction that later rolls back, the queued
+        listener has already run against data that no longer exists. Use Laravel's <IC>afterCommit()</IC>
+        property on the listener — <IC>public bool $afterCommit = true</IC> — to delay dispatch until
+        the transaction commits.
+      </li>
+    </UL>
+
+    <H2 id="eda-takeaways">Key Takeaways</H2>
+    <UL>
+      <li>Events decouple the action that <em className="not-italic">causes</em> a thing from the reactions to that thing. This is their only job — use them for it.</li>
+      <li>Every listener that performs I/O should implement <IC>ShouldQueue</IC>. Synchronous I/O in listeners blocks requests.</li>
+      <li>One listener, one concern. Split responsibilities across listeners; do not consolidate them.</li>
+      <li>Use <IC>afterCommit = true</IC> on any listener whose event is fired inside a database transaction.</li>
+      <li>Model observers handle Eloquent lifecycle hooks; application events handle domain signals. These are different things and serve different purposes.</li>
+      <li>Test the event firing and the listener handling independently — they are separate units of behaviour.</li>
+    </UL>
+  </div>
+);
+
+const PerformanceOptimizationArticle: React.FC = () => (
+  <div>
+    <P>
+      Performance problems in Laravel applications share a short list of root causes. In practice,
+      the same four patterns — unbounded queries, missing caches, absent indexes, and synchronous
+      heavy work — account for the vast majority of slowdowns. This article covers each with
+      concrete detection and fix strategies.
+    </P>
+    <P>
+      <em className="not-italic font-medium text-gray-900 dark:text-white">Note:</em>{' '}
+      This article is published in full on Medium. The highlights below cover the core concepts;
+      the full version includes benchmarks, Horizon configuration, and advanced Redis patterns.
+    </P>
+
+    <H2 id="perf-n1">The N+1 Query Problem</H2>
+    <P>
+      N+1 is the most common Laravel performance bug and the easiest to miss. It occurs when you
+      load a collection and then access a relationship on each item — triggering one query per item
+      instead of one query for all items.
+    </P>
+    <CB>{`// This fires 1 + N queries (1 for students, N for each student's course)
+$students = Student::all();
+foreach ($students as $student) {
+    echo $student->course->name; // query per student
+}`}</CB>
+    <CB>{`// This fires 2 queries total
+$students = Student::with('course')->get();
+foreach ($students as $student) {
+    echo $student->course->name; // already loaded
+}`}</CB>
+    <P>
+      Detection: install Laravel Debugbar in development and watch the query count climb above 10 on
+      any page. In production, Laravel Telescope's query panel surfaces slow and repeated queries.
+      You can also enforce eager loading by setting <IC>Model::preventLazyLoading()</IC> in your
+      <IC>AppServiceProvider</IC> — it throws an exception in development whenever a lazy load fires.
+    </P>
+
+    <H2 id="perf-caching">Redis Caching Strategies</H2>
+    <P>
+      Not every query needs to hit the database on every request. Data that is expensive to compute
+      and changes infrequently — dashboard aggregates, configuration values, feature flags,
+      role/permission lists — belongs in a cache.
+    </P>
+    <CB>{`// Cache-aside: check cache first, compute on miss, store result
+$stats = Cache::remember("school:{$schoolId}:stats", now()->addMinutes(15), function () use ($schoolId) {
+    return [
+        'student_count'    => Student::where('school_id', $schoolId)->count(),
+        'active_courses'   => Course::where('school_id', $schoolId)->active()->count(),
+        'pending_invoices' => Invoice::where('school_id', $schoolId)->pending()->count(),
+    ];
+});`}</CB>
+    <P>
+      Cache invalidation is the harder half. Tag your cache entries to invalidate whole groups
+      without tracking individual keys:
+    </P>
+    <CB>{`// Write with tags
+Cache::tags(["school:{$schoolId}"])->put('stats', $stats, now()->addMinutes(15));
+
+// Invalidate everything for this school when data changes
+Cache::tags(["school:{$schoolId}"])->flush();`}</CB>
+
+    <H2 id="perf-indexes">Database Indexing</H2>
+    <P>
+      An unindexed column in a <IC>WHERE</IC> clause means a full table scan on every query.
+      At 10,000 rows, this is tolerable. At 1,000,000 rows, it destroys response times.
+    </P>
+    <CB>{`// In a migration: composite index covers WHERE school_id = ? ORDER BY created_at DESC
+Schema::table('students', function (Blueprint $table): void {
+    $table->index(['school_id', 'created_at']);
+});`}</CB>
+    <P>
+      For multi-tenant applications, every tenant-scoped table needs at minimum an index on
+      <IC>school_id</IC>. The most common queries add <IC>created_at</IC> as a second column
+      for ordered pagination, producing a composite index that covers both the filter and the sort
+      in a single index scan.
+    </P>
+
+    <H2 id="perf-queues">Queue-Based Offloading</H2>
+    <P>
+      Any operation the user does not need to wait for belongs in a queue. Report generation,
+      notification dispatch, PDF creation, webhook delivery, and third-party API calls should
+      never block an HTTP response.
+    </P>
+    <CB>{`// Dispatch and return immediately
+GenerateReportJob::dispatch($report)->onQueue('reports');
+
+return response()->json(['message' => 'Report generation started'], 202);`}</CB>
+    <P>
+      Laravel Horizon provides real-time visibility into queue throughput, job failure rates,
+      and worker utilisation. Running Horizon in production is non-optional once queues
+      become critical infrastructure — you need to know when jobs are backing up before your
+      users do.
+    </P>
+
+    <H2 id="perf-read-more">Read the Full Article</H2>
+    <P>
+      The full article on Medium covers: query builder vs Eloquent performance tradeoffs,
+      advanced Redis data structures (sorted sets for leaderboards, pub/sub for real-time),
+      database connection pooling with PgBouncer, PHP OPcache configuration,
+      and a complete Horizon setup with per-queue worker counts and memory limits.
+    </P>
+  </div>
+);
+
+const MultiTenantCompleteArticle: React.FC = () => (
+  <div>
+    <H2 id="mt2-schema">Planning Your Schema for Multi-Tenancy</H2>
+    <P>
+      The most expensive decision in a multi-tenant application is the one you make first:
+      how tenant data is physically separated. Retrofitting isolation into an existing schema
+      is one of the most painful migrations a team can undertake — every table, every query,
+      every test, every seeder must be touched. Plan it before you write your first migration.
+    </P>
+    <P>
+      For a shared-database strategy (one database, all tenants' data co-located), the rule is simple:
+      <strong className="font-semibold text-gray-900 dark:text-white"> every table that contains tenant data must have a <IC>school_id</IC> foreign key</strong>.
+      Not most tables. Every table. Include it in your base migration template so it is impossible
+      to forget:
+    </P>
+    <CB>{`Schema::create('enrollments', function (Blueprint $table): void {
+    $table->id();
+    $table->foreignId('school_id')->constrained()->cascadeOnDelete();
+    $table->foreignId('student_id')->constrained()->cascadeOnDelete();
+    $table->foreignId('course_id')->constrained()->cascadeOnDelete();
+    $table->timestamp('enrolled_at');
+    $table->timestamps();
+    $table->softDeletes();
+
+    // Composite index: tenant filter + time sort covered in one scan
+    $table->index(['school_id', 'created_at']);
+    // Unique constraint: a student cannot enrol in the same course twice per school
+    $table->unique(['school_id', 'student_id', 'course_id']);
+});`}</CB>
+    <P>
+      The <IC>cascadeOnDelete()</IC> on the <IC>school_id</IC> foreign key means that if a school
+      is ever deleted, all of its data is automatically removed. This is essential for GDPR
+      "right to erasure" compliance — one delete on the <IC>schools</IC> table cascades to every
+      tenant-scoped table in the database.
+    </P>
+
+    <H2 id="mt2-onboarding">Tenant Onboarding Flow</H2>
+    <P>
+      Onboarding is the first impression of your product and the riskiest transaction in the system —
+      it creates multiple records across several tables, sends emails, and potentially charges a card,
+      all of which must succeed or fail atomically. Wrap every step in a database transaction and
+      dispatch side effects only after the transaction commits:
+    </P>
+    <CB>{`// app/Actions/OnboardNewSchoolAction.php
+
+class OnboardNewSchoolAction
+{
+    public function __invoke(OnboardSchoolData $data): School
+    {
+        return DB::transaction(function () use ($data): School {
+            $school = School::create([
+                'name'       => $data->schoolName,
+                'slug'       => Str::slug($data->schoolName),
+                'plan'       => Plan::Trial,
+                'trial_ends' => now()->addDays(30),
+            ]);
+
+            $admin = User::create([
+                'school_id' => $school->id,
+                'name'      => $data->adminName,
+                'email'     => $data->adminEmail,
+                'password'  => Hash::make($data->password),
+            ]);
+
+            $admin->assignRole('school_admin');
+
+            // Default configuration for every new school
+            $school->settings()->create(SchoolSettings::defaults());
+
+            return $school;
+        });
+        // Side effects dispatched after transaction commits:
+        // SchoolOnboarded event fires here, not inside the transaction
+    }
+}`}</CB>
+    <CB>{`// app/Listeners/SendWelcomeEmail.php
+
+class SendWelcomeEmail implements ShouldQueue
+{
+    public bool $afterCommit = true; // only fires if the transaction committed
+
+    public function handle(SchoolOnboarded $event): void
+    {
+        Mail::to($event->school->admin->email)
+            ->send(new WelcomeToMadarikMail($event->school));
+    }
+}`}</CB>
+
+    <H2 id="mt2-config">Per-Tenant Configuration</H2>
+    <P>
+      Schools are not identical. Some enable parent portals; others do not. Some have custom grading
+      scales; others use the default. Storing per-tenant configuration in a JSON column gives you
+      schema flexibility without adding a new migration for every new feature flag:
+    </P>
+    <CB>{`// Migration
+$table->json('settings')->nullable();
+
+// Model cast
+protected function casts(): array
+{
+    return [
+        'settings' => SchoolSettings::class, // custom cast to typed DTO
+    ];
+}
+
+// Usage
+$school->settings->parentPortalEnabled;   // bool
+$school->settings->gradingScale;          // string: 'letters' | 'percentages' | 'points'
+$school->settings->maxStudentsPerClass;   // int`}</CB>
+    <CB>{`// app/Casts/SchoolSettings.php
+
+class SchoolSettings implements Castable
+{
+    public bool   $parentPortalEnabled  = false;
+    public string $gradingScale         = 'percentages';
+    public int    $maxStudentsPerClass  = 40;
+    public bool   $attendanceRequired   = true;
+
+    public static function defaults(): array
+    {
+        return (new self())->toArray();
+    }
+}`}</CB>
+    <P>
+      When a school updates their settings, you update the JSON column rather than a dedicated
+      settings table. Adding a new feature flag requires no migration — just add a property
+      with a sensible default to <IC>SchoolSettings</IC> and every existing school inherits the default.
+    </P>
+
+    <H2 id="mt2-billing">Subscription and Billing Logic</H2>
+    <P>
+      Most SaaS products have plans, and plans have limits. The cleanest way to enforce them is
+      through a middleware or a gate check that the controller never has to think about:
+    </P>
+    <CB>{`// app/Http/Middleware/EnforceSubscriptionLimits.php
+
+class EnforceSubscriptionLimits
+{
+    public function handle(Request $request, Closure $next, string $feature): Response
+    {
+        $school = app('current_school');
+
+        if (!$school->canUseFeature($feature)) {
+            return $request->expectsJson()
+                ? response()->json(['error' => 'Your plan does not include this feature.'], 403)
+                : redirect()->route('billing.upgrade');
+        }
+
+        return $next($request);
+    }
+}`}</CB>
+    <CB>{`// On routes that require a specific plan feature
+Route::post('/api/reports', [ReportController::class, 'generate'])
+    ->middleware('subscription:advanced_reports');`}</CB>
+    <CB>{`// On the School model
+public function canUseFeature(string $feature): bool
+{
+    if ($this->isTrialExpired()) {
+        return false;
+    }
+
+    return in_array($feature, Plan::featuresFor($this->plan), true);
+}`}</CB>
+
+    <H2 id="mt2-migrations">Running Migrations Across All Tenants</H2>
+    <P>
+      With a shared database, <IC>php artisan migrate</IC> runs once and affects all tenants simultaneously.
+      This is both a strength (simplicity) and a risk (a bad migration is a bad migration for everyone at once).
+    </P>
+    <P>
+      For zero-downtime migrations on large tables, the pattern is:
+    </P>
+    <UL>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Deploy 1:</strong> Add the new column as nullable. Application runs with the old schema.</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Backfill job:</strong> Dispatch a queued job that populates the column in chunks for existing rows.</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Deploy 2:</strong> Once backfill completes, add the <IC>NOT NULL</IC> constraint or default value in a separate migration.</li>
+    </UL>
+    <CB>{`// The backfill job — safe for large tables
+class BackfillStudentStatusJob implements ShouldQueue
+{
+    public function handle(): void
+    {
+        Student::whereNull('status')
+            ->chunkById(500, function (Collection $students): void {
+                Student::whereIn('id', $students->pluck('id'))
+                    ->update(['status' => StudentStatus::Active->value]);
+            });
+    }
+}`}</CB>
+    <P>
+      Never add a <IC>NOT NULL</IC> column without a default in a single migration on a table with existing rows —
+      the migration will lock the table for the entire duration of the backfill. The two-deploy pattern
+      keeps the table available throughout.
+    </P>
+
+    <H2 id="mt2-takeaways">Key Takeaways</H2>
+    <UL>
+      <li>Design your schema for multi-tenancy before writing your first line of application code. The cost of retrofitting is an order of magnitude higher than building it in from the start.</li>
+      <li>Wrap tenant onboarding in a database transaction. Fire side effects (email, billing) only after the transaction commits, using <IC>afterCommit = true</IC> on queued listeners.</li>
+      <li>JSON settings columns with typed casts give you per-tenant configuration flexibility without a migration for every new feature flag.</li>
+      <li>Enforce subscription limits in middleware, not in controllers. Controllers should not know about billing.</li>
+      <li>Zero-downtime migrations on large shared tables require two deploys and a backfill job. One-step <IC>NOT NULL</IC> column additions lock the table.</li>
+    </UL>
+  </div>
+);
+
+const ApiTestingArticle: React.FC = () => (
+  <div>
+    <H2 id="api-resources">API Resource Design</H2>
+    <P>
+      Eloquent API Resources are Laravel's answer to the transform layer: a dedicated class that controls
+      exactly what fields are exposed, how relationships are represented, and what metadata accompanies
+      the response. Never return an Eloquent model directly from an API endpoint — models expose every
+      column by default, and that includes columns you did not intend to make public.
+    </P>
+    <CB language="bash">{`php artisan make:resource StudentResource
+php artisan make:resource StudentCollection`}</CB>
+    <CB>{`// app/Http/Resources/StudentResource.php
+
+class StudentResource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'          => $this->id,
+            'name'        => $this->name,
+            'email'       => $this->email,
+            'enrolledAt'  => $this->created_at->toIso8601String(),
+            'course'      => CourseResource::make($this->whenLoaded('course')),
+            'gradeCount'  => $this->when(
+                $request->user()->can('view', $this->resource),
+                fn () => $this->grades()->count(),
+            ),
+        ];
+    }
+}`}</CB>
+    <P>
+      Two patterns are worth highlighting here. <IC>whenLoaded('course')</IC> only includes the relationship
+      in the response if it was eagerly loaded — preventing N+1 queries when the resource is used in contexts
+      where the relationship was not fetched. <IC>when(condition, value)</IC> conditionally includes a field
+      based on any runtime condition: authorisation, plan tier, request parameters. These two helpers alone
+      handle 90% of the "I need different shapes for different consumers" problem.
+    </P>
+
+    <H2 id="api-versioning">API Versioning</H2>
+    <P>
+      APIs are public contracts. Once a consumer is calling <IC>GET /api/students</IC> and expecting a specific
+      response shape, you cannot change that shape without breaking them. Versioning gives you a path to
+      evolve your API without breaking existing integrations.
+    </P>
+    <P>
+      URL versioning (<IC>/api/v1/</IC>, <IC>/api/v2/</IC>) is the most pragmatic approach for most
+      applications. It is explicit, cache-friendly, and trivial to debug in logs:
+    </P>
+    <CB>{`// routes/api.php
+
+Route::prefix('v1')->name('api.v1.')->group(base_path('routes/api_v1.php'));
+Route::prefix('v2')->name('api.v2.')->group(base_path('routes/api_v2.php'));`}</CB>
+    <CB>{`// routes/api_v1.php — stays frozen once v2 ships
+
+Route::apiResource('students', V1\StudentController::class);
+Route::apiResource('courses',  V1\CourseController::class);`}</CB>
+    <P>
+      The discipline: once a version ships to consumers, its response contracts are frozen.
+      Bug fixes are allowed; shape changes are not. New shapes go in the next version.
+      Deprecate old versions with a sunset header and a migration timeline — never delete them
+      without giving consumers enough runway to migrate.
+    </P>
+
+    <H2 id="api-auth">Authentication with Sanctum</H2>
+    <P>
+      Laravel Sanctum handles two authentication scenarios: SPA session-based auth (cookies) and
+      API token auth (bearer tokens). For a multi-tenant SaaS exposing an API to external integrations,
+      token auth with abilities is the right pattern:
+    </P>
+    <CB>{`// Issuing a token with scoped abilities
+$token = $user->createToken('mobile-app', [
+    'students:read',
+    'students:write',
+    'courses:read',
+])->plainTextToken;
+
+// In a controller or policy — check the ability
+if (!$request->user()->tokenCan('students:write')) {
+    abort(403, 'Token does not have students:write ability');
+}`}</CB>
+    <CB>{`// Middleware — protect routes by ability
+Route::middleware(['auth:sanctum', 'ability:students:read'])->group(function () {
+    Route::get('/students', [StudentController::class, 'index']);
+});`}</CB>
+    <P>
+      Token rotation is a security requirement, not a nice-to-have. Provide a token refresh endpoint
+      and set expiry on sensitive tokens. For mobile clients, implement a refresh token flow.
+      For server-to-server integrations, long-lived tokens are acceptable but must be stored
+      securely and rotated when a team member leaves.
+    </P>
+
+    <H2 id="api-testing">Feature Testing APIs with Pest</H2>
+    <P>
+      Every API endpoint needs a feature test that covers: the happy path, validation failures,
+      authorisation failures, and not-found cases. This is not optional — it is the only reliable
+      signal that your API contract is intact after a refactor.
+    </P>
+    <CB language="php">{`// tests/Feature/Api/V1/StudentTest.php
+
+beforeEach(function (): void {
+    $this->school = School::factory()->create();
+    $this->user   = User::factory()->for($this->school)->create();
+});
+
+it('returns a paginated list of students scoped to the authenticated school', function (): void {
+    Student::factory()->count(5)->for($this->school)->create();
+    Student::factory()->count(3)->create(); // other school — must not appear
+
+    actingAs($this->user)
+        ->getJson('/api/v1/students')
+        ->assertOk()
+        ->assertJsonCount(5, 'data')
+        ->assertJsonStructure([
+            'data' => [['id', 'name', 'email', 'enrolledAt']],
+            'meta' => ['total', 'per_page', 'current_page'],
+        ]);
+});
+
+it('returns 401 for unauthenticated requests', function (): void {
+    getJson('/api/v1/students')->assertUnauthorized();
+});
+
+it('returns 422 with validation errors for an invalid store request', function (): void {
+    actingAs($this->user)
+        ->postJson('/api/v1/students', [])
+        ->assertUnprocessable()
+        ->assertJsonValidationErrors(['name', 'email']);
+});
+
+it('returns 403 when the user lacks the students:write ability', function (): void {
+    $token = $this->user->createToken('test', ['students:read'])->plainTextToken;
+
+    withToken($token)
+        ->postJson('/api/v1/students', ['name' => 'Test', 'email' => 'test@example.com'])
+        ->assertForbidden();
+});`}</CB>
+    <P>
+      Notice the cross-tenant assertion in the index test: <IC>{'Student::factory()->count(3)->create()'}</IC>
+      creates students in a different school and the test asserts they do not appear in the response.
+      This single assertion verifies tenant isolation on every CI run. Never skip it.
+    </P>
+
+    <H2 id="api-tdd">Test-Driven API Development</H2>
+    <P>
+      TDD for APIs is exceptionally productive because the API contract is defined before the
+      implementation. Write the test first, watch it fail, build exactly enough code to make it pass.
+      The result is an implementation with no dead code and no missing test coverage.
+    </P>
+    <P>A typical TDD cycle for a new endpoint:</P>
+    <UL>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Red:</strong> Write a test that calls <IC>POST /api/v1/enrollments</IC> and asserts a 201 response with the correct shape. Run it — it fails with 404 (route does not exist).</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Green:</strong> Add the route, controller, form request, service call, and resource. Run the test — it passes.</li>
+      <li><strong className="font-semibold text-gray-900 dark:text-white">Refactor:</strong> Clean up the implementation without touching the test. If the test still passes, the refactor is safe.</li>
+    </UL>
+    <CB language="php">{`// Step 1: write the test first
+it('enrols a student in a course', function (): void {
+    $student = Student::factory()->for($this->school)->create();
+    $course  = Course::factory()->for($this->school)->withCapacity(30)->create();
+
+    actingAs($this->user)
+        ->postJson('/api/v1/enrollments', [
+            'student_id' => $student->id,
+            'course_id'  => $course->id,
+        ])
+        ->assertCreated()
+        ->assertJsonStructure(['data' => ['id', 'student', 'course', 'enrolledAt']]);
+
+    expect(Enrollment::count())->toBe(1);
+});
+
+// Step 2: only then write the route, controller, and service`}</CB>
+    <P>
+      The discipline is writing the assertion before the implementation. This forces you to define
+      the contract from the consumer's perspective — which is the only perspective that matters
+      for an API.
+    </P>
+
+    <H2 id="api-takeaways">Key Takeaways</H2>
+    <UL>
+      <li>Always use API Resources — never return raw Eloquent models. Use <IC>whenLoaded()</IC> and <IC>when()</IC> to build conditional response shapes without N+1 queries.</li>
+      <li>Version your API from day one. Once a response contract is published, it is frozen. New shapes go in a new version.</li>
+      <li>Sanctum token abilities let you issue least-privilege tokens per consumer. Every API token should carry only the abilities it actually needs.</li>
+      <li>Every endpoint needs four tests: happy path, validation failure, authorisation failure, and (for multi-tenant apps) cross-tenant isolation.</li>
+      <li>Write the test before the implementation. It forces you to define the contract from the consumer's perspective and guarantees coverage from the first line of code.</li>
+    </UL>
+  </div>
+);
+
 interface ArticleDoc { toc: TocItem[]; body: React.ReactNode; }
 
 const getArticleContent = (articleId: string): ArticleDoc | null => {
@@ -1108,6 +2094,63 @@ const getArticleContent = (articleId: string): ArticleDoc | null => {
         { id: 'takeaways', title: 'Key Takeaways' },
       ],
       body: <ChunkedNotificationsArticle />,
+    },
+    '3': {
+      toc: [
+        { id: 'sp-god-objects', title: 'Why Controllers Become God Objects' },
+        { id: 'sp-service-layer', title: 'The Service Layer' },
+        { id: 'sp-dtos', title: 'Data Transfer Objects' },
+        { id: 'sp-actions', title: 'Action Classes' },
+        { id: 'sp-together', title: 'Structuring the Layers Together' },
+        { id: 'sp-testing', title: 'Testing Service Classes' },
+        { id: 'sp-when-not', title: 'When Not to Use This Pattern' },
+      ],
+      body: <ServicePatternArticle />,
+    },
+    '4': {
+      toc: [
+        { id: 'eda-what', title: 'What Event-Driven Means in Laravel' },
+        { id: 'eda-events-listeners', title: 'Defining Events and Listeners' },
+        { id: 'eda-queued', title: 'Queued Listeners: Async by Default' },
+        { id: 'eda-observer-vs-events', title: 'Observer vs Events' },
+        { id: 'eda-coupling', title: 'Preventing Listener Coupling' },
+        { id: 'eda-testing', title: 'Testing Events and Listeners' },
+        { id: 'eda-pitfalls', title: 'Common Pitfalls' },
+        { id: 'eda-takeaways', title: 'Key Takeaways' },
+      ],
+      body: <EventDrivenArticle />,
+    },
+    '5': {
+      toc: [
+        { id: 'perf-n1', title: 'The N+1 Query Problem' },
+        { id: 'perf-caching', title: 'Redis Caching Strategies' },
+        { id: 'perf-indexes', title: 'Database Indexing' },
+        { id: 'perf-queues', title: 'Queue-Based Offloading' },
+        { id: 'perf-read-more', title: 'Read the Full Article' },
+      ],
+      body: <PerformanceOptimizationArticle />,
+    },
+    '6': {
+      toc: [
+        { id: 'mt2-schema', title: 'Planning Your Schema' },
+        { id: 'mt2-onboarding', title: 'Tenant Onboarding Flow' },
+        { id: 'mt2-config', title: 'Per-Tenant Configuration' },
+        { id: 'mt2-billing', title: 'Subscription and Billing Logic' },
+        { id: 'mt2-migrations', title: 'Running Migrations Safely' },
+        { id: 'mt2-takeaways', title: 'Key Takeaways' },
+      ],
+      body: <MultiTenantCompleteArticle />,
+    },
+    '7': {
+      toc: [
+        { id: 'api-resources', title: 'API Resource Design' },
+        { id: 'api-versioning', title: 'API Versioning' },
+        { id: 'api-auth', title: 'Authentication with Sanctum' },
+        { id: 'api-testing', title: 'Feature Testing with Pest' },
+        { id: 'api-tdd', title: 'Test-Driven API Development' },
+        { id: 'api-takeaways', title: 'Key Takeaways' },
+      ],
+      body: <ApiTestingArticle />,
     },
   };
   return map[articleId] ?? null;
