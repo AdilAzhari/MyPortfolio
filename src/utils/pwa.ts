@@ -17,6 +17,16 @@ interface PWAState {
   installPrompt: BeforeInstallPromptEvent | null;
 }
 
+interface NavigatorStandalone extends Navigator {
+  standalone?: boolean;
+}
+
+interface SwipeDetails {
+  deltaX: number;
+  deltaY: number;
+  deltaTime: number;
+}
+
 class PWAManager {
   private static instance: PWAManager;
   private state: PWAState = {
@@ -117,7 +127,7 @@ class PWAManager {
   private checkInstallation(): void {
     // Check if running as PWA
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches ||
-                        (window.navigator as any).standalone ||
+                        (window.navigator as NavigatorStandalone).standalone ||
                         document.referrer.includes('android-app://');
     
     this.state.isInstalled = isStandalone;
@@ -140,7 +150,7 @@ class PWAManager {
 
   private setupBackgroundSync(): void {
     if ('serviceWorker' in navigator && 'sync' in window.ServiceWorkerRegistration.prototype) {
-      navigator.serviceWorker.ready.then((registration) => {
+      navigator.serviceWorker.ready.then(() => {
         // Background sync is supported
         console.log('[PWA] Background sync is supported');
       });
@@ -225,7 +235,7 @@ class PWAManager {
     return false;
   }
 
-  public async storeOfflineFormData(data: any): Promise<void> {
+  public async storeOfflineFormData(data: unknown): Promise<void> {
     if (!('indexedDB' in window)) return;
 
     return new Promise((resolve, reject) => {
@@ -347,7 +357,7 @@ export class TouchGestureManager {
     }
   }
 
-  private handleSwipe(direction: string, details: any): void {
+  private handleSwipe(direction: string, details: SwipeDetails): void {
     const swipeEvent = new CustomEvent('swipe', {
       detail: { direction, ...details }
     });

@@ -2,8 +2,8 @@
 
 declare global {
   interface Window {
-    gtag: (...args: any[]) => void;
-    dataLayer: any[];
+    gtag: (...args: unknown[]) => void;
+    dataLayer: unknown[];
   }
 }
 
@@ -20,8 +20,8 @@ export const initGA = () => {
 
   // Initialize gtag
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function() {
-    window.dataLayer.push(arguments);
+  window.gtag = function(...args: unknown[]) {
+    window.dataLayer.push(args);
   };
   
   window.gtag('js', new Date());
@@ -107,6 +107,11 @@ export const trackEngagement = {
   }
 };
 
+interface LayoutShiftEntry extends PerformanceEntry {
+  value: number;
+  hadRecentInput: boolean;
+}
+
 // Performance monitoring
 export class PerformanceMonitor {
   private static instance: PerformanceMonitor;
@@ -156,14 +161,15 @@ export class PerformanceMonitor {
     if ('PerformanceObserver' in window) {
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          const fid = entry.processingStart - entry.startTime;
+        entries.forEach((entry) => {
+          const eventTiming = entry as PerformanceEventTiming;
+          const fid = eventTiming.processingStart - eventTiming.startTime;
           this.metrics.fid = fid;
-          
+
           trackEvent('core_web_vital', 'performance', 'FID', Math.round(fid));
         });
       });
-      
+
       observer.observe({ entryTypes: ['first-input'] });
     }
   }
@@ -171,12 +177,13 @@ export class PerformanceMonitor {
   private trackCLS() {
     if ('PerformanceObserver' in window) {
       let clsValue = 0;
-      
+
       const observer = new PerformanceObserver((list) => {
         const entries = list.getEntries();
-        entries.forEach((entry: any) => {
-          if (!entry.hadRecentInput) {
-            clsValue += entry.value;
+        entries.forEach((entry) => {
+          const layoutShift = entry as LayoutShiftEntry;
+          if (!layoutShift.hadRecentInput) {
+            clsValue += layoutShift.value;
           }
         });
         
@@ -252,7 +259,7 @@ export class PerformanceMonitor {
 }
 
 // Error tracking
-export const trackError = (error: Error, errorInfo?: any) => {
+export const trackError = (error: Error, errorInfo?: unknown) => {
   trackEvent('javascript_error', 'errors', error.message);
   
   // Log to console for debugging
