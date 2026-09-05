@@ -33,7 +33,7 @@ const About: React.FC = () => {
   ];
 
   const stats = [
-    { number: '3+', label: 'Years Experience', sublabel: 'Laravel & PHP ecosystem' },
+    { number: '4+', label: 'Years Experience', sublabel: 'Laravel & PHP ecosystem' },
     { number: '15+', label: 'Projects Delivered', sublabel: 'From concept to production' },
     { number: '103+', label: 'Pest Tests Written', sublabel: 'On Madarik SaaS alone' },
     { number: '4', label: 'Industry Domains', sublabel: 'Education, Healthcare, Retail, Transport' },
@@ -68,7 +68,7 @@ const About: React.FC = () => {
               <div className="space-y-5 text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p className="relative pl-5">
                   <span className="absolute left-0 top-2.5 w-2 h-2 bg-accent rounded-full flex-shrink-0" />
-                  I'm a Full-Stack PHP Developer with over <strong className="text-gray-900 dark:text-white">3 years of experience</strong> building scalable web applications, primarily with Laravel. My engineering philosophy centers on writing clean, maintainable code while delivering measurable business value.
+                  I'm a Full-Stack PHP Developer with over <strong className="text-gray-900 dark:text-white">4 years of experience</strong> building scalable web applications, primarily with Laravel. My engineering philosophy centers on writing clean, maintainable code while delivering measurable business value.
                 </p>
                 <p className="relative pl-5">
                   <span className="absolute left-0 top-2.5 w-2 h-2 bg-accent rounded-full flex-shrink-0" />

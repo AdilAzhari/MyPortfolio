@@ -54,36 +54,6 @@ const projects: Project[] = [
     category: 'Full-Stack',
   },
   {
-    id: '1',
-    title: 'Vehicle Rental System',
-    duration: 'Sep 2025 - Present',
-    domain: 'Transportation / Rental Services',
-    problem: 'Need for comprehensive rental platform handling multi-language support, real-time booking management, and seamless payment processing for growing vehicle rental business.',
-    solution: 'Developing full-stack rental platform using Laravel 12 and Vue.js 3 with Inertia.js, implementing multi-language support (Arabic/English RTL), real-time notifications, and integrated payment processing.',
-    role: 'Full-Stack Developer',
-    contributions: [
-      'Architected scalable backend APIs with extensive migrations and relationship mapping',
-      'Built comprehensive Filament-based admin dashboard with analytics and reporting',
-      'Implemented SPA with Vue.js for intuitive booking workflow and user management',
-      'Integrated business logic for deposit calculations, booking validation, and availability tracking'
-    ],
-    technologies: ['Laravel 12', 'Vue.js 3', 'Inertia.js', 'MySQL', 'Filament v4', 'Livewire v3', 'Pest', 'PHP 8.2+'],
-    features: [
-      'Multi-language support with Arabic/English RTL functionality',
-      'Real-time booking system with availability management',
-      'Comprehensive admin dashboard with revenue reporting',
-      'Activity logging and vehicle utilization tracking'
-    ],
-    outcomes: [
-      'Streamlined vehicle rental operations with automated workflows',
-      'Enhanced user experience with multi-language support',
-      'Improved booking efficiency with real-time availability',
-      'Established comprehensive testing infrastructure for reliability'
-    ],
-    githubUrl: 'https://github.com/AdilAzhari/car-rental-system',
-    category: 'Full-Stack',
-  },
-  {
     id: '2',
     title: 'Enterprise POS & Retail Management',
     duration: 'Jul 2024 - Aug 2025',
