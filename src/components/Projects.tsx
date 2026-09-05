@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { ExternalLink, Github, Calendar, Users, TrendingUp, Zap, Shield, Cpu, Star } from 'lucide-react';
-import LazyImage from './LazyImage';
+import { ExternalLink, Github, Calendar, Users, Cpu, Zap, Shield, TrendingUp, ImageIcon } from 'lucide-react';
 
 interface Project {
   id: string;
@@ -16,10 +15,9 @@ interface Project {
   outcomes: string[];
   demoUrl?: string;
   githubUrl?: string;
-  image: string;
+  // Real screenshots aren't ready yet — swap in e.g. '/projects/madarik.png' here
+  // once available and reintroduce LazyImage for it.
   category: string;
-  complexity: 'High' | 'Medium' | 'Low';
-  impact: 'Critical' | 'High' | 'Medium';
 }
 
 const projects: Project[] = [
@@ -53,10 +51,7 @@ const projects: Project[] = [
       'Modular architecture enabling rapid addition of new school modules without regression'
     ],
     githubUrl: 'https://github.com/AdilAzhari/madarik',
-    image: 'https://images.pexels.com/photos/256395/pexels-photo-256395.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'Full-Stack',
-    complexity: 'High',
-    impact: 'Critical'
   },
   {
     id: '1',
@@ -86,10 +81,7 @@ const projects: Project[] = [
       'Established comprehensive testing infrastructure for reliability'
     ],
     githubUrl: 'https://github.com/AdilAzhari/car-rental-system',
-    image: 'https://images.pexels.com/photos/170811/pexels-photo-170811.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'Full-Stack',
-    complexity: 'High',
-    impact: 'High'
   },
   {
     id: '2',
@@ -119,10 +111,7 @@ const projects: Project[] = [
       'Achieved high-performance transaction processing with Redis optimization'
     ],
     githubUrl: 'https://github.com/AdilAzhari/POS-SuperMarket',
-    image: 'https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'Full-Stack',
-    complexity: 'High',
-    impact: 'Critical'
   },
   {
     id: '3',
@@ -152,34 +141,26 @@ const projects: Project[] = [
       'Reduced administrative overhead through automation'
     ],
     githubUrl: 'https://github.com/AdilAzhari/blood-bank',
-    image: 'https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=800',
     category: 'Full-Stack',
-    complexity: 'High',
-    impact: 'Critical'
   }
 ];
 
-const getImpactColor = (impact: string) => {
-  switch (impact) {
-    case 'Critical': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
-    case 'High': return 'bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300';
-    default: return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300';
-  }
-};
+const ProjectImagePlaceholder: React.FC<{ className?: string }> = ({ className = '' }) => (
+  <div className={`hero-grid relative flex items-center justify-center bg-gray-100 dark:bg-gray-800 ${className}`}>
+    <ImageIcon className="h-8 w-8 text-gray-300 dark:text-gray-600" />
+  </div>
+);
 
 const Projects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
 
-  const spotlight = projects[0];
-  const rest = projects.slice(1);
-
   return (
     <section id="projects" className="py-24 bg-white dark:bg-gray-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
         {/* Section Header */}
         <div className="mb-16">
-          <p className="text-blue-600 dark:text-blue-400 font-mono text-sm tracking-widest uppercase mb-3">Engineering Portfolio</p>
+          <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">Engineering Portfolio</p>
           <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white">
             Project Deep Dives
           </h2>
@@ -188,132 +169,24 @@ const Projects: React.FC = () => {
           </p>
         </div>
 
-        {/* Spotlight — Madarik */}
-        <div className="mb-10">
-          <div className="group relative bg-gray-50 dark:bg-gray-800 rounded-3xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 transition-all duration-300 shadow-sm hover:shadow-xl">
-            {/* Featured badge */}
-            <div className="absolute top-5 left-5 z-10 flex items-center gap-2 px-3 py-1.5 bg-blue-600 text-white rounded-full text-xs font-bold">
-              <Star className="h-3 w-3" />
-              Featured Project
-            </div>
-
-            <div className="grid lg:grid-cols-[480px_1fr]">
-              {/* Image */}
-              <div className="relative overflow-hidden h-64 lg:h-auto min-h-[320px]">
-                <LazyImage
-                  src={spotlight.image}
-                  alt={spotlight.title}
-                  className="w-full h-full transition-transform duration-700 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-r from-black/20 to-transparent lg:bg-gradient-to-r" />
-              </div>
-
-              {/* Content */}
-              <div className="p-8 lg:p-12 flex flex-col justify-between">
-                <div className="space-y-6">
-                  <div>
-                    <div className="flex flex-wrap items-center gap-3 mb-3">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getImpactColor(spotlight.impact)}`}>
-                        {spotlight.impact} Impact
-                      </span>
-                      <span className="text-gray-400 dark:text-gray-500 text-sm flex items-center gap-1">
-                        <Calendar className="h-3 w-3" />{spotlight.duration}
-                      </span>
-                      <span className="text-gray-400 dark:text-gray-500 text-sm flex items-center gap-1">
-                        <Users className="h-3 w-3" />{spotlight.role}
-                      </span>
-                    </div>
-                    <h3 className="text-3xl lg:text-4xl font-black text-gray-900 dark:text-white mb-2">
-                      {spotlight.title}
-                    </h3>
-                    <p className="text-blue-600 dark:text-blue-400 font-medium">{spotlight.domain}</p>
-                  </div>
-
-                  <div className="grid sm:grid-cols-2 gap-4">
-                    <div className="p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border-l-4 border-red-500">
-                      <p className="text-xs font-bold text-red-700 dark:text-red-400 mb-1">Challenge</p>
-                      <p className="text-sm text-red-700 dark:text-red-300 leading-relaxed line-clamp-3">{spotlight.problem}</p>
-                    </div>
-                    <div className="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border-l-4 border-emerald-500">
-                      <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400 mb-1">Solution</p>
-                      <p className="text-sm text-emerald-700 dark:text-emerald-300 leading-relaxed line-clamp-3">{spotlight.solution}</p>
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex flex-wrap gap-2">
-                      {spotlight.technologies.map(tech => (
-                        <span key={tech} className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
-                          {tech}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center gap-3 pt-6 border-t border-gray-200 dark:border-gray-700 mt-6">
-                  <button
-                    onClick={() => setSelectedProject(spotlight)}
-                    className="flex-1 sm:flex-none px-6 py-3 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-xl font-semibold text-sm hover:bg-gray-700 dark:hover:bg-gray-100 transition-colors duration-200"
-                  >
-                    Deep Dive Analysis
-                  </button>
-                  {spotlight.githubUrl && (
-                    <a
-                      href={spotlight.githubUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-gray-400 dark:hover:border-gray-500 transition-colors duration-200"
-                    >
-                      <Github className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                    </a>
-                  )}
-                  {spotlight.demoUrl && (
-                    <a
-                      href={spotlight.demoUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="p-3 border border-gray-200 dark:border-gray-700 rounded-xl hover:border-gray-400 dark:hover:border-gray-500 transition-colors duration-200"
-                    >
-                      <ExternalLink className="h-5 w-5 text-gray-600 dark:text-gray-400" />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Remaining Projects Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {rest.map(project => (
+        {/* Uniform Projects Grid */}
+        <div className="grid md:grid-cols-2 gap-6">
+          {projects.map(project => (
             <div
               key={project.id}
-              className="group bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-blue-400 dark:hover:border-blue-500 hover:shadow-lg transition-all duration-300 flex flex-col"
+              className="group bg-gray-50 dark:bg-gray-800 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-accent-300 dark:hover:border-accent-700 transition-colors duration-300 flex flex-col"
             >
-              <div className="relative overflow-hidden h-44">
-                <LazyImage
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full transition-transform duration-500 group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-                <div className="absolute bottom-3 left-3 flex gap-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-semibold ${getImpactColor(project.impact)}`}>
-                    {project.impact}
-                  </span>
-                </div>
-              </div>
+              <ProjectImagePlaceholder className="h-44" />
 
               <div className="p-6 flex flex-col flex-1">
                 <div className="flex-1">
                   <div className="flex items-center gap-2 text-xs text-gray-400 dark:text-gray-500 mb-2">
                     <Calendar className="h-3 w-3" />{project.duration}
                   </div>
-                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-1 group-hover:text-accent transition-colors duration-200">
                     {project.title}
                   </h3>
-                  <p className="text-blue-600 dark:text-blue-400 text-xs font-medium mb-3">{project.domain}</p>
+                  <p className="text-accent text-xs font-medium mb-3">{project.domain}</p>
                   <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed line-clamp-2 mb-4">
                     {project.solution}
                   </p>
@@ -334,7 +207,7 @@ const Projects: React.FC = () => {
                 <div className="flex items-center gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
                   <button
                     onClick={() => setSelectedProject(project)}
-                    className="flex-1 py-2 text-sm font-semibold text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-600 transition-colors duration-200"
+                    className="flex-1 py-2 text-sm font-semibold text-gray-900 dark:text-white bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors duration-200"
                   >
                     Deep Dive
                   </button>
@@ -373,13 +246,16 @@ const Projects: React.FC = () => {
 };
 
 const ProjectModal: React.FC<{ project: Project; onClose: () => void }> = ({ project, onClose }) => (
-  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-    <div className="bg-white dark:bg-gray-900 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl">
+  <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
+    <div className="bg-white dark:bg-gray-900 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl" onClick={(e) => e.stopPropagation()}>
       <div className="p-8">
         <div className="flex justify-between items-start mb-8">
           <div>
             <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-1">{project.title}</h3>
-            <p className="text-blue-600 dark:text-blue-400 font-medium">{project.domain} · {project.duration}</p>
+            <p className="text-accent font-medium">{project.domain} · {project.duration}</p>
+            <p className="text-gray-400 dark:text-gray-500 text-sm flex items-center gap-1 mt-2">
+              <Users className="h-3 w-3" />{project.role}
+            </p>
           </div>
           <button
             onClick={onClose}
@@ -390,16 +266,27 @@ const ProjectModal: React.FC<{ project: Project; onClose: () => void }> = ({ pro
         </div>
 
         <div className="space-y-8">
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-l-4 border-gray-300 dark:border-gray-600">
+              <p className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Challenge</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{project.problem}</p>
+            </div>
+            <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border-l-4 border-accent">
+              <p className="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Solution</p>
+              <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{project.solution}</p>
+            </div>
+          </div>
+
           <div className="grid md:grid-cols-2 gap-6">
             <div>
               <h4 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Cpu className="h-5 w-5 text-blue-500" /> Technical Contributions
+                <Cpu className="h-5 w-5 text-accent" /> Technical Contributions
               </h4>
               <div className="space-y-3">
                 {project.contributions.map((c, i) => (
-                  <div key={i} className="flex gap-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                    <div className="w-5 h-5 bg-blue-600 rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
-                      <span className="text-white text-xs font-bold">{i + 1}</span>
+                  <div key={i} className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="w-5 h-5 bg-gray-900 dark:bg-white rounded-full flex-shrink-0 flex items-center justify-center mt-0.5">
+                      <span className="text-white dark:text-gray-900 text-xs font-bold">{i + 1}</span>
                     </div>
                     <p className="text-sm text-gray-700 dark:text-gray-300">{c}</p>
                   </div>
@@ -409,12 +296,12 @@ const ProjectModal: React.FC<{ project: Project; onClose: () => void }> = ({ pro
 
             <div>
               <h4 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                <Zap className="h-5 w-5 text-emerald-500" /> Key Features
+                <Zap className="h-5 w-5 text-accent" /> Key Features
               </h4>
               <div className="space-y-3">
                 {project.features.map((f, i) => (
-                  <div key={i} className="flex gap-3 p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-lg">
-                    <div className="w-2 h-2 bg-emerald-500 rounded-full flex-shrink-0 mt-2" />
+                  <div key={i} className="flex gap-3 p-3 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                    <div className="w-2 h-2 bg-accent rounded-full flex-shrink-0 mt-2" />
                     <p className="text-sm text-gray-700 dark:text-gray-300">{f}</p>
                   </div>
                 ))}
@@ -424,7 +311,7 @@ const ProjectModal: React.FC<{ project: Project; onClose: () => void }> = ({ pro
 
           <div>
             <h4 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <Shield className="h-5 w-5 text-purple-500" /> Full Tech Stack
+              <Shield className="h-5 w-5 text-accent" /> Full Tech Stack
             </h4>
             <div className="flex flex-wrap gap-2">
               {project.technologies.map(tech => (
@@ -437,12 +324,12 @@ const ProjectModal: React.FC<{ project: Project; onClose: () => void }> = ({ pro
 
           <div>
             <h4 className="font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-emerald-500" /> Measurable Impact
+              <TrendingUp className="h-5 w-5 text-accent" /> Measurable Impact
             </h4>
             <div className="grid md:grid-cols-2 gap-3">
               {project.outcomes.map((o, i) => (
-                <div key={i} className="p-4 bg-gradient-to-r from-emerald-50 to-blue-50 dark:from-emerald-900/20 dark:to-blue-900/20 rounded-xl border border-emerald-200 dark:border-emerald-800">
-                  <p className="text-sm font-semibold text-emerald-800 dark:text-emerald-300">{o}</p>
+                <div key={i} className="p-4 bg-gray-50 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+                  <p className="text-sm font-semibold text-gray-800 dark:text-gray-300">{o}</p>
                 </div>
               ))}
             </div>

@@ -7,11 +7,7 @@ const DYNAMIC_CACHE = 'adil-portfolio-dynamic-v1';
 const STATIC_ASSETS = [
   '/',
   '/index.html',
-  '/manifest.json',
-  '/icon-192x192.png',
-  '/icon-512x512.png',
-  '/favicon-32x32.png',
-  '/favicon-16x16.png'
+  '/manifest.json'
 ];
 
 // Assets to cache dynamically
@@ -148,11 +144,6 @@ self.addEventListener('fetch', (event) => {
             .catch((error) => {
               console.error('[SW] Fetch failed:', error);
               
-              // Return fallback for images
-              if (request.destination === 'image') {
-                return caches.match('/icon-192x192.png');
-              }
-              
               throw error;
             });
         })
@@ -176,19 +167,10 @@ self.addEventListener('push', (event) => {
   const data = event.data.json();
   const options = {
     body: data.body,
-    icon: '/icon-192x192.png',
-    badge: '/icon-96x96.png',
     tag: 'portfolio-notification',
     actions: [
-      {
-        action: 'view',
-        title: 'View',
-        icon: '/icon-96x96.png'
-      },
-      {
-        action: 'dismiss',
-        title: 'Dismiss'
-      }
+      { action: 'view', title: 'View' },
+      { action: 'dismiss', title: 'Dismiss' }
     ],
     data: data.url
   };
@@ -242,7 +224,6 @@ async function processOfflineFormSubmissions() {
           // Show success notification
           self.registration.showNotification('Message Sent!', {
             body: 'Your contact form message has been sent successfully.',
-            icon: '/icon-192x192.png',
             tag: 'form-success'
           });
         }

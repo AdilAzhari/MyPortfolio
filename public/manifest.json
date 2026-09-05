@@ -2,8 +2,8 @@
   "name": "Adil Omer - Software Engineer Portfolio",
   "short_name": "Adil Omer",
   "description": "Portfolio of Adil Omer, Software Developer (Laravel & Vue.js) specializing in Laravel, Vue.js, PHP, and cloud architecture",
-  "theme_color": "#06b6d4",
-  "background_color": "#0f172a",
+  "theme_color": "#2563eb",
+  "background_color": "#0a0a0a",
   "display": "standalone",
   "orientation": "portrait-primary",
   "scope": "/",
@@ -11,92 +11,19 @@
   "categories": ["productivity", "business", "technology"],
   "lang": "en-US",
   "dir": "ltr",
-  "icons": [
-    {
-      "src": "/icon-72x72.png",
-      "sizes": "72x72",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-96x96.png",
-      "sizes": "96x96",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-128x128.png",
-      "sizes": "128x128",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-144x144.png",
-      "sizes": "144x144",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-152x152.png",
-      "sizes": "152x152",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-192x192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-384x384.png",
-      "sizes": "384x384",
-      "type": "image/png",
-      "purpose": "maskable any"
-    },
-    {
-      "src": "/icon-512x512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable any"
-    }
-  ],
+  "icons": [],
   "shortcuts": [
     {
       "name": "View Projects",
       "short_name": "Projects",
       "description": "View my latest projects and case studies",
-      "url": "/#projects",
-      "icons": [
-        {
-          "src": "/icon-96x96.png",
-          "sizes": "96x96"
-        }
-      ]
+      "url": "/#projects"
     },
     {
       "name": "Contact Me",
       "short_name": "Contact",
       "description": "Get in touch for opportunities",
-      "url": "/#contact",
-      "icons": [
-        {
-          "src": "/icon-96x96.png",
-          "sizes": "96x96"
-        }
-      ]
-    },
-    {
-      "name": "My Blog",
-      "short_name": "Blog",
-      "description": "Read my technical articles",
-      "url": "/#blog",
-      "icons": [
-        {
-          "src": "/icon-96x96.png",
-          "sizes": "96x96"
-        }
-      ]
+      "url": "/#contact"
     }
   ],
   "related_applications": [

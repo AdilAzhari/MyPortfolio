@@ -7,7 +7,6 @@ const Footer: React.FC = () => {
   const navLinks = [
     { label: 'About', href: '#about' },
     { label: 'Projects', href: '#projects' },
-    { label: 'Blog', href: '#blog' },
     { label: 'Skills', href: '#skills' },
     { label: 'Contact', href: '#contact' },
   ];
@@ -22,7 +21,7 @@ const Footer: React.FC = () => {
           {/* Brand */}
           <div className="space-y-5">
             <div className="flex items-center gap-3">
-              <Code2 className="h-8 w-8 text-blue-500" />
+              <Code2 className="h-8 w-8 text-white" />
               <div>
                 <h3 className="text-xl font-bold text-white">Adil Omer</h3>
                 <p className="text-gray-500 text-xs">Full-Stack Developer · Laravel & Vue.js</p>

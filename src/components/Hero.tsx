@@ -15,27 +15,25 @@ const Hero: React.FC = () => {
       <div className="relative z-10 w-full max-w-3xl mx-auto flex flex-col items-center text-center">
 
         {/* ── Profile photo ── */}
+        {/* NOTE: /adil-profile.png is ~1.28MB — compress/resize to ~400x400px before shipping. */}
         <div className="relative mb-7">
-          {/* Animated gradient halo */}
-          <div className="absolute -inset-2 rounded-full bg-gradient-to-br from-blue-500/30 via-emerald-400/20 to-purple-500/30 animate-spin-slow blur-sm" />
-          {/* Static crisp ring */}
-          <div className="absolute -inset-1 rounded-full bg-gradient-to-br from-blue-400/50 to-emerald-400/50" />
-          {/* Photo */}
-          <div className="relative w-36 h-36 rounded-full overflow-hidden ring-[3px] ring-gray-50 dark:ring-[#080808]">
+          <div className="relative w-36 h-36 rounded-full overflow-hidden ring-[3px] ring-gray-200 dark:ring-white/10">
             <img
               src="/adil-profile.png"
               alt="Adil Omer"
-              className="w-full h-full object-cover object-top grayscale hover:grayscale-0 transition-all duration-700"
+              loading="eager"
+              fetchPriority="high"
+              className="w-full h-full object-cover object-top"
             />
           </div>
           {/* Online dot */}
-          <div className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-500 rounded-full ring-2 ring-gray-50 dark:ring-[#080808] animate-pulse" />
+          <div className="absolute bottom-1 right-1 w-4 h-4 bg-emerald-500 rounded-full ring-2 ring-gray-50 dark:ring-[#080808]" />
         </div>
 
         {/* ── Status pill ── */}
         <div className="mb-6">
           <span className="inline-flex items-center gap-2 px-4 py-1.5 bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 dark:text-emerald-400 font-mono text-xs tracking-widest uppercase rounded-full">
-            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full" />
             Open to opportunities
           </span>
         </div>
@@ -63,7 +61,7 @@ const Hero: React.FC = () => {
         <div className="flex flex-wrap justify-center gap-4 mb-7">
           <button
             onClick={() => scrollToSection('projects')}
-            className="group flex items-center gap-2 px-7 py-3.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl transition-all duration-200 text-sm"
+            className="group flex items-center gap-2 px-7 py-3.5 bg-accent hover:bg-accent-600 text-white font-semibold rounded-xl transition-colors duration-200 text-sm"
           >
             View My Work
             <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />

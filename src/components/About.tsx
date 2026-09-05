@@ -7,25 +7,21 @@ const About: React.FC = () => {
       icon: Code,
       title: 'Backend Development',
       description: 'Crafting robust RESTful APIs with Laravel, focused on scalability and performance.',
-      color: 'from-blue-500 to-cyan-500'
     },
     {
       icon: Database,
       title: 'Database Design & Optimization',
       description: 'Designing efficient MySQL schemas and optimizing queries with Redis caching.',
-      color: 'from-emerald-500 to-teal-500'
     },
     {
       icon: Layers,
       title: 'Frontend Integration',
       description: 'Seamlessly integrating dynamic UIs using Vue.js, Inertia.js, and Tailwind CSS.',
-      color: 'from-purple-500 to-pink-500'
     },
     {
       icon: GitBranch,
       title: 'Software Architecture & DevOps',
       description: 'Applying modular design, Clean Code, SOLID principles, and CI/CD pipelines.',
-      color: 'from-orange-500 to-red-500'
     }
   ];
 
@@ -53,11 +49,11 @@ const About: React.FC = () => {
     <section id="about" className="py-20 bg-white dark:bg-gray-900 relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
         <div className="text-center mb-16">
-          <p className="text-blue-600 dark:text-blue-400 font-mono text-sm tracking-widest uppercase mb-3">About Me</p>
+          <p className="text-accent font-mono text-sm tracking-widest uppercase mb-3">About Me</p>
           <h2 className="text-4xl lg:text-5xl font-black text-gray-900 dark:text-white mb-4">
             Engineering Philosophy
           </h2>
-          <div className="w-16 h-1 bg-blue-600 mx-auto rounded-full" />
+          <div className="w-16 h-1 bg-accent mx-auto rounded-full" />
         </div>
 
         <div className="grid lg:grid-cols-2 gap-16 items-center mb-20">
@@ -66,21 +62,21 @@ const About: React.FC = () => {
             <div className="space-y-6">
               <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Crafting digital solutions with
-                <span className="text-blue-600 dark:text-blue-400"> purpose</span>
+                <span className="text-accent"> purpose</span>
               </h3>
 
               <div className="space-y-5 text-gray-600 dark:text-gray-300 leading-relaxed">
                 <p className="relative pl-5">
-                  <span className="absolute left-0 top-2.5 w-2 h-2 bg-blue-600 rounded-full flex-shrink-0" />
+                  <span className="absolute left-0 top-2.5 w-2 h-2 bg-accent rounded-full flex-shrink-0" />
                   I'm a Full-Stack PHP Developer with over <strong className="text-gray-900 dark:text-white">3 years of experience</strong> building scalable web applications, primarily with Laravel. My engineering philosophy centers on writing clean, maintainable code while delivering measurable business value.
                 </p>
                 <p className="relative pl-5">
-                  <span className="absolute left-0 top-2.5 w-2 h-2 bg-purple-600 rounded-full flex-shrink-0" />
+                  <span className="absolute left-0 top-2.5 w-2 h-2 bg-accent rounded-full flex-shrink-0" />
                   I've focused on delivering robust solutions — from multi-tenant SaaS platforms and enterprise POS systems to healthcare management tools — handling complex data architecture and real-world scale.
                 </p>
                 <p className="relative pl-5">
-                  <span className="absolute left-0 top-2.5 w-2 h-2 bg-emerald-600 rounded-full flex-shrink-0" />
-                  I believe in continuous learning and staying ahead of technology trends. When I'm not coding, you'll find me building <strong className="text-emerald-600 dark:text-emerald-400">self-initiated projects</strong> and applying industry best practices through test-driven development.
+                  <span className="absolute left-0 top-2.5 w-2 h-2 bg-accent rounded-full flex-shrink-0" />
+                  I believe in continuous learning and staying ahead of technology trends. When I'm not coding, you'll find me building <strong className="text-gray-900 dark:text-white">self-initiated projects</strong> and applying industry best practices through test-driven development.
                 </p>
               </div>
             </div>
@@ -92,10 +88,10 @@ const About: React.FC = () => {
                 {principles.map((principle) => (
                   <div
                     key={principle.title}
-                    className="group p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors duration-200"
+                    className="group p-4 bg-gray-50 dark:bg-gray-800 rounded-xl hover:bg-accent-50 dark:hover:bg-accent-900/20 transition-colors duration-200"
                   >
                     <div className="flex items-center gap-3">
-                      <div className="p-2 bg-white dark:bg-gray-700 rounded-lg group-hover:bg-blue-600 transition-colors duration-200">
+                      <div className="p-2 bg-white dark:bg-gray-700 rounded-lg group-hover:bg-accent transition-colors duration-200">
                         <principle.icon className="h-4 w-4 text-gray-600 dark:text-gray-300 group-hover:text-white" />
                       </div>
                       <div>
@@ -115,7 +111,7 @@ const About: React.FC = () => {
                 {skills.map(skill => (
                   <span
                     key={skill}
-                    className="px-3 py-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 rounded-full text-sm font-medium border border-blue-100 dark:border-blue-800"
+                    className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-full text-sm font-medium border border-gray-200 dark:border-gray-700"
                   >
                     {skill}
                   </span>
@@ -129,17 +125,16 @@ const About: React.FC = () => {
             {highlights.map((item) => (
               <div
                 key={item.title}
-                className="group relative p-7 bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-lg transition-all duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden"
+                className="group relative p-7 bg-white dark:bg-gray-800 rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 border border-gray-100 dark:border-gray-700 overflow-hidden"
               >
-                <div className={`absolute inset-0 bg-gradient-to-br ${item.color} opacity-0 group-hover:opacity-[0.04] transition-opacity duration-300`} />
-                <div className={`w-14 h-14 bg-gradient-to-r ${item.color} rounded-xl flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300`}>
-                  <item.icon className="h-7 w-7 text-white" />
+                <div className="w-14 h-14 bg-gray-900 dark:bg-white rounded-xl flex items-center justify-center mb-5">
+                  <item.icon className="h-7 w-7 text-white dark:text-gray-900" />
                 </div>
-                <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-200">
+                <h4 className="text-lg font-bold text-gray-900 dark:text-white mb-2 group-hover:text-accent transition-colors duration-200">
                   {item.title}
                 </h4>
                 <p className="text-gray-500 dark:text-gray-400 text-sm leading-relaxed">{item.description}</p>
-                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-blue-600 to-purple-600 scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
+                <div className="absolute bottom-0 left-0 w-full h-0.5 bg-accent scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
               </div>
             ))}
           </div>
@@ -150,9 +145,9 @@ const About: React.FC = () => {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="text-center p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600 transition-colors duration-200"
+              className="text-center p-6 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 hover:border-accent-300 dark:hover:border-accent-600 transition-colors duration-200"
             >
-              <div className="text-4xl font-black text-blue-600 dark:text-blue-400 mb-1">{stat.number}</div>
+              <div className="text-4xl font-black text-accent mb-1">{stat.number}</div>
               <div className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{stat.label}</div>
               <div className="text-xs text-gray-500 dark:text-gray-400">{stat.sublabel}</div>
             </div>

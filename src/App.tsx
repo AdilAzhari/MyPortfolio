@@ -9,8 +9,6 @@ import ErrorBoundary from './components/ErrorBoundary';
 
 const About = React.lazy(() => import('./components/About'));
 const Projects = React.lazy(() => import('./components/Projects'));
-const Testimonials = React.lazy(() => import('./components/Testimonials'));
-const Blog = React.lazy(() => import('./components/Blog'));
 const Skills = React.lazy(() => import('./components/Skills'));
 const Contact = React.lazy(() => import('./components/Contact'));
 const Footer = React.lazy(() => import('./components/Footer'));
@@ -24,7 +22,7 @@ function App() {
   return (
     <ErrorBoundary>
       <ThemeProvider>
-        <div className="min-h-screen bg-white dark:bg-[#080808] animate-fade-in" role="main" aria-label="Adil Omer's Portfolio Website">
+        <div className="min-h-screen bg-surface dark:bg-surface-dark animate-fade-in" role="main" aria-label="Adil Omer's Portfolio Website">
           <Header />
 
           <main id="main-content" aria-label="Portfolio Content">
@@ -36,14 +34,6 @@ function App() {
 
             <Suspense fallback={<SkeletonLoader type="projects" />}>
               <Projects />
-            </Suspense>
-
-            <Suspense fallback={<SkeletonLoader type="testimonials" />}>
-              <Testimonials />
-            </Suspense>
-
-            <Suspense fallback={<SkeletonLoader type="blog" />}>
-              <Blog />
             </Suspense>
 
             <Suspense fallback={<SkeletonLoader type="section" />}>
