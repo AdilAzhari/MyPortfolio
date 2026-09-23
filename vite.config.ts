@@ -30,7 +30,6 @@ export default defineConfig({
           // Split vendor chunks for better caching
           'react-vendor': ['react', 'react-dom'],
           'icons': ['lucide-react'],
-          'email': ['@emailjs/browser'],
         },
       },
     },

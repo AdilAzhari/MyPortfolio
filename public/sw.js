@@ -1,7 +1,7 @@
 // Service Worker for PWA functionality
-const CACHE_NAME = 'adil-portfolio-v1';
-const STATIC_CACHE = 'adil-portfolio-static-v1';
-const DYNAMIC_CACHE = 'adil-portfolio-dynamic-v1';
+const CACHE_NAME = 'adil-portfolio-v2';
+const STATIC_CACHE = 'adil-portfolio-static-v2';
+const DYNAMIC_CACHE = 'adil-portfolio-dynamic-v2';
 
 // Assets to cache on install
 const STATIC_ASSETS = [
@@ -87,31 +87,22 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  // Handle navigation requests (HTML pages)
+  // Handle navigation requests (HTML pages): network-first so new deploys
+  // show up immediately; fall back to the cached shell when offline.
   if (request.mode === 'navigate') {
     event.respondWith(
-      caches.match('/index.html')
-        .then((response) => {
-          if (response) {
-            return response;
+      fetch(request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseClone = networkResponse.clone();
+            caches.open(STATIC_CACHE)
+              .then((cache) => {
+                cache.put('/index.html', responseClone);
+              });
           }
-          return fetch(request)
-            .then((networkResponse) => {
-              // Cache successful responses
-              if (networkResponse.ok) {
-                const responseClone = networkResponse.clone();
-                caches.open(DYNAMIC_CACHE)
-                  .then((cache) => {
-                    cache.put(request, responseClone);
-                  });
-              }
-              return networkResponse;
-            });
+          return networkResponse;
         })
-        .catch(() => {
-          // Return offline page if available
-          return caches.match('/index.html');
-        })
+        .catch(() => caches.match('/index.html'))
     );
     return;
   }

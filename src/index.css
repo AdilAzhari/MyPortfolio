@@ -1,79 +1,24 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /*
-  Typography scale (documented, not enforced by a plugin):
-  - text-5xl/6xl font-black  -> Hero name only
-  - text-4xl font-bold       -> section H2s
-  - text-lg                  -> body copy
-  - text-sm / text-xs        -> meta, labels, captions
-  Color rule: neutrals + a single accent (blue). The one exception is the
-  emerald "available" status dot, which is a semantic signal, not decoration.
+  Palette: slate-900 background, slate-400 body, slate-200 headings,
+  teal-300 as the single accent. Dark only, by design.
 */
 
-.bento-card {
-  background: #f3f4f6;
-  border: 1px solid rgba(0, 0, 0, 0.07);
-  transition: border-color 0.2s ease, background 0.2s ease;
-}
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
 
-.bento-card:hover {
-  border-color: rgba(0, 0, 0, 0.12);
-  background: #e9eaec;
-}
-
-.dark .bento-card {
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.dark .bento-card:hover {
-  border-color: rgba(255, 255, 255, 0.12);
-  background: #161616;
-}
-
-.hero-grid {
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 0, 0, 0.06) 1px, transparent 1px);
-  background-size: 64px 64px;
-}
-
-.dark .hero-grid {
-  background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-}
-
-.animate-fade-in {
-  animation: fade-in-page 0.4s ease-out;
-}
-
-@keyframes fade-in-page {
-  from { opacity: 0; transform: translateY(6px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* Used by SkeletonLoader's `animation="wave"` variant. */
-.skeleton-wave {
-  position: relative;
-  overflow: hidden;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  background-size: 200% 100%;
-  animation: wave 1.5s infinite;
-}
-
-@keyframes wave {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
+  body {
+    @apply bg-slate-900 font-sans leading-relaxed text-slate-400 antialiased selection:bg-teal-300 selection:text-teal-900;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .animate-fade-in,
-  .skeleton-wave {
-    animation: none;
+  html {
+    scroll-behavior: auto;
   }
 }
