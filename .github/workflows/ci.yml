@@ -1,0 +1,29 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Type check
+        run: npx tsc --noEmit -p tsconfig.app.json
+      - name: Lint
+        run: npx eslint src scripts
+      - name: Build and prerender
+        run: npm run build
+      - name: Check prerendered output
+        run: |
+          test -s dist/rss.xml
+          for f in dist/index.html dist/writing/*/index.html; do
+            grep -q '<div id="root"><' "$f" || { echo "::error::$f was not prerendered"; exit 1; }
+          done

@@ -1,12 +1,11 @@
-// Build-time entry for scripts/prerender.mjs; never hot-reloaded, so the fast-refresh rule does not apply.
-/* eslint-disable react-refresh/only-export-components */
 import { StrictMode } from 'react';
 import { renderToString } from 'react-dom/server';
 import App from './App';
 import { profile } from './data/portfolio';
 import { posts } from './data/posts';
 
-const SITE = 'https://adilomer.xyz';
+export const SITE = 'https://adilomer.xyz';
+export { posts, profile };
 
 export interface PageMeta {
   path: string;

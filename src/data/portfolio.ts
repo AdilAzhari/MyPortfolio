@@ -13,7 +13,7 @@ export interface Entry {
 export const profile = {
   name: 'Adil Omer',
   title: 'Backend-focused Laravel Engineer',
-  pitch: 'I build secure, well-tested Laravel systems that stay correct under real-world load.',
+  pitch: 'I build secure, well-tested Laravel systems that stay correct under real-world load, and contribute fixes upstream to projects like Laravel Horizon.',
   location: 'Shah Alam, Malaysia · Open to relocation',
   email: 'adilazhariosman@gmail.com',
   github: 'https://github.com/AdilAzhari',

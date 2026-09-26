@@ -1,6 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import App from './App.tsx';
+import '@fontsource-variable/inter/wght.css';
 import './index.css';
 
 const container = document.getElementById('root')!;

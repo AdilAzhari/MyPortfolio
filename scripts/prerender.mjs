@@ -1,6 +1,6 @@
 // Renders every page in src/entry-server.tsx to static HTML in dist/, so crawlers and
 // link previews get real content and per-page meta tags. Runs after both Vite builds.
-import { mkdir, readFile, rm, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -8,8 +8,17 @@ const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
 const ssrDir = resolve(root, 'dist-ssr');
 
-const { render, pages } = await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href);
-const template = await readFile(resolve(dist, 'index.html'), 'utf8');
+const { render, pages, posts, profile, SITE } = await import(pathToFileURL(resolve(ssrDir, 'entry-server.js')).href);
+let template = await readFile(resolve(dist, 'index.html'), 'utf8');
+
+// Preload the Latin Inter subset so text renders in the right font on first paint.
+const latinFont = (await readdir(resolve(dist, 'assets'))).find((f) => /^inter-latin-wght-normal-.*\.woff2$/.test(f));
+if (latinFont) {
+  template = template.replace(
+    '</head>',
+    `  <link rel="preload" href="/assets/${latinFont}" as="font" type="font/woff2" crossorigin />\n  </head>`,
+  );
+}
 
 const escapeAttr = (value) =>
   value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -52,5 +61,37 @@ for (const page of pages) {
   await writeFile(target, html);
   console.log(`prerendered ${page.path} -> dist/${page.file}`);
 }
+
+// RSS feed for the Writing section, newest first.
+const escapeXml = (value) =>
+  value.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date));
+const items = sorted
+  .map(
+    (post) => `    <item>
+      <title>${escapeXml(post.title)}</title>
+      <link>${SITE}/writing/${post.slug}</link>
+      <guid isPermaLink="true">${SITE}/writing/${post.slug}</guid>
+      <pubDate>${new Date(`${post.date}T00:00:00Z`).toUTCString()}</pubDate>
+      <description>${escapeXml(post.summary)}</description>
+${post.tags.map((tag) => `      <category>${escapeXml(tag)}</category>`).join('\n')}
+    </item>`,
+  )
+  .join('\n');
+const rss = `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>${escapeXml(profile.name)} — Writing</title>
+    <link>${SITE}/</link>
+    <atom:link href="${SITE}/rss.xml" rel="self" type="application/rss+xml" />
+    <description>Write-ups of bugs I tracked down and fixed in open-source PHP and Laravel projects.</description>
+    <language>en</language>
+    <lastBuildDate>${new Date(`${sorted[0].date}T00:00:00Z`).toUTCString()}</lastBuildDate>
+${items}
+  </channel>
+</rss>
+`;
+await writeFile(resolve(dist, 'rss.xml'), rss);
+console.log('wrote dist/rss.xml');
 
 await rm(ssrDir, { recursive: true, force: true });
