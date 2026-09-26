@@ -12,8 +12,6 @@ import { posts } from './data/posts';
 import PostPage from './components/PostPage';
 import { formatDate } from './utils/date';
 
-const postSlug = window.location.pathname.match(/^\/writing\/([\w-]+)\/?$/)?.[1];
-const currentPost = posts.find((p) => p.slug === postSlug);
 
 const WritingList: React.FC = () => (
   <ol className="group/list">
@@ -69,7 +67,10 @@ const MoreLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href,
   </div>
 );
 
-function App() {
+function App({ path }: { path: string }) {
+  const postSlug = path.match(/^\/writing\/([\w-]+)\/?$/)?.[1];
+  const currentPost = posts.find((p) => p.slug === postSlug);
+
   if (currentPost) {
     return (
       <ErrorBoundary>

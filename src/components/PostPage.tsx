@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ArrowLeft, ArrowUpRight } from 'lucide-react';
 import type { Block, Post } from '../data/posts';
 import { profile } from '../data/portfolio';
@@ -49,11 +49,6 @@ const BlockView: React.FC<{ block: Block }> = ({ block }) => {
 };
 
 const PostPage: React.FC<{ post: Post }> = ({ post }) => {
-  useEffect(() => {
-    document.title = `${post.title} · ${profile.name}`;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', post.summary);
-  }, [post]);
-
   return (
     <div className="mx-auto min-h-screen max-w-2xl px-6 py-12 md:px-12 md:py-20">
       <a href="/#writing" className="group mb-10 inline-flex items-center font-semibold leading-tight text-teal-300">

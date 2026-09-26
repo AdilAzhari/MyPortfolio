@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ isSsrBuild }) => ({
   plugins: [
     react({
       // Enable React Fast Refresh for better development experience
@@ -24,15 +24,18 @@ export default defineConfig({
       },
     },
     // Optimize chunk splitting
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          // Split vendor chunks for better caching
-          'react-vendor': ['react', 'react-dom'],
-          'icons': ['lucide-react'],
+    // The SSR build (used only for prerendering) keeps dependencies external, so no vendor chunks there.
+    rollupOptions: isSsrBuild
+      ? {}
+      : {
+          output: {
+            manualChunks: {
+              // Split vendor chunks for better caching
+              'react-vendor': ['react', 'react-dom'],
+              'icons': ['lucide-react'],
+            },
+          },
         },
-      },
-    },
     // Increase chunk size warning limit
     chunkSizeWarningLimit: 1000,
     // Enable CSS code splitting
@@ -46,4 +49,4 @@ export default defineConfig({
       overlay: false, // Disable error overlay for better performance
     },
   },
-});
+}));
