@@ -1,3 +1,5 @@
+import { track } from '@vercel/analytics';
+
 // PWA utilities and service worker registration
 import { useState, useEffect } from 'react';
 
@@ -114,13 +116,7 @@ class PWAManager {
       this.state.installPrompt = null;
       this.notifyListeners();
       
-      // Track installation
-      if (typeof gtag !== 'undefined') {
-        gtag('event', 'pwa_install', {
-          event_category: 'engagement',
-          event_label: 'app_installed'
-        });
-      }
+      track('pwa_install');
     });
   }
 
@@ -262,7 +258,7 @@ class PWAManager {
           if ('serviceWorker' in navigator) {
             navigator.serviceWorker.ready.then(registration => {
               if ('sync' in registration) {
-                return registration.sync.register('contact-form');
+                return (registration as ServiceWorkerRegistration & { sync: { register(tag: string): Promise<void> } }).sync.register('contact-form');
               }
             });
           }

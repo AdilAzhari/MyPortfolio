@@ -1,4 +1,4 @@
-import React, { Component, ErrorInfo, ReactNode } from 'react';
+import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Mail } from 'lucide-react';
 import { trackError } from '../utils/analytics';
 
@@ -116,7 +116,7 @@ Best regards`);
                 </div>
 
                 {/* Error Details (Development Only) */}
-                {process.env.NODE_ENV === 'development' && this.state.error && (
+                {import.meta.env.DEV && this.state.error && (
                   <details className="mb-6 p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
                     <summary className="cursor-pointer font-semibold text-gray-900 dark:text-white mb-2">
                       Technical Details (Development Mode)

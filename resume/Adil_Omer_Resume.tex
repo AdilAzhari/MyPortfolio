@@ -1,0 +1,162 @@
+% Source for public/resume/Adil_Omer_Resume.pdf
+% Build: tectonic resume/Adil_Omer_Resume.tex --outdir public/resume
+\documentclass[letterpaper,10pt]{article}
+
+\usepackage{latexsym}
+\usepackage[empty]{fullpage}
+\usepackage{titlesec}
+\usepackage[usenames,dvipsnames]{color}
+\usepackage{enumitem}
+\usepackage[hidelinks]{hyperref}
+\usepackage{fancyhdr}
+\usepackage[english]{babel}
+\usepackage{tabularx}
+\usepackage{fontawesome5}
+\ifdefined\pdfgentounicode\input{glyphtounicode}\fi
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyfoot{}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\addtolength{\oddsidemargin}{-0.5in}
+\addtolength{\evensidemargin}{-0.5in}
+\addtolength{\textwidth}{1in}
+\addtolength{\topmargin}{-.5in}
+\addtolength{\textheight}{1.0in}
+
+\urlstyle{same}
+\raggedbottom
+\raggedright
+\setlength{\tabcolsep}{0in}
+
+\titleformat{\section}{
+  \vspace{-4pt}\scshape\raggedright\large
+}{}{0em}{}[\color{black}\titlerule \vspace{-5pt}]
+
+\ifdefined\pdfgentounicode\pdfgentounicode=1\fi
+
+\newcommand{\resumeItem}[1]{\item\small{{#1 \vspace{-2pt}}}}
+
+\newcommand{\resumeSubheading}[4]{
+  \vspace{-2pt}\item
+    \begin{tabular*}{0.97\textwidth}[t]{l@{\extracolsep{\fill}}r}
+      \textbf{#1} & \textbf{\small #2} \\
+      \textit{\small#3} & \textit{\small #4} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\newcommand{\resumeProjectHeading}[2]{
+    \item
+    \begin{tabular*}{0.97\textwidth}{l@{\extracolsep{\fill}}r}
+      \small#1 & \textbf{\small #2} \\
+    \end{tabular*}\vspace{-7pt}
+}
+
+\renewcommand\labelitemii{$\vcenter{\hbox{\tiny$\bullet$}}$}
+\newcommand{\resumeSubHeadingListStart}{\begin{itemize}[leftmargin=0.15in, label={}]}
+\newcommand{\resumeSubHeadingListEnd}{\end{itemize}}
+\newcommand{\resumeItemListStart}{\begin{itemize}[label=--]}
+\newcommand{\resumeItemListEnd}{\end{itemize}\vspace{-5pt}}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge \scshape Adil Omer} \\ \vspace{1pt}
+    \small Shah Alam, Selangor $\bullet$ Open to Relocation $\bullet$ \faGlobe\ \href{https://adilomer.xyz}{adilomer.xyz} \\ \vspace{1pt}
+    \small \faPhone\ \href{tel:+60139034997}{+(60)139034997} ~
+    \faEnvelope\ \href{mailto:adilazhariosman@gmail.com}{adilazhariosman@gmail.com} ~
+    \faLinkedin\ \href{https://linkedin.com/in/adil-omer-8aab21167}{linkedin.com/in/adil-omer-8aab21167} ~
+    \faGithub\ \href{https://github.com/AdilAzhari}{github.com/AdilAzhari}
+\end{center}
+
+\section{Summary}
+\small{Backend-focused PHP/Laravel Engineer with 4+ years of experience building secure, maintainable, and business-critical applications. Experienced in REST APIs, MySQL, Redis, transactional workflows, event-driven architecture, and multi-tenant systems. Strong focus on correctness, idempotency, testing, clean architecture, and domain modeling. Open-source maintainer of published Laravel packages, with merged fixes in Laravel Horizon, laravel-debugbar, and Grav CMS.}
+
+\section{Professional Experience}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {Full-Stack PHP/Laravel Engineer}{Oct 2024 -- Present}
+      {Sentients AI}{}
+      \resumeItemListStart
+        \resumeItem{Design and maintain Laravel applications using PHP, MySQL, Redis, and Vue.js with emphasis on reliability, maintainability, and scalable backend architecture.}
+        \resumeItem{Integrate external REST APIs and build reliable synchronization workflows between internal systems and third-party services.}
+        \resumeItem{Optimize database queries, indexing, Redis caching, and data-access patterns to improve application performance.}
+        \resumeItem{Implement secure transactions and RBAC, reducing potential vulnerability surfaces by 45\%.}
+        \resumeItem{Develop automated tests with Pest and PHPUnit and participate in code reviews to prevent regressions.}
+      \resumeItemListEnd
+
+    \resumeSubheading
+      {PHP/Laravel Developer (Freelance)}{2024 -- Present}
+      {Client Projects}{}
+      \resumeItemListStart
+        \resumeItem{Develop Laravel applications and RESTful APIs, including database schemas, transactional workflows, authentication, authorization, and third-party integrations.}
+        \resumeItem{Integrate payment gateways, webhooks, and external APIs while handling failure and synchronization scenarios.}
+        \resumeItem{Apply automated testing with Pest and PHPUnit to improve reliability and reduce regression risk.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+\section{Open Source}
+  \resumeSubHeadingListStart
+    \resumeProjectHeading
+      {\textbf{Upstream Contributions} $|$ \emph{Laravel Horizon, laravel-debugbar, Grav CMS, career-ops}}{2026}
+      \resumeItemListStart
+        \resumeItem{\textbf{Laravel Horizon} (\href{https://github.com/laravel/horizon/pull/1819}{\#1819}, merged): fixed ``Delayed Until'' matching ``Pushed'' for jobs delayed with a \texttt{DateInterval}/\texttt{CarbonInterval} by mapping PHP interval fields to explicit moment.js duration keys.}
+        \resumeItem{\textbf{laravel-debugbar} (\href{https://github.com/fruitcake/laravel-debugbar/pull/2085}{\#2085}, merged): added casters for \texttt{ViewErrorBag}/\texttt{MessageBag} so validation messages survive the dumper's depth limit instead of rendering as ``\_cut''.}
+        \resumeItem{\textbf{Grav CMS} (\href{https://github.com/getgrav/grav/pull/4278}{\#4278}, merged): made \texttt{GRAV\_CONFIG\_\_*} env overrides convert \texttt{true}/\texttt{false} to real booleans, fixing \texttt{=false} being read as enabled.}
+        \resumeItem{\textbf{career-ops} (\href{https://github.com/career-ops-hq/career-ops}{GitHub}): multiple merged fixes across CLI validation, CV fact-checking, tracker mapping, and funnel analytics.}
+      \resumeItemListEnd
+    \resumeProjectHeading
+      {\textbf{Laravel Idempotency} --- \href{https://github.com/AdilAzhari/laravel-idempotency}{GitHub} $|$ \emph{Maintainer}}{2026}
+      \resumeItemListStart
+        \resumeItem{Laravel package preventing duplicate request execution through idempotency keys, request fingerprinting, response replay, conflict detection, and cache-based locking.}
+        \resumeItem{Extensible storage, locking, and fingerprinting contracts with quality gates using Pest, PHPStan, Rector, and Laravel Pint; 93\% test coverage.}
+      \resumeItemListEnd
+    \resumeProjectHeading
+      {\textbf{Laravel Tracer} --- \href{https://github.com/AdilAzhari/laravel-trace}{GitHub} $|$ \emph{Maintainer}}{2026 -- Present}
+      \resumeItemListStart
+        \resumeItem{Application-level Laravel tracing package supporting request, query, event, and execution-context spans with pluggable storage (including a database driver) and framework integration.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+\section{Selected Projects}
+  \resumeSubHeadingListStart
+    \resumeProjectHeading
+      {\textbf{Madarik School Management System} --- \href{https://madarik.aljebal-albeedos.com}{Live Demo}}{2026}
+      \resumeItemListStart
+        \resumeItem{Developed and deployed a multi-tenant school management platform for student records, academic workflows, reporting, and role-based access control.}
+        \resumeItem{Implemented Redis-backed background processing for notifications and scheduled operations and built interactive dashboards with React.js and Inertia.js.}
+      \resumeItemListEnd
+    \resumeProjectHeading
+      {\textbf{Modular E-Commerce System} --- \href{https://store.aljebal-albeedos.com}{Live Demo} --- \href{https://github.com/AdilAzhari/nexo-ecommerce}{GitHub}}{2026}
+      \resumeItemListStart
+        \resumeItem{Designed and deployed a modular Laravel system separating orders, payments, inventory, and users using DDD, value objects, domain events, and business-rule isolation.}
+        \resumeItem{Implemented multi-tenancy, automated query scoping, and event-driven workflows to decouple business processes.}
+      \resumeItemListEnd
+  \resumeSubHeadingListEnd
+
+\section{Technical Skills}
+ \begin{itemize}[leftmargin=0.15in, label={}]
+    \small{\item{
+     \textbf{Languages}{: PHP, SQL, JavaScript} \\
+     \textbf{Backend}{: Laravel, REST APIs, MySQL, Redis, Transactions, Caching, RBAC} \\
+     \textbf{Laravel}{: Eloquent, Sanctum, Fortify, Passport, Horizon, Telescope, Queues, Events, Middleware, Policies, API Resources, Notifications, Scheduler, Rate Limiting} \\
+     \textbf{Architecture}{: DDD, SOLID, Clean Architecture, Event-Driven Architecture, Multi-Tenancy} \\
+     \textbf{Frontend}{: Vue.js 3, React.js, Inertia.js, Livewire, Alpine.js} \\
+     \textbf{Testing \& Quality}{: PestPHP, PHPUnit, PHPStan, Rector, Laravel Pint} \\
+     \textbf{Tools}{: Git, Composer, GitHub Actions, Filament, Reverb, Laravel Echo}
+    }}
+ \end{itemize}
+
+\section{Education}
+  \resumeSubHeadingListStart
+    \resumeSubheading
+      {University of the People}{2020 -- 2023}
+      {BSc Computer Science, GPA 3.58}{Remote, USA}
+    \resumeSubheading
+      {Kreativstorm}{2024}
+      {Software Engineering Program}{Remote, Germany}
+  \resumeSubHeadingListEnd
+
+\end{document}

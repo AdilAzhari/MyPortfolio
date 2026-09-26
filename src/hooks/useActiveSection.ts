@@ -19,7 +19,18 @@ export const useActiveSection = (ids: string[]) => {
       if (el) observer.observe(el);
     });
 
-    return () => observer.disconnect();
+    // A short final section never reaches the observed band, so select it at the page bottom.
+    const onScroll = () => {
+      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) {
+        setActive(ids[ids.length - 1]);
+      }
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', onScroll);
+    };
   }, [ids]);
 
   return active;

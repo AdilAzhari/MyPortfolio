@@ -7,6 +7,7 @@ export interface Entry {
   tags: string[];
   links?: { label: string; href: string }[];
   thumb?: string;
+  image?: string;
 }
 
 export const profile = {
@@ -49,24 +50,31 @@ export const projects: Entry[] = [
   {
     period: '2026',
     title: 'Madarik — School Management SaaS',
-    href: 'https://github.com/AdilAzhari/madarik',
+    href: 'https://madarik.aljebal-albeedos.com',
     thumb: 'MD',
+    image: '/projects/madarik.webp',
     description:
       'Multi-tenant school platform covering students, attendance, grades, fees, library and messaging. Tenant isolation via global scopes and resolver middleware, Redis-backed notifications chunked for large schools, React dashboards over Inertia, and 100+ Pest feature tests guarding every API contract.',
     tags: ['Laravel 11', 'React', 'Inertia.js', 'Sanctum', 'Spatie', 'Pest'],
+    links: [{ label: 'Live demo', href: 'https://madarik.aljebal-albeedos.com' }],
   },
   {
     period: '2026',
     title: 'Modular E-Commerce System',
+    href: 'https://store.aljebal-albeedos.com',
     thumb: 'EC',
+    image: '/projects/store.webp',
     description:
       'Modular Laravel system separating orders, payments, inventory and users with DDD — value objects, domain events and isolated business rules. Multi-tenancy with automatic query scoping and event-driven workflows that decouple business processes.',
     tags: ['Laravel', 'DDD', 'Domain Events', 'Multi-Tenancy'],
+    links: [
+      { label: 'Live demo', href: 'https://store.aljebal-albeedos.com' },
+      { label: 'Source', href: 'https://github.com/AdilAzhari/nexo-ecommerce' },
+    ],
   },
   {
     period: '2024 — 2025',
     title: 'Enterprise POS & Retail Management',
-    href: 'https://github.com/AdilAzhari/POS-SuperMarket',
     thumb: 'POS',
     description:
       'Retail management system with a barcode-driven POS, real-time inventory with low-stock alerts, multi-payment processing, a customer loyalty program, and PDF/Excel/CSV reporting. Redis caching keeps high-volume transactions fast.',
@@ -75,7 +83,6 @@ export const projects: Entry[] = [
   {
     period: '2023 — 2024',
     title: 'BloodConnect — Blood Bank Platform',
-    href: 'https://github.com/AdilAzhari/blood-bank',
     thumb: 'BC',
     description:
       'Healthcare platform for blood bank operations: donor–patient compatibility matching, automated alerts for critical requests, role-based workflows, and audit trails for regulatory compliance.',
