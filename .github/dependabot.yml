@@ -9,6 +9,19 @@ updates:
       # One PR for routine minor/patch bumps; majors still arrive individually.
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Major upgrades that need deliberate migration work; do these by hand
+      # (react and react-dom must move together, which separate PRs can't do).
+      - dependency-name: react
+        update-types: [version-update:semver-major]
+      - dependency-name: react-dom
+        update-types: [version-update:semver-major]
+      - dependency-name: '@types/react'
+        update-types: [version-update:semver-major]
+      - dependency-name: '@types/react-dom'
+        update-types: [version-update:semver-major]
+      - dependency-name: tailwindcss
+        update-types: [version-update:semver-major]
   - package-ecosystem: github-actions
     directory: /
     schedule:
