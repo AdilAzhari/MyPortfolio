@@ -18,7 +18,7 @@ jobs:
       - name: Type check
         run: npx tsc --noEmit -p tsconfig.app.json
       - name: Lint
-        run: npx eslint src scripts
+        run: npx eslint src scripts tests playwright.config.ts
       - name: Build and prerender
         run: npm run build
       - name: Check prerendered output
@@ -27,3 +27,14 @@ jobs:
           for f in dist/index.html dist/404.html dist/writing/*/index.html; do
             grep -q '<div id="root"><' "$f" || { echo "::error::$f was not prerendered"; exit 1; }
           done
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
+      - name: Smoke tests
+        run: npm run test:e2e
+      - name: Upload Playwright traces
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-traces
+          path: test-results
+          retention-days: 7
