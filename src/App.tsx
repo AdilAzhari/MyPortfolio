@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { ArrowRight } from 'lucide-react';
 import ErrorBoundary from './components/ErrorBoundary';
 import Sidebar from './components/Sidebar';
@@ -8,7 +8,6 @@ import EntryCard from './components/EntryCard';
 import { about, experience, openSource, profile, projects, type Entry } from './data/portfolio';
 import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
-import { initPWA } from './utils/pwa';
 import { posts } from './data/posts';
 import PostPage from './components/PostPage';
 import { formatDate } from './utils/date';
@@ -71,10 +70,6 @@ const MoreLink: React.FC<{ href: string; children: React.ReactNode }> = ({ href,
 );
 
 function App() {
-  useEffect(() => {
-    initPWA();
-  }, []);
-
   if (currentPost) {
     return (
       <ErrorBoundary>

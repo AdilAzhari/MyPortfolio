@@ -2,12 +2,13 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     
     <!-- SEO Meta Tags -->
     <meta name="description" content="Adil Omer is a backend-focused PHP/Laravel engineer building secure, well-tested systems — REST APIs, multi-tenant SaaS, and open-source Laravel packages." />
-    <meta name="keywords" content="Adil Omer, software engineer, full stack developer, cloud architecture, PHP, Laravel, React, Vue.js, TypeScript, AWS, MySQL, portfolio, Malaysia developer" />
+    <meta name="keywords" content="Adil Omer, Laravel engineer, PHP developer, backend developer, Laravel Horizon contributor, open source, Pest, REST APIs, multi-tenant SaaS, Malaysia" />
     <meta name="author" content="Adil Omer" />
     <meta name="robots" content="index, follow" />
     <meta name="language" content="English" />
@@ -42,15 +43,11 @@
     <!-- Canonical Link -->
     <link rel="canonical" href="https://adilomer.xyz" />
     
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="/manifest.json" />
-    
     <!-- Preload Critical Resources -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Structured Data - Person -->
+    <!-- Structured Data -->
     <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -58,87 +55,27 @@
       "name": "Adil Omer",
       "alternateName": "Adil Azhari Osman",
       "jobTitle": "Backend-focused PHP/Laravel Engineer",
-      "description": "Backend-focused PHP/Laravel engineer with 4+ years of experience",
+      "description": "Backend-focused PHP/Laravel engineer building secure, well-tested systems, with merged contributions to Laravel Horizon, laravel-debugbar and Grav.",
       "url": "https://adilomer.xyz",
-      "email": "adilazhariosman@gmail.com",
-      "telephone": "+60139034997",
+      "image": "https://adilomer.xyz/og-image.png",
+      "email": "mailto:adilazhariosman@gmail.com",
+      "worksFor": { "@type": "Organization", "name": "Sentients AI" },
       "address": {
         "@type": "PostalAddress",
         "addressLocality": "Shah Alam",
         "addressRegion": "Selangor",
-        "addressCountry": "Malaysia"
+        "addressCountry": "MY"
       },
       "sameAs": [
         "https://github.com/AdilAzhari",
+        "https://github.com/AdilAzhariOmsan",
         "https://linkedin.com/in/adil-omer-8aab21167"
       ],
       "knowsAbout": [
-        "Laravel",
-        "PHP",
-        "Vue.js",
-        "Inertia.js",
-        "MySQL",
-        "AWS",
-        "CI/CD",
-        "GitHub Actions",
-        "Tailwind CSS",
-        "Full-Stack Development",
-        "Cloud Architecture"
+        "PHP", "Laravel", "REST APIs", "MySQL", "Redis", "Queues",
+        "Multi-Tenancy", "Domain-Driven Design", "Pest", "PHPStan",
+        "Vue.js", "React", "Inertia.js"
       ]
-    }
-    </script>
-    
-    <!-- Structured Data - Website -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Adil Omer Portfolio",
-      "alternateName": "Adil Omer - Software Engineer Portfolio",
-      "url": "https://adilomer.xyz",
-      "description": "Portfolio website showcasing projects, skills, and experience of Adil Omer, Software Developer (Laravel & Vue.js)",
-      "inLanguage": "en-US",
-      "author": {
-        "@type": "Person",
-        "name": "Adil Omer"
-      },
-      "potentialAction": {
-        "@type": "SearchAction",
-        "target": {
-          "@type": "EntryPoint",
-          "urlTemplate": "https://adilomer.xyz/#search?q={search_term_string}"
-        },
-        "query-input": "required name=search_term_string"
-      }
-    }
-    </script>
-    
-    <!-- Structured Data - Professional Service -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "ProfessionalService",
-      "name": "Adil Omer Software Development Services",
-      "description": "Professional full-stack development services specializing in Laravel, Vue.js, cloud architecture, and scalable web applications",
-      "provider": {
-        "@type": "Person",
-        "name": "Adil Omer"
-      },
-      "areaServed": {
-        "@type": "Place",
-        "name": "Global"
-      },
-      "serviceType": [
-        "Full-Stack Web Development",
-        "Laravel Development",
-        "Vue.js Development", 
-        "Cloud Architecture",
-        "DevOps & CI/CD",
-        "Database Design",
-        "API Development"
-      ],
-      "priceRange": "$$",
-      "availability": "https://schema.org/InStock"
     }
     </script>
     
@@ -150,7 +87,7 @@
       Skip to main content
     </a>
     
-    <div id="root" role="application" aria-label="Adil Omer's Portfolio Website"></div>
+    <div id="root"></div>
     
     <!-- No JavaScript fallback -->
     <noscript>
@@ -162,7 +99,6 @@
         <p>You can still contact me directly:</p>
         <p>
           <strong>Email:</strong> <a href="mailto:adilazhariosman@gmail.com" style="color: #2563eb;">adilazhariosman@gmail.com</a><br>
-          <strong>Phone:</strong> <a href="tel:+60139034997" style="color: #2563eb;">+60 13-903 4997</a><br>
           <strong>Location:</strong> Shah Alam, Selangor, Malaysia
         </p>
       </div>
