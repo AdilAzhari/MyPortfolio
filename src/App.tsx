@@ -10,6 +10,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { posts } from './data/posts';
 import PostPage from './components/PostPage';
+import NotFound from './components/NotFound';
 import { formatDate } from './utils/date';
 
 
@@ -19,7 +20,7 @@ const WritingList: React.FC = () => (
       <li key={post.slug} className="mb-12">
         <div className="group relative grid pb-1 transition-all sm:grid-cols-8 sm:gap-8 md:gap-4 lg:hover:!opacity-100 lg:group-hover/list:opacity-50">
           <div className="absolute -inset-x-4 -inset-y-4 z-0 hidden rounded-md transition motion-reduce:transition-none lg:-inset-x-6 lg:block lg:group-hover:bg-slate-800/50 lg:group-hover:shadow-[inset_0_1px_0_0_rgba(148,163,184,0.1)] lg:group-hover:drop-shadow-lg" />
-          <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:col-span-2">
+          <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400 sm:col-span-2">
             {formatDate(post.date)}
           </header>
           <div className="z-10 sm:col-span-6">
@@ -71,12 +72,14 @@ function App({ path }: { path: string }) {
   const postSlug = path.match(/^\/writing\/([\w-]+)\/?$/)?.[1];
   const currentPost = posts.find((p) => p.slug === postSlug);
 
-  if (currentPost) {
+  const isHome = path === '/' || path === '/index.html';
+
+  if (currentPost || !isHome) {
     return (
       <ErrorBoundary>
         <div className="relative">
           <Spotlight />
-          <PostPage post={currentPost} />
+          {currentPost ? <PostPage post={currentPost} /> : <NotFound />}
         </div>
         <Analytics />
         <SpeedInsights />
@@ -119,7 +122,7 @@ function App({ path }: { path: string }) {
                 <WritingList />
               </Section>
 
-              <footer className="max-w-md pb-16 text-sm text-slate-500 sm:pb-0">
+              <footer className="max-w-md pb-16 text-sm text-slate-400 sm:pb-0">
                 <p>
                   Built with React and Tailwind CSS, deployed on Vercel. Layout inspired by{' '}
                   <a

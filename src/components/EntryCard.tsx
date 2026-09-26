@@ -27,7 +27,7 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
           {thumb}
         </div>
       ) : (
-        <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500 sm:col-span-2">
+        <header className="z-10 mb-2 mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400 sm:col-span-2">
           {period}
         </header>
       )}
@@ -56,7 +56,7 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
             </span>
           )}
         </h3>
-        {(thumb || image) && <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-500">{period}</p>}
+        {(thumb || image) && <p className="mt-1 text-xs font-semibold uppercase tracking-wide text-slate-400">{period}</p>}
         <p className="mt-2 text-sm leading-normal">{description}</p>
 
         {links && (

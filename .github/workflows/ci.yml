@@ -24,6 +24,6 @@ jobs:
       - name: Check prerendered output
         run: |
           test -s dist/rss.xml
-          for f in dist/index.html dist/writing/*/index.html; do
+          for f in dist/index.html dist/404.html dist/writing/*/index.html; do
             grep -q '<div id="root"><' "$f" || { echo "::error::$f was not prerendered"; exit 1; }
           done

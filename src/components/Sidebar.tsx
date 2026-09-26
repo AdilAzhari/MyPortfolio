@@ -31,7 +31,7 @@ const Sidebar: React.FC = () => {
         </h1>
         <h2 className="mt-3 text-lg font-medium tracking-tight text-slate-200 sm:text-xl">{profile.title}</h2>
         <p className="mt-4 max-w-xs leading-normal">{profile.pitch}</p>
-        <p className="mt-3 flex items-center gap-1.5 text-sm text-slate-500">
+        <p className="mt-3 flex items-center gap-1.5 text-sm text-slate-400">
           <MapPin className="h-3.5 w-3.5" />
           {profile.location}
         </p>
@@ -50,7 +50,7 @@ const Sidebar: React.FC = () => {
                     />
                     <span
                       className={`text-xs font-bold uppercase tracking-widest group-hover:text-slate-200 group-focus-visible:text-slate-200 ${
-                        isActive ? 'text-slate-200' : 'text-slate-500'
+                        isActive ? 'text-slate-200' : 'text-slate-400'
                       }`}
                     >
                       {label}

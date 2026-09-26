@@ -42,6 +42,7 @@ const applyMeta = (html, page) => {
   out = setContent(out, 'name="twitter:title"', page.title);
   out = setContent(out, 'name="twitter:description"', page.description);
   out = out.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${page.url}$2`);
+  if (page.noindex) out = setContent(out, 'name="robots"', 'noindex');
   if (page.jsonLd) {
     // Only the "<" needs escaping inside a JSON script block.
     const json = JSON.stringify(page.jsonLd).replace(/</g, '\\u003c');

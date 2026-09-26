@@ -58,7 +58,7 @@ const PostPage: React.FC<{ post: Post }> = ({ post }) => {
 
       <article>
         <header className="mb-10">
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
             {formatDate(post.date)} · {post.project}
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-200 sm:text-4xl">{post.title}</h1>

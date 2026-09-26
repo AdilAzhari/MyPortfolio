@@ -1,31 +1,4 @@
 User-agent: *
 Allow: /
 
-# Allow search engines to index all content
-Allow: /projects
-Allow: /blog
-Allow: /certifications
-Allow: /testimonials
-Allow: /skills
-Allow: /contact
-Allow: /about
-
-# Sitemap location
 Sitemap: https://adilomer.xyz/sitemap.xml
-
-# Block access to sensitive files
-Disallow: /api/
-Disallow: /*.json$
-Disallow: /manifest.json
-
-# Allow common assets
-Allow: /*.css$
-Allow: /*.js$
-Allow: /*.png$
-Allow: /*.jpg$
-Allow: /*.jpeg$
-Allow: /*.gif$
-Allow: /*.svg$
-Allow: /*.webp$
-Allow: /*.ico$
-Allow: /*.pdf$

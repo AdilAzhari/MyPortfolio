@@ -14,6 +14,7 @@ export interface PageMeta {
   description: string;
   url: string;
   type: 'website' | 'article';
+  noindex?: boolean;
   jsonLd?: Record<string, unknown>;
 }
 
@@ -33,6 +34,15 @@ export const pages: PageMeta[] = [
     description: '',
     url: `${SITE}/`,
     type: 'website',
+  },
+  {
+    path: '/404',
+    file: '404.html',
+    title: `Page not found · ${profile.name}`,
+    description: 'This page does not exist.',
+    url: `${SITE}/404`,
+    type: 'website',
+    noindex: true,
   },
   ...posts.map((post): PageMeta => ({
     path: `/writing/${post.slug}`,
