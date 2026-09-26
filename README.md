@@ -54,11 +54,14 @@ vercel.json            security headers (CSP) and asset caching
 
 **Add a post:** add an entry to `src/data/posts.ts`. It is prerendered at `/writing/<slug>`, listed on the home page, included in the RSS feed and covered by the smoke tests automatically. Also add its URL to `public/sitemap.xml`.
 
-**Update the resume:** edit `resume/Adil_Omer_Resume.tex`, then build it with [Tectonic](https://tectonic-typesetting.github.io/):
+**Update the resume:** edit `resume/Adil_Omer_Resume.tex`, then rebuild `public/resume/Adil_Omer_Resume.pdf` with [Tectonic](https://tectonic-typesetting.github.io/) (it must be on PATH):
 
 ```bash
-tectonic resume/Adil_Omer_Resume.tex --outdir public/resume
+npm run resume         # build once
+npm run resume:watch   # rebuild on every save of the .tex
 ```
+
+Commit both the `.tex` and the PDF. SumatraPDF reloads the PDF automatically when it changes, which makes the watch mode a live preview.
 
 **Add a third-party script, style, font or embed:** also allow its origin in the `Content-Security-Policy` header in `vercel.json`. The policy only allows `'self'`, so the browser blocks anything else, and the smoke tests fail on CSP violations.
 
