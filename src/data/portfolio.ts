@@ -23,7 +23,7 @@ export const profile = {
 export const about: string[] = [
   "I'm a backend-focused PHP/Laravel engineer with 4+ years of experience building business-critical applications — REST APIs, transactional workflows, event-driven systems, and multi-tenant SaaS platforms.",
   'I care most about correctness: idempotent endpoints, clean domain boundaries, careful data access, and test suites that catch regressions before users do. Pest, PHPStan, and Rector are part of how I work, not an afterthought.',
-  "Currently I'm a Full-Stack Laravel Engineer at Sentients AI, and outside work I maintain open-source Laravel packages and contribute fixes to established projects in the PHP ecosystem.",
+  "Currently I'm a Full-Stack Laravel Engineer at Sentients AI, and outside work I maintain open-source Laravel packages and contribute fixes to established projects in the PHP ecosystem, including Laravel Horizon.",
 ];
 
 export const experience: Entry[] = [
@@ -99,20 +99,29 @@ export const openSource: Entry[] = [
     subtitle: 'Maintainer · In progress',
     href: 'https://github.com/AdilAzhari/laravel-trace',
     description:
-      'Application-level tracing for Laravel — request, query, event and execution-context spans with pluggable storage and framework integration.',
+      'Application-level tracing for Laravel — request, query, event and execution-context spans with pluggable storage (including a database driver) and framework integration.',
     tags: ['Laravel', 'Observability'],
+  },
+  {
+    period: 'Sep 2026',
+    title: 'laravel/horizon',
+    subtitle: 'Contributor · Merged',
+    href: 'https://github.com/laravel/horizon/pull/1819',
+    description:
+      'Fixed the dashboard showing "Delayed Until" as the same time as "Pushed" for jobs delayed with a DateInterval/CarbonInterval — the idiomatic way to express a delay in Laravel. Merged into the official Laravel queue dashboard (fixes #1668).',
+    tags: ['Laravel', 'Queues', 'PHP'],
   },
   {
     period: '2026',
     title: 'Upstream contributions',
     subtitle: 'Contributor',
     description:
-      'Merged fixes across CLI validation, content filtering, CV generation and scan history in career-ops, plus bug fixes in laravel-debugbar and Grav — working through issues, reviews and CI in established codebases.',
+      'Merged fixes in laravel-debugbar (validation errors cut off by the dumper depth limit), Grav CMS (env config booleans read as strings), and a run of fixes in career-ops covering CLI validation, CV fact-checking, tracker mapping and funnel analytics — working through issues, reviews and CI in established codebases.',
     tags: ['Open Source', 'PHP', 'Node.js'],
     links: [
-      { label: 'career-ops', href: 'https://github.com/career-ops-hq/career-ops' },
-      { label: 'laravel-debugbar #2083', href: 'https://github.com/barryvdh/laravel-debugbar/pull/2083' },
+      { label: 'laravel-debugbar #2085', href: 'https://github.com/fruitcake/laravel-debugbar/pull/2085' },
       { label: 'grav #4278', href: 'https://github.com/getgrav/grav/pull/4278' },
+      { label: 'career-ops PRs', href: 'https://github.com/career-ops-hq/career-ops/pulls?q=is%3Apr+author%3AAdilAzhariOmsan+is%3Amerged' },
     ],
   },
 ];
