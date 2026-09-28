@@ -71,12 +71,12 @@ const PostPage: React.FC<{ post: Post }> = ({ post }) => {
 
         <footer className="mt-12 border-t border-slate-800 pt-6">
           <a
-            href={post.pr}
+            href={post.link.href}
             target="_blank"
             rel="noreferrer noopener"
             className="group inline-flex items-baseline font-semibold text-slate-200 hover:text-teal-300 focus-visible:text-teal-300"
           >
-            Read the pull request
+            {post.link.label}
             <ArrowUpRight className="ml-1 h-4 w-4 translate-y-0.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-1 motion-reduce:transition-none" />
           </a>
         </footer>

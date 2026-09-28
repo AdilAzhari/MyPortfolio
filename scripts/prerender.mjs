@@ -85,7 +85,7 @@ const rss = `<?xml version="1.0" encoding="UTF-8"?>
     <title>${escapeXml(profile.name)} — Writing</title>
     <link>${SITE}/</link>
     <atom:link href="${SITE}/rss.xml" rel="self" type="application/rss+xml" />
-    <description>Write-ups of bugs I tracked down and fixed in open-source PHP and Laravel projects.</description>
+    <description>How I build Laravel systems, and write-ups of bugs I fixed in open-source PHP projects.</description>
     <language>en</language>
     <lastBuildDate>${new Date(`${sorted[0].date}T00:00:00Z`).toUTCString()}</lastBuildDate>
 ${items}

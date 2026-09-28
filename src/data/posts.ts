@@ -10,7 +10,7 @@ export interface Post {
   date: string;
   summary: string;
   project: string;
-  pr: string;
+  link: { label: string; href: string };
   tags: string[];
   body: Block[];
 }
@@ -18,13 +18,109 @@ export interface Post {
 // Inline `code` in text blocks is rendered as <code>.
 export const posts: Post[] = [
   {
+    slug: 'madarik-tenant-isolation',
+    title: 'Keeping every school\'s data apart in a multi-tenant Laravel app',
+    date: '2026-09-28',
+    summary:
+      'How Madarik scopes 30 models to the current school with one middleware and one trait, where that stops protecting you, and the test I still owe it.',
+    project: 'Madarik',
+    link: { label: 'See the live demo', href: 'https://madarik.aljebal-albeedos.com' },
+    tags: ['Laravel', 'Multi-Tenancy', 'Architecture'],
+    body: [
+      {
+        type: 'p',
+        text: 'Madarik is a school management platform: students, attendance, grades, fees, the library, messaging. Every school is a tenant, and they all live in one database. Each tenant-owned table carries a `school_id` column, which keeps one schema and one migration path. The cost is that isolation depends on every query remembering that column. With 30 tenant-owned models, "remember to add the where clause" is not a strategy.',
+      },
+      { type: 'h', text: 'Resolve the tenant once per request' },
+      {
+        type: 'p',
+        text: 'A `ResolveSchool` middleware runs on both the web and API stacks. It takes the school from the authenticated user and binds it into the container. Super-admins can act on another school through an `X-School-Id` header, but only if they pass the `manage-platform` gate:',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: `$schoolId = $user->school_id;
+
+if (($override = $request->header('X-School-Id')) && Gate::allows('manage-platform')) {
+    $schoolId = (int) $override;
+}
+
+app()->instance('school_id', $schoolId);`,
+      },
+      { type: 'h', text: 'Scope every tenant model with one trait' },
+      {
+        type: 'p',
+        text: 'Tenant-owned models use a `BelongsToSchool` trait. It does two things: fills in `school_id` when a model is created, and adds a global scope that limits every query to the current school.',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: `static::creating(function (Model $model): void {
+    if (empty($model->school_id) && app()->bound('school_id')) {
+        $model->school_id = resolve('school_id');
+    }
+});
+
+static::addGlobalScope('school', function (Builder $builder): void {
+    if (app()->bound('school_id') && resolve('school_id')) {
+        $builder->where($builder->getModel()->getTable().'.school_id', resolve('school_id'));
+    }
+});`,
+      },
+      {
+        type: 'p',
+        text: 'Qualifying the column with the table name matters. Without it, a query that joins two tenant tables fails with an ambiguous `school_id` column.',
+      },
+      { type: 'h', text: 'The one model that can\'t use it' },
+      {
+        type: 'p',
+        text: '`User` deliberately does not use the trait. The user is what resolves the tenant, so scoping users by the tenant would be circular: authentication would need the school before it knows who is asking. Queries on users are scoped by hand instead, for example when choosing who receives an announcement:',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: `$base = User::query()->where('school_id', $a->school_id);
+
+return match ($a->audience) {
+    'all' => $base,
+    'teachers' => $base->role('teacher'),
+    'parents' => $base->role('parent'),
+    // ...
+};`,
+      },
+      {
+        type: 'p',
+        text: 'Those recipients are then notified with `chunkById(200)`, so a large school never loads every user into memory at once. Push notifications are batched 500 tokens per request, the most FCM accepts.',
+      },
+      { type: 'h', text: 'Suspending a whole tenant' },
+      {
+        type: 'p',
+        text: 'A second middleware, `CheckSchoolStatus`, runs right after the resolver. If the school is suspended, API requests get a 403 with the reason, and browser sessions are logged out and invalidated. Platform staff are exempt so they can still get in and fix things.',
+      },
+      { type: 'h', text: 'Where this stops protecting you' },
+      {
+        type: 'p',
+        text: 'The scope only applies when `school_id` is bound, and only the middleware binds it. Artisan commands, scheduled tasks and queued jobs run without it, so there every tenant query is unscoped. That is intentional, because platform-wide jobs need to see every school, but it means any code outside a request has to set or filter the school explicitly.',
+      },
+      {
+        type: 'p',
+        text: 'The suite has over a hundred Pest tests, but none of them creates two schools and proves that one can\'t read the other\'s data. The global scope makes a leak unlikely; it doesn\'t make it tested. That is the next thing I\'m adding: one test per tenant model that seeds two schools and asserts the second school\'s rows never come back.',
+      },
+      { type: 'h', text: 'Takeaway' },
+      {
+        type: 'p',
+        text: 'Put tenant isolation somewhere nobody has to remember it, a scope rather than a where clause, and write down the places the scope deliberately doesn\'t reach. Then test the property you actually care about: that tenant B\'s data is invisible to tenant A.',
+      },
+    ],
+  },
+  {
     slug: 'horizon-delayed-until',
     title: 'Why Horizon showed "Delayed Until" equal to "Pushed"',
     date: '2026-09-15',
     summary:
       'A delayed job looked like it had no delay at all. The cause was two libraries using the letter "m" for different units.',
     project: 'laravel/horizon',
-    pr: 'https://github.com/laravel/horizon/pull/1819',
+    link: { label: 'Read the pull request', href: 'https://github.com/laravel/horizon/pull/1819' },
     tags: ['Laravel', 'Queues', 'JavaScript'],
     body: [
       {
@@ -86,7 +182,7 @@ export const posts: Post[] = [
     summary:
       'Validation messages showed up as "_cut" because of a dumper depth limit. A pair of casters removed one level of nesting.',
     project: 'laravel-debugbar',
-    pr: 'https://github.com/fruitcake/laravel-debugbar/pull/2085',
+    link: { label: 'Read the pull request', href: 'https://github.com/fruitcake/laravel-debugbar/pull/2085' },
     tags: ['Laravel', 'Debugging', 'PHP'],
     body: [
       {
@@ -140,7 +236,7 @@ export const posts: Post[] = [
     summary:
       'Environment variables are always strings, and (bool)"false" is true in PHP. A small cast fixed a config override that did the opposite of what it said.',
     project: 'Grav CMS',
-    pr: 'https://github.com/getgrav/grav/pull/4278',
+    link: { label: 'Read the pull request', href: 'https://github.com/getgrav/grav/pull/4278' },
     tags: ['PHP', 'Configuration'],
     body: [
       {

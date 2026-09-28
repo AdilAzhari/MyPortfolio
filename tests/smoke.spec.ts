@@ -61,7 +61,7 @@ for (const post of posts) {
     await page.goto(`/writing/${post.slug}/`);
     await expect(page.getByRole('heading', { level: 1 })).toHaveText(post.title);
     await expect(page).toHaveTitle(`${post.title} · Adil Omer`);
-    await expect(page.getByRole('link', { name: 'Read the pull request' })).toHaveAttribute('href', post.pr);
+    await expect(page.getByRole('link', { name: post.link.label })).toHaveAttribute('href', post.link.href);
 
     expect(problems).toEqual([]);
   });
