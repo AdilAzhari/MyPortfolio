@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import App from './App';
 import { profile } from './data/portfolio';
 import { posts } from './data/posts';
+import { formatDate } from './utils/date';
 
 export const SITE = 'https://adilomer.xyz';
 export { posts, profile };
@@ -16,6 +17,8 @@ export interface PageMeta {
   type: 'website' | 'article';
   noindex?: boolean;
   jsonLd?: Record<string, unknown>;
+  /** Generated social preview; written to dist/<file> and used for og:image. */
+  ogImage?: { file: string; url: string; alt: string; title: string; summary: string; project: string; date: string };
 }
 
 export const render = (path: string) =>
@@ -51,6 +54,15 @@ export const pages: PageMeta[] = [
     description: post.summary,
     url: `${SITE}/writing/${post.slug}`,
     type: 'article',
+    ogImage: {
+      file: `og/${post.slug}.png`,
+      url: `${SITE}/og/${post.slug}.png`,
+      alt: post.title,
+      title: post.title,
+      summary: post.summary,
+      project: post.project,
+      date: formatDate(post.date),
+    },
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
@@ -58,7 +70,7 @@ export const pages: PageMeta[] = [
       description: post.summary,
       datePublished: post.date,
       url: `${SITE}/writing/${post.slug}`,
-      image: `${SITE}/og-image.png`,
+      image: `${SITE}/og/${post.slug}.png`,
       keywords: post.tags.join(', '),
       author: { '@type': 'Person', name: profile.name, url: SITE },
     },

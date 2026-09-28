@@ -56,6 +56,9 @@ for (const post of posts) {
     expect(raw).toContain('<div id="root"><');
     expect(raw).toContain(`<meta property="og:url" content="https://adilomer.xyz/writing/${post.slug}"`);
     expect(raw).toContain('"@type":"BlogPosting"');
+    expect(raw).toContain(`<meta property="og:image" content="https://adilomer.xyz/og/${post.slug}.png"`);
+    const image = await request.get(`/og/${post.slug}.png`);
+    expect(image.headers()['content-type']).toBe('image/png');
 
     const problems = await watch(page);
     await page.goto(`/writing/${post.slug}/`);

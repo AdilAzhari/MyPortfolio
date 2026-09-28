@@ -3,6 +3,7 @@
 import { mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { renderPostImage } from './og-image.mjs';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const dist = resolve(root, 'dist');
@@ -43,6 +44,11 @@ const applyMeta = (html, page) => {
   out = setContent(out, 'name="twitter:description"', page.description);
   out = out.replace(/(<link rel="canonical" href=")[^"]*(")/, `$1${page.url}$2`);
   if (page.noindex) out = setContent(out, 'name="robots"', 'noindex');
+  if (page.ogImage) {
+    out = setContent(out, 'property="og:image"', page.ogImage.url);
+    out = setContent(out, 'property="og:image:alt"', page.ogImage.alt);
+    out = setContent(out, 'name="twitter:image"', page.ogImage.url);
+  }
   if (page.jsonLd) {
     // Only the "<" needs escaping inside a JSON script block.
     const json = JSON.stringify(page.jsonLd).replace(/</g, '\\u003c');
@@ -56,6 +62,13 @@ for (const page of pages) {
   let html = template.replace('<div id="root"></div>', `<div id="root">${appHtml}</div>`);
   if (html === template) throw new Error('prerender: <div id="root"></div> not found in index.html');
   if (page.title) html = applyMeta(html, page);
+
+  if (page.ogImage) {
+    const png = await renderPostImage({ ...page.ogImage, site: SITE.replace(/^https:\/\//, '') });
+    const imageTarget = resolve(dist, page.ogImage.file);
+    await mkdir(dirname(imageTarget), { recursive: true });
+    await writeFile(imageTarget, png);
+  }
 
   const target = resolve(dist, page.file);
   await mkdir(dirname(target), { recursive: true });
