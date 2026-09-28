@@ -7,6 +7,7 @@ export interface Entry {
   tags: string[];
   links?: { label: string; href: string }[];
   thumb?: string;
+  /** Screenshot in public/; a 320px-wide `-320.webp` variant must sit next to it. */
   image?: string;
 }
 

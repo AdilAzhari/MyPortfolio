@@ -12,6 +12,9 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
       {image ? (
         <img
           src={image}
+          // Each screenshot has a 320px "-320" variant; displayed at ~160px (mobile) or ~120px.
+          srcSet={`${image.replace(/\.webp$/, '-320.webp')} 320w, ${image} 640w`}
+          sizes="(min-width: 640px) 128px, 160px"
           alt=""
           loading="lazy"
           decoding="async"
@@ -39,7 +42,7 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
               href={href}
               target="_blank"
               rel="noreferrer noopener"
-              aria-label={`${title}${subtitle ? ` — ${subtitle}` : ''} (opens in a new tab)`}
+              aria-label={`${title}${subtitle ? ` · ${subtitle}` : ''} (opens in a new tab)`}
               className="group/link inline-flex items-baseline text-base font-medium leading-tight text-slate-200 hover:text-teal-300 focus-visible:text-teal-300"
             >
               <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block" />
