@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
   const active = useActiveSection(sectionIds);
 
   return (
-    <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24">
+    <header className="lg:sticky lg:top-0 lg:flex lg:max-h-screen lg:w-1/2 lg:flex-col lg:justify-between lg:py-24 [@media(min-width:1024px)_and_(max-height:760px)]:py-12">
       <div>
         <h1 className="text-4xl font-bold tracking-tight text-slate-200 sm:text-5xl">
           <a href="/">{profile.name}</a>
@@ -36,7 +36,7 @@ const Sidebar: React.FC = () => {
           {profile.location}
         </p>
 
-        <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">
+        <p className="mt-5 inline-flex items-center gap-2 rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">
           <span className="relative flex h-2 w-2" aria-hidden="true">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-300 opacity-60 motion-reduce:animate-none" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-300" />
@@ -44,7 +44,7 @@ const Sidebar: React.FC = () => {
           {profile.availability}
         </p>
 
-        <div className="mt-5">
+        <div className="mt-4">
           <a
             href={`mailto:${profile.email}?subject=${encodeURIComponent('Backend Laravel role')}`}
             className="inline-flex items-center gap-2 rounded-md border border-teal-300/60 px-4 py-2 text-sm font-semibold text-teal-300 transition hover:bg-teal-400/10 focus-visible:bg-teal-400/10 motion-reduce:transition-none"
@@ -55,7 +55,7 @@ const Sidebar: React.FC = () => {
         </div>
 
         <nav className="nav hidden lg:block" aria-label="In-page jump links">
-          <ul className="mt-16 w-max">
+          <ul className="mt-10 w-max">
             {sections.map(({ id, label }) => {
               const isActive = active === id;
               return (
