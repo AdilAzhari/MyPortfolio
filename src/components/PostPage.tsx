@@ -7,7 +7,8 @@ import { formatDate } from '../utils/date';
 // Renders `inline code` spans inside plain text.
 const Inline: React.FC<{ text: string }> = ({ text }) => (
   <>
-    {text.split(/(`[^`]+`)/g).map((part, i) =>
+    {/* Drop the empty strings split() leaves at the edges; they would become stray text nodes. */}
+    {text.split(/(`[^`]+`)/g).filter(Boolean).map((part, i) =>
       part.startsWith('`') && part.endsWith('`') ? (
         <code key={i} className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-[0.85em] text-teal-200">
           {part.slice(1, -1)}
@@ -59,7 +60,7 @@ const PostPage: React.FC<{ post: Post }> = ({ post }) => {
       <article>
         <header className="mb-10">
           <p className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-            {formatDate(post.date)} · {post.project}
+            {`${formatDate(post.date)} · ${post.project}`}
           </p>
           <h1 className="mt-3 text-3xl font-bold tracking-tight text-slate-200 sm:text-4xl">{post.title}</h1>
           <p className="mt-4 text-lg leading-relaxed">{post.summary}</p>

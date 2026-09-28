@@ -124,7 +124,7 @@ function App({ path }: { path: string }) {
 
               <footer className="max-w-md pb-16 text-sm text-slate-400 sm:pb-0">
                 <p>
-                  Built with React and Tailwind CSS, deployed on Vercel. Layout inspired by{' '}
+                  {'Built with Preact and Tailwind CSS, deployed on Vercel. Layout inspired by '}
                   <a
                     href="https://brittanychiang.com"
                     target="_blank"
@@ -133,7 +133,7 @@ function App({ path }: { path: string }) {
                   >
                     Brittany Chiang
                   </a>
-                  . Say hi at{' '}
+                  {'. Say hi at '}
                   <a href={`mailto:${profile.email}`} className="font-medium text-slate-400 hover:text-teal-300">
                     {profile.email}
                   </a>

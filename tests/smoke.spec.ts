@@ -9,7 +9,10 @@ const csp: string = vercel.headers[0].headers
   .find((h: { key: string }) => h.key === 'Content-Security-Policy')
   .value.replace(/;\s*upgrade-insecure-requests/, '');
 
-// Collects uncaught errors, console errors and CSP violations for the page.
+// Collects uncaught errors, console errors, CSP violations and hydration mismatches for the page.
+// Preact patches a mismatch silently instead of throwing, so mismatches are detected from the DOM:
+// correct hydration reuses the prerendered nodes, so nothing inside #root is removed or rewritten
+// while the page loads.
 const watch = async (page: Page) => {
   const problems: string[] = [];
   page.on('pageerror', (e) => problems.push(`pageerror: ${e.message}`));
@@ -19,6 +22,21 @@ const watch = async (page: Page) => {
     document.addEventListener('securitypolicyviolation', (e) =>
       console.error(`CSP violation: ${e.violatedDirective} ${e.blockedURI}`),
     );
+
+    const inRoot = (node: Node | null) => !!node && !!(node instanceof Element ? node : node.parentElement)?.closest('#root');
+    const observer = new MutationObserver((records) => {
+      for (const r of records) {
+        if (r.type === 'childList' && r.removedNodes.length && inRoot(r.target)) {
+          console.error(`hydration mismatch: nodes removed under <${(r.target as Element).tagName?.toLowerCase()}>`);
+        }
+        if (r.type === 'characterData' && inRoot(r.target) && r.oldValue !== r.target.textContent) {
+          console.error(`hydration mismatch: text "${r.oldValue}" -> "${r.target.textContent}"`);
+        }
+      }
+    });
+    observer.observe(document, { childList: true, subtree: true, characterData: true, characterDataOldValue: true });
+    // Hydration is finished by load; later changes are ordinary interaction.
+    addEventListener('load', () => setTimeout(() => observer.disconnect(), 500));
   });
   // Vercel serves its analytics scripts only in production.
   await page.route('**/_vercel/**', (route) => route.fulfill({ contentType: 'application/javascript', body: '' }));

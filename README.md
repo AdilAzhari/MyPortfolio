@@ -8,7 +8,7 @@ Personal site of Adil Omer, a backend-focused Laravel engineer: experience, proj
 
 ## Stack
 
-- React 18 + TypeScript, built with Vite
+- TypeScript + the React API, running on [Preact](https://preactjs.com/) via `preact/compat` (aliased in `vite.config.ts`), built with Vite
 - Tailwind CSS, Inter (self-hosted variable font)
 - Static HTML prerendered at build time, hydrated on the client
 - Hosted on Vercel, with Web Analytics and Speed Insights
@@ -30,9 +30,9 @@ npm run lint
 
 1. `vite build`: the client bundle in `dist/`.
 2. `vite build --ssr src/entry-server.tsx`: a Node bundle that can render the app to a string.
-3. `scripts/prerender.mjs`: renders every page listed in `entry-server.tsx` to static HTML with its own `<title>`, description, Open Graph/Twitter tags, canonical URL and JSON-LD. It also writes `dist/404.html` and `dist/rss.xml`, and preloads the Latin font subset.
+3. `scripts/prerender.mjs`: renders every page listed in `entry-server.tsx` to static HTML with its own `<title>`, description, Open Graph/Twitter tags, canonical URL and JSON-LD. It also writes `dist/404.html`, `dist/rss.xml` and a social preview image per post (`dist/og/<slug>.png`, rendered by `scripts/og-image.mjs`), and preloads the Latin font subset.
 
-The browser then hydrates that HTML (`src/main.tsx`). Anything that depends on `window` must live in an effect, so the server and client render identical markup.
+The browser then hydrates that HTML (`src/main.tsx`). Anything that depends on `window` must live in an effect, so the server and client render identical markup. Keep each run of visible text in one JSX expression (`{`${a} · ${b}`}` rather than `{a} · {b}`): Preact's server renderer merges adjacent text, and the client would have to split it again. The smoke tests fail if hydration rewrites any prerendered node.
 
 ## Project layout
 
@@ -67,7 +67,7 @@ Commit both the `.tex` and the PDF. SumatraPDF reloads the PDF automatically whe
 
 ## Checks
 
-GitHub Actions (`.github/workflows/ci.yml`) runs on every push and pull request: type check, lint, build and prerender, an output sanity check, and the Playwright smoke tests. The smoke tests serve the build with the production CSP applied and fail on any page error, console error, CSP violation or hydration mismatch. Dependabot opens weekly npm updates and monthly GitHub Actions updates.
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push and pull request: type check, lint, build and prerender, an output sanity check, and the Playwright smoke tests. The smoke tests serve the build with the production CSP applied and fail on any page error, console error, CSP violation or hydration mismatch (any prerendered node removed or rewritten during load). Dependabot opens weekly npm updates and monthly GitHub Actions updates.
 
 ## Deploying
 

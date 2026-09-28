@@ -1,18 +1,31 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import preact from '@preact/preset-vite';
+
+// The app is written against the React API but runs on Preact (preact/compat), which is ~120 KB
+// lighter. These aliases apply to both builds, so the prerendered HTML and the hydrating client
+// come from the same renderer. Order matters: the more specific react-dom/* entries come first.
+const reactToPreact = [
+  { find: /^react-dom\/client$/, replacement: 'preact/compat/client' },
+  { find: /^react-dom\/server$/, replacement: 'preact/compat/server' },
+  { find: /^react-dom$/, replacement: 'preact/compat' },
+  { find: /^react\/jsx-runtime$/, replacement: 'preact/jsx-runtime' },
+  { find: /^react\/jsx-dev-runtime$/, replacement: 'preact/jsx-dev-runtime' },
+  { find: /^react$/, replacement: 'preact/compat' },
+];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ isSsrBuild }) => ({
-  plugins: [
-    react({
-      // Enable React Fast Refresh for better development experience
-      fastRefresh: true,
-      // Optimize JSX transform
-      jsxRuntime: 'automatic',
-    }),
-  ],
+  plugins: [preact({ prerender: { enabled: false } })],
+  resolve: {
+    alias: reactToPreact,
+  },
+  ssr: {
+    // Bundle packages that import "react" into the SSR build, so the aliases above apply to
+    // them too; left external, Node would resolve a React that is no longer installed.
+    noExternal: ['lucide-react', '@vercel/analytics', '@vercel/speed-insights'],
+  },
   optimizeDeps: {
-    include: ['react', 'react-dom', 'lucide-react'],
+    include: ['preact', 'preact/compat', 'lucide-react'],
   },
   build: {
     // Enable minification
@@ -23,27 +36,22 @@ export default defineConfig(({ isSsrBuild }) => ({
         drop_debugger: true,
       },
     },
-    // Optimize chunk splitting
-    // The SSR build (used only for prerendering) keeps dependencies external, so no vendor chunks there.
+    // The SSR build (used only for prerendering) needs no vendor chunks.
     rollupOptions: isSsrBuild
       ? {}
       : {
           output: {
             manualChunks: {
               // Split vendor chunks for better caching
-              'react-vendor': ['react', 'react-dom'],
-              'icons': ['lucide-react'],
+              vendor: ['preact', 'preact/compat', 'preact/hooks'],
+              icons: ['lucide-react'],
             },
           },
         },
-    // Increase chunk size warning limit
-    chunkSizeWarningLimit: 1000,
     // Enable CSS code splitting
     cssCodeSplit: true,
-    // Enable source maps for debugging (can disable in production)
     sourcemap: false,
   },
-  // Enable server optimizations
   server: {
     hmr: {
       overlay: false, // Disable error overlay for better performance

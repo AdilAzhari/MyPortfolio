@@ -47,15 +47,15 @@ const EntryCard: React.FC<{ entry: Entry }> = ({ entry }) => {
             >
               <span className="absolute -inset-x-4 -inset-y-2.5 hidden rounded md:-inset-x-6 md:-inset-y-4 lg:block" />
               <span>
-                {title}
-                {subtitle && <> · <span className="inline-block">{subtitle}</span></>}
+                {subtitle ? `${title} · ` : title}
+                {subtitle && <span className="inline-block">{subtitle}</span>}
                 <ArrowUpRight className="ml-1 inline-block h-4 w-4 shrink-0 translate-y-px transition-transform group-hover/link:-translate-y-1 group-hover/link:translate-x-1 group-focus-visible/link:-translate-y-1 group-focus-visible/link:translate-x-1 motion-reduce:transition-none" />
               </span>
             </a>
           ) : (
             <span className="text-base">
-              {title}
-              {subtitle && <> · <span className="inline-block">{subtitle}</span></>}
+              {subtitle ? `${title} · ` : title}
+              {subtitle && <span className="inline-block">{subtitle}</span>}
             </span>
           )}
         </h3>
