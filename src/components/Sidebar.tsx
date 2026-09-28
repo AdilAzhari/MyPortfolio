@@ -36,6 +36,24 @@ const Sidebar: React.FC = () => {
           {profile.location}
         </p>
 
+        <p className="mt-6 inline-flex items-center gap-2 rounded-full bg-teal-400/10 px-3 py-1 text-xs font-medium leading-5 text-teal-300">
+          <span className="relative flex h-2 w-2" aria-hidden="true">
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-teal-300 opacity-60 motion-reduce:animate-none" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-teal-300" />
+          </span>
+          {profile.availability}
+        </p>
+
+        <div className="mt-5">
+          <a
+            href={`mailto:${profile.email}?subject=${encodeURIComponent('Backend Laravel role')}`}
+            className="inline-flex items-center gap-2 rounded-md border border-teal-300/60 px-4 py-2 text-sm font-semibold text-teal-300 transition hover:bg-teal-400/10 focus-visible:bg-teal-400/10 motion-reduce:transition-none"
+          >
+            <Mail className="h-4 w-4" aria-hidden="true" />
+            Get in touch
+          </a>
+        </div>
+
         <nav className="nav hidden lg:block" aria-label="In-page jump links">
           <ul className="mt-16 w-max">
             {sections.map(({ id, label }) => {
