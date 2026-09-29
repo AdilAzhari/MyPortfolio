@@ -1,6 +1,7 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 import { AlertTriangle, RefreshCw, Home, Mail } from 'lucide-react';
 import { trackError } from '../utils/analytics';
+import { profile } from '../data/portfolio';
 
 interface Props {
   children: ReactNode;
@@ -81,7 +82,7 @@ Please let me know if you need any additional information.
 
 Best regards`);
 
-    window.open(`mailto:adilazhariosman@gmail.com?subject=${subject}&body=${body}`);
+    window.open(`mailto:${profile.email}?subject=${subject}&body=${body}`);
   };
 
   public render() {
@@ -184,10 +185,10 @@ Best regards`);
                   </p>
                   <div className="flex items-center justify-center gap-4 text-sm">
                     <a
-                      href="mailto:adilazhariosman@gmail.com"
+                      href={`mailto:${profile.email}`}
                       className="text-blue-600 dark:text-blue-400 hover:underline"
                     >
-                      adilazhariosman@gmail.com
+                      {profile.email}
                     </a>
                     <span className="text-gray-400">•</span>
                     <span className="text-gray-600 dark:text-gray-400">
