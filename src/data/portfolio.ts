@@ -24,7 +24,7 @@ export const profile = {
 };
 
 export const about: string[] = [
-  "I'm a backend-focused PHP/Laravel engineer with 4+ years of experience building business-critical applications — REST APIs, transactional workflows, event-driven systems, and multi-tenant SaaS platforms.",
+  "I'm a backend-focused PHP/Laravel engineer with 4 years of experience building business-critical applications — REST APIs, transactional workflows, event-driven systems, and multi-tenant SaaS platforms.",
   'I care most about correctness: idempotent endpoints, clean domain boundaries, careful data access, and test suites that catch regressions before users do. Pest, PHPStan, and Rector are part of how I work, not an afterthought.',
   "Currently I'm a Full-Stack Laravel Engineer at Sentients AI, and outside work I maintain open-source Laravel packages and contribute fixes to established projects in the PHP ecosystem, including Laravel Horizon.",
 ];
