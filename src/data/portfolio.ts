@@ -19,7 +19,7 @@ export const profile = {
   availability: 'Open to backend Laravel roles · remote or relocation',
   email: 'adilazhariosman@gmail.com',
   github: 'https://github.com/AdilAzhari',
-  linkedin: 'https://linkedin.com/in/adil-omer-8aab21167',
+  linkedin: 'https://linkedin.com/in/adil-azhari-omer',
   resume: '/resume/Adil_Omer_Resume.pdf',
 };
 
