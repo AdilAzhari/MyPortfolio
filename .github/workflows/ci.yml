@@ -38,3 +38,41 @@ jobs:
           name: playwright-traces
           path: test-results
           retention-days: 7
+
+  # Deploys main to production once the checks above pass. Vercel's own Git integration
+  # is blocked for this repo (commit author and Vercel account don't match), so this
+  # deploys with the Vercel CLI and a token instead, like `npx vercel --prod` locally.
+  deploy:
+    needs: build
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    concurrency:
+      group: production-deploy
+      cancel-in-progress: false
+    env:
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_ORG_ID: team_ZVB5eiUVnWfECqO99uFYQoFf
+      VERCEL_PROJECT_ID: prj_mryaKMtDlmVa4Y9BHGXsOdvCMFlp
+    steps:
+      - name: Skip when no Vercel token is configured
+        id: token
+        run: |
+          if [ -z "$VERCEL_TOKEN" ]; then
+            echo "::notice::VERCEL_TOKEN secret not set; skipping deploy. Add it under Settings > Secrets and variables > Actions."
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/checkout@v7
+        if: steps.token.outputs.present == 'true'
+      - uses: actions/setup-node@v7
+        if: steps.token.outputs.present == 'true'
+        with:
+          node-version: 22
+          cache: npm
+      - name: Deploy to production
+        if: steps.token.outputs.present == 'true'
+        run: |
+          npx --yes vercel@60 pull --yes --environment=production --token="$VERCEL_TOKEN"
+          npx --yes vercel@60 build --prod --token="$VERCEL_TOKEN"
+          npx --yes vercel@60 deploy --prebuilt --prod --token="$VERCEL_TOKEN"

@@ -71,7 +71,9 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every push and pull request:
 
 ## Deploying
 
-Deploys go through the Vercel CLI:
+Pushing to `main` deploys automatically: the `deploy` job in `.github/workflows/ci.yml` runs after the checks pass and deploys with the Vercel CLI. It needs a `VERCEL_TOKEN` repository secret and skips itself (with a notice) when the secret is missing. Vercel's own Git integration is not used for this repo.
+
+To deploy by hand instead:
 
 ```bash
 npx vercel --prod

@@ -22,7 +22,7 @@ export const posts: Post[] = [
     title: 'Keeping every school\'s data apart in a multi-tenant Laravel app',
     date: '2026-09-28',
     summary:
-      'How Madarik scopes 30 models to the current school with one middleware and one trait, where that stops protecting you, and the test I still owe it.',
+      'How Madarik scopes 30 models to the current school with one middleware and one trait, where that stops protecting you, and the test that proves it.',
     project: 'Madarik',
     link: { label: 'See the live demo', href: 'https://madarik.aljebal-albeedos.com' },
     tags: ['Laravel', 'Multi-Tenancy', 'Architecture'],
@@ -102,9 +102,32 @@ return match ($a->audience) {
         type: 'p',
         text: 'The scope only applies when `school_id` is bound, and only the middleware binds it. Artisan commands, scheduled tasks and queued jobs run without it, so there every tenant query is unscoped. That is intentional, because platform-wide jobs need to see every school, but it means any code outside a request has to set or filter the school explicitly.',
       },
+      { type: 'h', text: 'Testing the property, not the code' },
       {
         type: 'p',
-        text: 'The suite has over a hundred Pest tests, but none of them creates two schools and proves that one can\'t read the other\'s data. The global scope makes a leak unlikely; it doesn\'t make it tested. That is the next thing I\'m adding: one test per tenant model that seeds two schools and asserts the second school\'s rows never come back.',
+        text: 'The suite had over a hundred Pest tests, but every one of them bound `school_id` by hand, and none created two schools to prove one can\'t read the other\'s data. The scope made a leak unlikely; it didn\'t make it tested. So I added a test that finds every model using `BelongsToSchool` by reflection, seeds one row per school, and asserts only the current school\'s row comes back:',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: `it('scopes queries to the current school', function (string $model): void {
+    $mine = $model::factory()->create(['school_id' => $this->schoolA->id]);
+    $theirs = $model::factory()->create(['school_id' => $this->schoolB->id]);
+
+    app()->instance('school_id', $this->schoolA->id);
+
+    $ids = $model::query()->pluck('id');
+    expect($ids)->toContain($mine->getKey())
+        ->and($ids)->not->toContain($theirs->getKey());
+})->with(tenantModelsWithFactories());`,
+      },
+      {
+        type: 'p',
+        text: 'Because the models are discovered, a new tenant model is covered as soon as it has a factory. A second set of tests goes through HTTP and the real middleware: listing students, fetching another school\'s student by id, and the `X-School-Id` header, which must be ignored for regular admins and honoured for super-admins.',
+      },
+      {
+        type: 'p',
+        text: 'To check the tests could actually fail, I disabled the scope and reran them: 22 of 26 failed. The four that still passed were informative too. Fetching another school\'s student by id stayed blocked, because the policy compares `school_id` on its own. That second layer is exactly what you want when one of them slips.',
       },
       { type: 'h', text: 'Takeaway' },
       {
