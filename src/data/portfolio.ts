@@ -31,7 +31,7 @@ export const about: string[] = [
 
 export const experience: Entry[] = [
   {
-    period: 'Oct 2024 — Present',
+    period: 'Oct 2025 — Present',
     title: 'Full-Stack PHP/Laravel Engineer',
     subtitle: 'Sentients AI',
     description:
@@ -39,7 +39,7 @@ export const experience: Entry[] = [
     tags: ['Laravel', 'PHP', 'MySQL', 'Redis', 'Vue.js', 'Pest', 'REST APIs'],
   },
   {
-    period: '2024 — Present',
+    period: '2022 — Present',
     title: 'PHP/Laravel Developer',
     subtitle: 'Freelance · Client Projects',
     description:
