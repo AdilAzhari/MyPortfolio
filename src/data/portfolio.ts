@@ -17,7 +17,7 @@ export const profile = {
   pitch: 'I build secure, well-tested Laravel systems that stay correct under real-world load, and contribute fixes upstream to projects like Laravel Horizon.',
   location: 'Shah Alam, Malaysia',
   availability: 'Open to backend Laravel roles · remote or relocation',
-  email: 'adelazhry1997@gmail.com',
+  email: 'adilazhariosman@gmail.com',
   github: 'https://github.com/AdilAzhari',
   linkedin: 'https://linkedin.com/in/adil-azhari-omer',
   resume: '/resume/Adil_Omer_Resume.pdf',
