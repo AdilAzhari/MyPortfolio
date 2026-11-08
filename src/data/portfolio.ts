@@ -72,15 +72,15 @@ export const projects: Entry[] = [
   },
   {
     period: '2026',
-    title: 'Modular E-Commerce System',
-    href: 'https://store.aljebal-albeedos.com',
+    title: 'Nexo v1 — Modular E-Commerce',
+    subtitle: 'Predecessor to Nexo 2.0',
+    href: 'https://github.com/AdilAzhari/nexo-ecommerce',
     thumb: 'EC',
     image: '/projects/store.webp',
     description:
-      'Modular Laravel system separating orders, payments, inventory and users with DDD — value objects, domain events and isolated business rules. Multi-tenancy with automatic query scoping and event-driven workflows that decouple business processes.',
+      'Modular Laravel system separating orders, payments, inventory and users with DDD — value objects, domain events and isolated business rules. Multi-tenancy with automatic query scoping and event-driven workflows that decouple business processes. Auditing it surfaced the payment and tenant-isolation gaps that the Nexo 2.0 rebuild now designs out from the start.',
     tags: ['Laravel', 'DDD', 'Domain Events', 'Multi-Tenancy'],
     links: [
-      { label: 'Live demo', href: 'https://store.aljebal-albeedos.com' },
       { label: 'Source', href: 'https://github.com/AdilAzhari/nexo-ecommerce' },
     ],
   },
