@@ -56,7 +56,7 @@ export const projects: Entry[] = [
     thumb: 'KW',
     image: '/projects/kilat.webp',
     description:
-      'Car wash platform for a multi-branch operator: QR booking with race and duplicate-booking protection, a washer bay tablet app, and live queue and TV screens over Laravel Reverb. Owners get cost-per-wash and gross-profit reports, CSV exports, payroll and per-wash stock deduction; a plate-camera webhook, WhatsApp reminders, PDPA consent and data requests, and enforced staff 2FA round it out. 230+ PHPUnit tests and Larastan in CI.',
+      'Car wash platform for multi-branch operators, with 46 screens across four roles (customer, washer, supervisor, owner) in English and Malay. QR booking with race and duplicate-booking protection, a washer bay tablet app, and live queue and TV screens over Laravel Reverb. Owners get cost-per-wash and gross-profit reports, CSV exports, payroll and per-wash stock deduction; a plate-camera webhook, WhatsApp reminders, PDPA consent and data requests, and enforced staff 2FA round it out. 232 PHPUnit tests and Larastan in CI, shipped across 20 reviewed PRs.',
     tags: ['Laravel 13', 'React 19', 'TypeScript', 'Inertia.js', 'Reverb', 'PHPUnit'],
   },
   {
@@ -66,7 +66,7 @@ export const projects: Entry[] = [
     thumb: 'MD',
     image: '/projects/madarik.webp',
     description:
-      'Multi-tenant school platform covering students, attendance, grades, fees, library and messaging. Tenant isolation via global scopes and resolver middleware, Redis-backed notifications chunked for large schools, React dashboards over Inertia, and 100+ Pest feature tests guarding every API contract.',
+      'Multi-tenant school platform in production at a school of 500 students, covering students, attendance, grades, fees, library and messaging. Tenant isolation via global scopes and resolver middleware, Redis-backed notifications chunked for large schools, React dashboards over Inertia, and 100+ Pest feature tests guarding every API contract.',
     tags: ['Laravel 11', 'React', 'Inertia.js', 'Sanctum', 'Spatie', 'Pest'],
     links: [{ label: 'Live demo', href: 'https://madarik.aljebal-albeedos.com' }],
   },
