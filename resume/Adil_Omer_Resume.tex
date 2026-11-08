@@ -68,11 +68,11 @@
     \small \faPhone\ \href{tel:+60139034997}{+(60)139034997} ~
     \faEnvelope\ \href{mailto:adilazhariosman@gmail.com}{adilazhariosman@gmail.com} ~
     \faLinkedin\ \href{https://linkedin.com/in/adil-azhari-omer}{linkedin.com/in/adil-azhari-omer} ~
-    \faGithub\ \href{https://github.com/AdilAzhari}{github.com/AdilAzhari}
+    \faGithub\ \href{https://github.com/AdilAzhariOmsan}{github.com/AdilAzhariOmsan}
 \end{center}
 
 \section{Summary}
-\small{Backend-focused PHP/Laravel Engineer with 4 years building secure, business-critical applications: REST APIs, MySQL, Redis, transactional workflows, event-driven architecture, and multi-tenant systems. Focused on correctness, idempotency, testing, and domain modeling. Maintainer of published Laravel packages, with merged fixes in Laravel Horizon, laravel-debugbar, and Grav CMS.}
+\small{Backend-focused PHP/Laravel Engineer with 4 years building secure, business-critical applications: REST APIs, MySQL, Redis, transactional workflows, event-driven architecture, and multi-tenant systems. Focused on correctness, idempotency, testing, and domain modeling. Maintainer of published Laravel packages, with 19 merged upstream PRs across Laravel Horizon, laravel-debugbar, Grav CMS, and career-ops.}
 
 \section{Professional Experience}
   \resumeSubHeadingListStart
@@ -80,45 +80,50 @@
       {Full-Stack PHP/Laravel Engineer}{Oct 2025 -- Present}
       {Sentients AI}{}
       \resumeItemListStart
-        \resumeItem{Design and maintain Laravel applications (PHP, MySQL, Redis, Vue.js) with a focus on reliability and scalable backend architecture.}
-        \resumeItem{Integrate external REST APIs and build reliable synchronization workflows between internal systems and third-party services.}
-        \resumeItem{Optimize queries, indexing, and Redis caching; implement secure transactions and RBAC, reducing potential vulnerability surfaces by 45\%.}
-        \resumeItem{Write Pest and PHPUnit tests and take part in code reviews to prevent regressions.}
+        \resumeItem{Drive the Nexo 2.0 marketplace rebuild: assessed the legacy app (payments never marked paid, cross-tenant vendor routes, staging on the production DB) and wrote the v2 spec and ADRs.}
+        \resumeItem{Built the v2 frontend foundation (Vue 3, Inertia 3, TypeScript) with a Node 24 CI job (type-check, Vitest, \texttt{npm audit}); resolved Composer security advisories blocking CI.}
+        \resumeItem{Integrate external REST APIs and synchronization workflows; optimize queries, indexing, and Redis caching; implement secure transactions and RBAC, reducing potential vulnerability surfaces by 45\%.}
       \resumeItemListEnd
 
     \resumeSubheading
       {PHP/Laravel Developer (Freelance)}{2022 -- Present}
       {Client Projects}{}
       \resumeItemListStart
-        \resumeItem{Deliver Laravel applications and REST APIs end to end: schemas, transactional workflows, authentication, authorization, and Pest/PHPUnit tests.}
-        \resumeItem{Integrate payment gateways, webhooks, and external APIs, handling failure and synchronization scenarios.}
+        \resumeItem{Deliver Laravel apps and REST APIs end to end (schemas, transactional workflows, auth, Pest tests); integrate payment gateways, webhooks, and external APIs with failure and sync handling.}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
 \section{Open Source}
   \resumeSubHeadingListStart
     \resumeProjectHeading
-      {\textbf{Upstream Contributions} $|$ \emph{Laravel Horizon, laravel-debugbar, Grav CMS, career-ops}}{2026}
+      {\textbf{Upstream Contributions} --- \href{https://github.com/AdilAzhariOmsan}{GitHub} $|$ \emph{Laravel Horizon, laravel-debugbar, Grav CMS, career-ops}}{2026}
       \resumeItemListStart
         \resumeItem{\textbf{Laravel Horizon} (\href{https://github.com/laravel/horizon/pull/1819}{\#1819}, merged): fixed ``Delayed Until'' matching ``Pushed'' for jobs delayed with a \texttt{CarbonInterval}.}
         \resumeItem{\textbf{laravel-debugbar} (\href{https://github.com/fruitcake/laravel-debugbar/pull/2085}{\#2085}, merged): validation errors no longer cut off by the dumper's depth limit.}
         \resumeItem{\textbf{Grav CMS} (\href{https://github.com/getgrav/grav/pull/4278}{\#4278}, merged): \texttt{GRAV\_CONFIG\_\_*=false} env overrides no longer read as enabled.}
-        \resumeItem{\textbf{career-ops} (\href{https://github.com/career-ops-hq/career-ops}{GitHub}): merged fixes across CLI validation, CV fact-checking, and analytics.}
+        \resumeItem{\textbf{career-ops} (\href{https://github.com/career-ops-hq/career-ops/pulls?q=is\%3Apr+author\%3AAdilAzhariOmsan+is\%3Amerged}{16 merged PRs}): fixes across job-portal scanning, the lead pipeline, CV templates, and web onboarding.}
+        \resumeItem{\textbf{Under review:} Larastan (\href{https://github.com/larastan/larastan/pull/2563}{\#2563}, per-connection schema isolation) and Collision (\href{https://github.com/nunomaduro/collision/pull/379}{\#379}, \texttt{artisan test} option parsing).}
       \resumeItemListEnd
     \resumeProjectHeading
       {\textbf{Laravel Idempotency} --- \href{https://github.com/AdilAzhari/laravel-idempotency}{GitHub} $|$ \emph{Maintainer}}{2026}
       \resumeItemListStart
-        \resumeItem{Prevents duplicate request execution via idempotency keys, fingerprinting, response replay, and cache-based locking; extensible contracts, Pest/PHPStan/Rector quality gates, 93\% coverage.}
+        \resumeItem{Idempotency keys, request fingerprinting, response replay, and cache locking behind extensible contracts; 93\% coverage.}
       \resumeItemListEnd
     \resumeProjectHeading
       {\textbf{Laravel Tracer} --- \href{https://github.com/AdilAzhari/laravel-trace}{GitHub} $|$ \emph{Maintainer}}{2026 -- Present}
       \resumeItemListStart
-        \resumeItem{Application-level tracing for Laravel: request, query, event, and execution-context spans with pluggable storage (incl. a database driver).}
+        \resumeItem{Application-level tracing: request, query, event, and execution-context spans with pluggable storage drivers.}
       \resumeItemListEnd
   \resumeSubHeadingListEnd
 
 \section{Selected Projects}
   \resumeSubHeadingListStart
+    \resumeProjectHeading
+      {\textbf{Kilat Car Wash --- Multi-Branch Booking \& Operations} $|$ \emph{Laravel 13, React 19, TypeScript, Inertia, Reverb}}{2026}
+      \resumeItemListStart
+        \resumeItem{QR booking with race and duplicate-booking protection, a washer bay tablet app, and live queue and TV screens over Laravel Reverb; supervisor and owner dashboards across branches.}
+        \resumeItem{Cost per wash and gross-profit reporting with CSV exports, payroll, stock deducted per wash, a plate-camera webhook, WhatsApp reminders, PDPA consent and data requests, and enforced staff 2FA; 230+ PHPUnit tests and Larastan in CI.}
+      \resumeItemListEnd
     \resumeProjectHeading
       {\textbf{Madarik School Management System} --- \href{https://madarik.aljebal-albeedos.com}{Live Demo}}{2026}
       \resumeItemListStart
@@ -137,8 +142,8 @@
      \textbf{Languages \& Backend}{: PHP, SQL, JavaScript; Laravel, REST APIs, MySQL, Redis, Transactions, Caching, RBAC} \\
      \textbf{Laravel}{: Eloquent, Sanctum, Fortify, Passport, Horizon, Telescope, Queues, Events, Middleware, Policies, API Resources, Notifications, Scheduler, Rate Limiting} \\
      \textbf{Architecture}{: DDD, SOLID, Clean Architecture, Event-Driven Architecture, Multi-Tenancy} \\
-     \textbf{Frontend}{: Vue.js 3, React.js, Inertia.js, Livewire, Alpine.js} \\
-     \textbf{Testing \& Tools}{: PestPHP, PHPUnit, PHPStan, Rector, Pint; Git, Composer, GitHub Actions, Filament, Reverb, Echo}
+     \textbf{Frontend}{: TypeScript, Vue.js 3, React 19, Inertia.js, Livewire, Alpine.js, Tailwind CSS} \\
+     \textbf{Testing \& Tools}{: PestPHP, PHPUnit, Vitest, PHPStan/Larastan, Rector, Pint; Git, Composer, GitHub Actions, Filament, Reverb, Echo}
     }}
  \end{itemize}
 

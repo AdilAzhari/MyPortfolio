@@ -18,7 +18,7 @@ export const profile = {
   location: 'Shah Alam, Malaysia',
   availability: 'Open to backend Laravel roles · remote or relocation',
   email: 'adilazhariosman@gmail.com',
-  github: 'https://github.com/AdilAzhari',
+  github: 'https://github.com/AdilAzhariOmsan',
   linkedin: 'https://linkedin.com/in/adil-azhari-omer',
   resume: '/resume/Adil_Omer_Resume.pdf',
 };
@@ -35,8 +35,8 @@ export const experience: Entry[] = [
     title: 'Full-Stack PHP/Laravel Engineer',
     subtitle: 'Sentients AI',
     description:
-      'Design and maintain Laravel applications with an emphasis on reliability and scalable backend architecture. Build synchronization workflows with third-party REST APIs, tune queries, indexing and Redis caching, and implement secure transactions and RBAC — reducing potential vulnerability surfaces by 45%. Write Pest/PHPUnit tests and take part in code review.',
-    tags: ['Laravel', 'PHP', 'MySQL', 'Redis', 'Vue.js', 'Pest', 'REST APIs'],
+      'Driving the Nexo 2.0 multi-vendor marketplace rebuild: assessed the legacy app (surfacing payments never marked paid, cross-tenant vendor routes and staging wired to the production DB), wrote the v2 spec and ADRs, and built the Vue 3 + Inertia 3 + TypeScript frontend foundation with its own Node 24 CI job. Also build synchronization workflows with third-party REST APIs, tune queries, indexing and Redis caching, and implement secure transactions and RBAC — reducing potential vulnerability surfaces by 45%.',
+    tags: ['Laravel', 'PHP', 'MySQL', 'Redis', 'Vue 3', 'TypeScript', 'Pest'],
   },
   {
     period: '2022 — Present',
@@ -49,6 +49,15 @@ export const experience: Entry[] = [
 ];
 
 export const projects: Entry[] = [
+  {
+    period: '2026',
+    title: 'Kilat Car Wash — Multi-Branch Booking & Operations',
+    subtitle: 'Private repository',
+    thumb: 'KW',
+    description:
+      'Car wash platform for a multi-branch operator: QR booking with race and duplicate-booking protection, a washer bay tablet app, and live queue and TV screens over Laravel Reverb. Owners get cost-per-wash and gross-profit reports, CSV exports, payroll and per-wash stock deduction; a plate-camera webhook, WhatsApp reminders, PDPA consent and data requests, and enforced staff 2FA round it out. 230+ PHPUnit tests and Larastan in CI.',
+    tags: ['Laravel 13', 'React 19', 'TypeScript', 'Inertia.js', 'Reverb', 'PHPUnit'],
+  },
   {
     period: '2026',
     title: 'Madarik — School Management SaaS',
@@ -125,12 +134,14 @@ export const openSource: Entry[] = [
     title: 'Upstream contributions',
     subtitle: 'Contributor',
     description:
-      'Merged fixes in laravel-debugbar (validation errors cut off by the dumper depth limit), Grav CMS (env config booleans read as strings), and a run of fixes in career-ops covering CLI validation, CV fact-checking, tracker mapping and funnel analytics — working through issues, reviews and CI in established codebases.',
+      'Merged fixes in laravel-debugbar (validation errors cut off by the dumper depth limit), Grav CMS (env config booleans read as strings), and 16 merged PRs in career-ops covering job-portal scanning, the lead pipeline, CV templates and web onboarding. Under review: Larastan (schema changes on one connection leaking into another) and Collision (artisan test option parsing).',
     tags: ['Open Source', 'PHP', 'Node.js'],
     links: [
       { label: 'laravel-debugbar #2085', href: 'https://github.com/fruitcake/laravel-debugbar/pull/2085' },
       { label: 'grav #4278', href: 'https://github.com/getgrav/grav/pull/4278' },
       { label: 'career-ops PRs', href: 'https://github.com/career-ops-hq/career-ops/pulls?q=is%3Apr+author%3AAdilAzhariOmsan+is%3Amerged' },
+      { label: 'larastan #2563', href: 'https://github.com/larastan/larastan/pull/2563' },
+      { label: 'collision #379', href: 'https://github.com/nunomaduro/collision/pull/379' },
     ],
   },
 ];
