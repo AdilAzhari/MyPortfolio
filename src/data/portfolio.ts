@@ -106,11 +106,15 @@ export const openSource: Entry[] = [
   {
     period: '2026',
     title: 'laravel-idempotency',
-    subtitle: 'Maintainer',
-    href: 'https://github.com/AdilAzhari/laravel-idempotency',
+    subtitle: 'Maintainer · v1.1 on Packagist',
+    href: 'https://github.com/AdilAzhariOmsan/laravel-idempotency',
     description:
-      'Prevents duplicate request execution with idempotency keys, request fingerprinting, response replay, conflict detection and cache-based locking. Extensible storage, locking and fingerprinting contracts; 93% test coverage.',
+      'Prevents duplicate execution of HTTP requests and queued jobs with idempotency keys scoped per user, request fingerprinting, response replay, conflict detection and cache-based locking. Extensible storage, locking and scoping contracts; 96% test coverage.',
     tags: ['Pest', 'PHPStan', 'Rector', 'Pint'],
+    links: [
+      { label: 'Source', href: 'https://github.com/AdilAzhariOmsan/laravel-idempotency' },
+      { label: 'Packagist', href: 'https://packagist.org/packages/adilazhari/laravel-idempotency' },
+    ],
   },
   {
     period: '2026 — Now',

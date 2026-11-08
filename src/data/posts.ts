@@ -24,7 +24,7 @@ export const posts: Post[] = [
     summary:
       "How laravel-idempotency stops a retried payment from charging twice, and why I changed it so one user can never be replayed another user's response.",
     project: 'laravel-idempotency',
-    link: { label: 'View the package', href: 'https://github.com/AdilAzhari/laravel-idempotency' },
+    link: { label: 'View the package', href: 'https://github.com/AdilAzhariOmsan/laravel-idempotency' },
     tags: ['Laravel', 'APIs', 'Security'],
     body: [
       {
