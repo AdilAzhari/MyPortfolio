@@ -54,6 +54,7 @@ export const projects: Entry[] = [
     title: 'Kilat Car Wash — Multi-Branch Booking & Operations',
     subtitle: 'Private repository',
     thumb: 'KW',
+    image: '/projects/kilat.webp',
     description:
       'Car wash platform for a multi-branch operator: QR booking with race and duplicate-booking protection, a washer bay tablet app, and live queue and TV screens over Laravel Reverb. Owners get cost-per-wash and gross-profit reports, CSV exports, payroll and per-wash stock deduction; a plate-camera webhook, WhatsApp reminders, PDPA consent and data requests, and enforced staff 2FA round it out. 230+ PHPUnit tests and Larastan in CI.',
     tags: ['Laravel 13', 'React 19', 'TypeScript', 'Inertia.js', 'Reverb', 'PHPUnit'],
