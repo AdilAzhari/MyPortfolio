@@ -18,6 +18,140 @@ export interface Post {
 // Inline `code` in text blocks is rendered as <code>.
 export const posts: Post[] = [
   {
+    slug: 'idempotency-keys-per-user',
+    title: 'An idempotency key is a promise, not a password',
+    date: '2026-11-08',
+    summary:
+      "How laravel-idempotency stops a retried payment from charging twice, and why I changed it so one user can never be replayed another user's response.",
+    project: 'laravel-idempotency',
+    link: { label: 'View the package', href: 'https://github.com/AdilAzhari/laravel-idempotency' },
+    tags: ['Laravel', 'APIs', 'Security'],
+    body: [
+      {
+        type: 'p',
+        text: 'A mobile app sends `POST /payments`. The server charges the card, but the response is lost on a flaky connection. The app retries, and the customer is charged twice. Retrying is the right thing for a client to do; the server just needs a way to recognise the second attempt.',
+      },
+      {
+        type: 'p',
+        text: 'That is what an `Idempotency-Key` header is for. The client generates a key per operation and sends it with every attempt. laravel-idempotency is middleware that runs the request once and replays the stored response for every retry:',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: "Route::post('/payments', StorePaymentController::class)\n    ->middleware('idempotency');",
+      },
+      { type: 'h', text: 'Three things have to be right' },
+      {
+        type: 'list',
+        items: [
+          'Concurrency. Two attempts can arrive at the same moment, before either has stored a response. The middleware takes a lock on the key, then checks the store again after acquiring it, because the other attempt may have finished while this one waited. Only the request holding the lock runs the controller.',
+          'Same key, different request. A client bug can reuse a key for a different body. Each request is fingerprinted with SHA-256; a stored record with a different fingerprint returns `409 Conflict` instead of replaying a response that belongs to another operation.',
+          'Honest replays. A replayed response carries `Idempotency-Replayed: true`, so clients and logs can tell a replay from a fresh execution.',
+        ],
+      },
+      { type: 'h', text: 'The hole: keys were global' },
+      {
+        type: 'p',
+        text: "In v1.0 the client's key was the storage key. But keys are chosen by clients, and nothing stops two clients choosing the same one: a weak generator, a hard-coded value in a test build, or someone deliberately reusing a key they saw. If user B sent a request with user A's key and the same body, B was replayed A's stored response. The key was acting like a password it was never meant to be.",
+      },
+      { type: 'h', text: 'The fix: scope every key to its owner' },
+      {
+        type: 'p',
+        text: "Keys are now stored in their owner's namespace. The default scope is the authenticated user, including the model class, so a `User` and an `Admin` that both have id 1 never share keys. The scope and the key are hashed together, which also keeps the storage key a fixed length however long the client's key is:",
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: "return 'scoped:'.hash('sha256', $scope.\"\\0\".$key->value);",
+      },
+      {
+        type: 'p',
+        text: 'The lock uses the same scoped key, so two different users who happen to send the same key no longer block each other either. For multi-tenant APIs, the scope is a small contract you can implement yourself:',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: "final class TenantScopeResolver implements IdempotencyScopeResolver\n{\n    public function resolve(Request $request): ?string\n    {\n        return $request->header('X-Tenant-Id');\n    }\n}",
+      },
+      { type: 'h', text: 'The cost of changing a default' },
+      {
+        type: 'p',
+        text: "Making scoping the default changes where existing records are found, so a retry that straddles the deploy runs once more. I decided that was the right trade for a security fix, documented it as a breaking change in the changelog, and kept `'scope' => null` as a one-line way back to v1.0 behaviour.",
+      },
+      { type: 'h', text: 'Takeaway' },
+      {
+        type: 'p',
+        text: 'Anything a client chooses is input, even when it looks like an identifier. Treat it as unique only within the boundary you can actually verify: here, the authenticated user.',
+      },
+    ],
+  },
+  {
+    slug: 'kilat-last-slot-race',
+    title: 'Two customers, one last slot: booking without races in Laravel',
+    date: '2026-11-08',
+    summary:
+      'How Kilat Car Wash keeps double taps, retries and two customers grabbing the same time slot from ever creating two bookings: row locks, a re-check, and a unique request id.',
+    project: 'Kilat Car Wash',
+    link: { label: 'See the project', href: 'https://adilomer.xyz/#projects' },
+    tags: ['Laravel', 'Concurrency', 'Databases'],
+    body: [
+      {
+        type: 'p',
+        text: 'Kilat is a booking and operations app for a multi-branch car wash. Customers scan a QR code at the branch or book ahead, washers run the queue from a bay tablet, and owners watch every branch live. Car washes get busy at the same times, so the bugs that matter are concurrency bugs:',
+      },
+      {
+        type: 'list',
+        items: [
+          'Two customers pick the last 10:30 slot in the same second.',
+          'A customer on mobile data double-taps "Book", or the browser retries the request.',
+          'Two washers tap the same car at once, or check two cars into the same bay.',
+        ],
+      },
+      {
+        type: 'p',
+        text: 'Checking "is this slot free?" and then inserting does not survive any of these. Both requests run the check, both see a free slot, both insert.',
+      },
+      { type: 'h', text: 'Lock first, then check' },
+      {
+        type: 'p',
+        text: 'Every write that takes a slot runs in a transaction that first locks the branch row. On MySQL that is a `SELECT ... FOR UPDATE`: a second booking for the same branch waits until the first commits, then runs its checks against the result.',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: "DB::transaction(function () use ($branch, $plate, $scheduledAt, $duration) {\n    Branch::query()->whereKey($branch->id)->lockForUpdate()->first();\n\n    if ($branch->bookings()->active()->where('plate', $plate)->exists()) {\n        throw ValidationException::withMessages(['plate' => 'Already booked.']);\n    }\n\n    if (! $this->queue->isBookable($branch, $scheduledAt, $duration)) {\n        throw ValidationException::withMessages([\n            'time' => 'That time was just taken. Pick another one.',\n        ]);\n    }\n\n    // ...create the booking\n}, attempts: 3);",
+      },
+      {
+        type: 'p',
+        text: "The lock is per branch, not global, so a busy Cheras branch never slows down Puchong, and the second customer gets a clear message instead of a double booking. Status changes work the same way but lock the booking row: a car can only move along allowed transitions, it can't be handed over before it is marked paid, and checking a car into a bay locks the bay so two cars never share it.",
+      },
+      { type: 'h', text: 'Retries: a unique request id' },
+      {
+        type: 'p',
+        text: 'Locks stop two different bookings from colliding, but a double tap is the same booking sent twice. Each booking form generates a UUID that is submitted with it and stored in a `request_id` column with a unique index. If two copies race, the database rejects the second insert and the app returns the booking the first copy created:',
+      },
+      {
+        type: 'code',
+        lang: 'php',
+        text: "try {\n    $booking = DB::transaction(/* ... */);\n} catch (UniqueConstraintViolationException $e) {\n    // The same form was submitted twice at once and the other copy won.\n    if ($existing = Booking::where('request_id', $requestId)->first()) {\n        return $existing;\n    }\n\n    throw $e;\n}",
+      },
+      {
+        type: 'p',
+        text: 'The customer sees one booking, whichever request won. The one-time code is only spent once a booking actually succeeds, so a failed attempt never burns it.',
+      },
+      { type: 'h', text: 'Repeating a status change does nothing' },
+      {
+        type: 'p',
+        text: 'Moving a booking to the status it already has is a no-op and sends no second WhatsApp message. A washer tapping "Ready" twice, or two supervisors confirming the same request, is harmless by design.',
+      },
+      { type: 'h', text: 'Takeaway' },
+      {
+        type: 'p',
+        text: 'For anything that takes a scarce resource, check the rule inside the same transaction that holds the lock, and let a unique constraint, not application code, decide which duplicate wins. The database is the one place where both requests can see each other.',
+      },
+    ],
+  },
+  {
     slug: 'madarik-tenant-isolation',
     title: 'Keeping every school\'s data apart in a multi-tenant Laravel app',
     date: '2026-09-28',
