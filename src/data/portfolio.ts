@@ -120,12 +120,12 @@ export const openSource: Entry[] = [
     period: '2026 — Now',
     title: 'laravel-trace',
     subtitle: 'Maintainer · v0.1.0 on Packagist',
-    href: 'https://github.com/AdilAzhari/laravel-trace',
+    href: 'https://github.com/AdilAzhariOmsan/laravel-trace',
     description:
       'Application-level tracing for Laravel — request, database-query and queued-job spans, trace context propagated across queues and outbound HTTP, memory and database storage, and a prune command for retention. Tested on PHP 8.3–8.5 and Laravel 12–13 across Ubuntu and Windows.',
     tags: ['Laravel', 'Observability'],
     links: [
-      { label: 'Source', href: 'https://github.com/AdilAzhari/laravel-trace' },
+      { label: 'Source', href: 'https://github.com/AdilAzhariOmsan/laravel-trace' },
       { label: 'Packagist', href: 'https://packagist.org/packages/adilazhari/laravel-trace' },
     ],
   },
