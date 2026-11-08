@@ -35,7 +35,7 @@ export const experience: Entry[] = [
     title: 'Full-Stack PHP/Laravel Engineer',
     subtitle: 'Sentients AI',
     description:
-      'Driving the Nexo 2.0 multi-vendor marketplace rebuild: assessed the legacy app (surfacing payments never marked paid, cross-tenant vendor routes and staging wired to the production DB), wrote the v2 spec and ADRs, and built the Vue 3 + Inertia 3 + TypeScript frontend foundation with its own Node 24 CI job. Also build synchronization workflows with third-party REST APIs, tune queries, indexing and Redis caching, and implement secure transactions and RBAC — reducing potential vulnerability surfaces by 45%.',
+      'Driving the Nexo 2.0 multi-vendor marketplace rebuild: assessed the legacy app (surfacing payments never marked paid, cross-tenant vendor routes and staging wired to the production DB), wrote the v2 spec and ADRs, set up a CI quality gate (Pint, Larastan level 6, Pest architecture tests), and built the Vue 3 + Inertia 3 + TypeScript frontend foundation with its own Node 24 CI job. Cleared 11 Composer and Symfony security advisories that were blocking CI. Also build synchronization workflows with third-party REST APIs and tune queries, indexing and Redis caching.',
     tags: ['Laravel', 'PHP', 'MySQL', 'Redis', 'Vue 3', 'TypeScript', 'Pest'],
   },
   {
